@@ -3,6 +3,7 @@ communicatorApp.controller('levelCardsCtrl', function($scope, $stateParams, tuto
 
     cardDbService.selectEnabled().then(function(results) {
         $scope.cards = results;
+        $scope.levelNumber = $stateParams.levelNumber;
     });
 
     tutorialService.showIfActive();

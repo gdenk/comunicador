@@ -23,7 +23,7 @@ communicatorApp.controller('homeCtrl', function($scope, $ionicPopup, $state, $st
             } else {
                 $ionicPopup.alert({
                     title: 'Próximamente',
-                    template: 'El nivel seleccionado todavía no se encuentra disponible'
+                    template: 'El nivel seleccionado no se encuentra disponible actualmente'
                 });
             }
         }
