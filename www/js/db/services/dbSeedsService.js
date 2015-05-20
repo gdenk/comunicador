@@ -27,7 +27,11 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
             .insertValues(['name', 'level'], [
                 ['"pick"', 1],
                 ['"reach"', 1],
-                ['"drop"', 1]
+                ['"drop"', 1],
+                ['"reachTerminal"',2],
+                ['"reachReceiver"',2],
+                ['"distanceToTerminal"',2],
+                ['"distanceToReceiver"',2]
             ]),
 
         new TableMigrationService('Score')

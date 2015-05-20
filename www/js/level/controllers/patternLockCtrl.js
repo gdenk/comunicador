@@ -1,4 +1,4 @@
-communicatorApp.controller('patternLockCtrl', function($scope, $state, $ionicNavBarDelegate, $ionicPopup, tutorialService, receiverDbService, currentReceiverService) {
+communicatorApp.controller('patternLockCtrl', function($scope, $state, $ionicNavBarDelegate, $ionicPopup, tutorialService, receiverDbService, currentReceiverService, registryService) {
 	var lock = new PatternLock("#lock", { 
 		margin: 15,
 		onDraw: validatePattern
@@ -43,8 +43,18 @@ communicatorApp.controller('patternLockCtrl', function($scope, $state, $ionicNav
 	}
 
 	function selectReceiver (receiver) {
+
 		currentReceiverService.receiver = receiver;
-		$state.go(receiver.advanced == 'true'? 'app.advancedRegistry' : 'app.basicRegistry');
+
+		//TODO: Refactor: avoid this switch, changing step 1 view & controller's names.
+		switch(registryService.pickedLevelNumber) {
+   			 case 1:
+        		$state.go(receiver.advanced == 'true'? 'app.advancedRegistry' : 'app.basicRegistry');
+        	 break;
+   		 	 case 2:
+       	 		$state.go('app.registryLevel2');
+        	 break; 			 
+		}
 	}
 
 	function showConflictPopup (conflictingReceivers) {
@@ -77,7 +87,7 @@ communicatorApp.controller('patternLockCtrl', function($scope, $state, $ionicNav
     $scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'Para usar un receptor de la comunicación de prueba se deben unir los puntos 1-2-3. La puntuación del intercambio no quedará registrada.'
+            template: 'Debe ingresar el patrón de 3 puntos escogido al momento de registrarse. Si desea utilizar un receptor de la comunicación de prueba se deben unir los puntos 1-2-3 (primer linea horizontal). La puntuación del intercambio no quedará registrada en éste último caso.'
         });
     };
 
