@@ -1,6 +1,6 @@
 communicatorApp.controller('registryLevel2Ctrl', function($scope, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
 
-	var basicScoreValues = { true: 'withoutHelp', false: 'withHelp' };
+	var basicScoreValues = { true: 'withoutHelp', false: 'withHelp', 1: 'lessThan1mt', 2: 'between1And3Mts', 3: 'moreThan3Mts'};
 	
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
@@ -45,7 +45,7 @@ communicatorApp.controller('registryLevel2Ctrl', function($scope, $q, $ionicPopu
 
 	var checkForDefaultScores = function() {
 		var deferred = $q.defer();
-		if ($scope.registry.reachTerminal && $scope.registry.reachReceiver && $scope.registry.distanceToTerminal && $scope.registry.distanceToReceiver) {
+		if ($scope.registry.reachTerminal && $scope.registry.reachReceiver && ($scope.registry.distanceToTerminal > 0) && ($scope.registry.distanceToReceiver > 0)) {
 			$ionicPopup.confirm({
 				title: "Advertencia",
 				template: "Usted va a ingresar un registro con todos los pasos correctos. ¿Está seguro que desea hacer esto?"

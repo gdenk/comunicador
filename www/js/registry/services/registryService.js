@@ -40,11 +40,13 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 	}
 
 	function insertNewScore (exchangeId, stepId, scoreName) {
-		scoreByExchangeDbService.insert({
-			exchangeId: exchangeId,
-			stepId: stepId,
-			scoreId: getScoreId(scoreName)
-		});		
+		if(scoreName){
+			scoreByExchangeDbService.insert({
+				exchangeId: exchangeId,
+				stepId: stepId,
+				scoreId: getScoreId(scoreName)
+			});		
+		}
 	}
 
 	function insertNewExchangeByCard (exchangeId) {
