@@ -38,7 +38,10 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
             .insertValues(['name'], [
                 ['"withHelp"'],
                 ['"withPartialHelp"'],
-                ['"withoutHelp"']
+                ['"withoutHelp"'],
+                ['"lessThan1mt"'],
+                ['"between1And3Mts"'],
+                ['"moreThan3Mts"']
             ]),
 
         new TableMigrationService('Configuration'),
