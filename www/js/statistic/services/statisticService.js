@@ -43,7 +43,7 @@ communicatorApp.service('statisticService', function($q,
                        ' JOIN ' + sbe.tableName + ' ON ' + sbe.prop('exchangeId') + ' = ' + this.prop('id') +
                        ' JOIN ' + s.tableName   + ' ON ' + s.prop('id') +           ' = ' + sbe.prop('scoreId') +
                        ' JOIN ' + sp.tableName  + ' ON ' + sp.prop('id') +          ' = ' + sbe.prop('stepId') +
-                       ' GROUP BY stepId, id, date, ' + r.prop('name') +', cardTitle, scoreName, stepName',
+                       ' GROUP BY stepId, ' + e.prop('id') + ' , date, ' + r.prop('name') +', cardTitle, scoreName, stepName',
                 args: []
             };
         });
