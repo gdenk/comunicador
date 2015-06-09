@@ -123,6 +123,18 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             }
         }
     })
+
+    .state('app.advancedRegistry2Receiver', {
+        url: '/advancedRegistry2Receiver',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/registry/advancedRegistry2Receiver.html',
+                controller: 'advancedRegistry2ReceiverCtrl'
+            }
+        }
+    })
+
+    
     .state('tutorialBasicRegistry', {
         url: '/tutorial',
         parent: 'app.basicRegistry',

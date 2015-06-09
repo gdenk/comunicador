@@ -1,19 +1,15 @@
-communicatorApp.controller('registryLevel2Ctrl', function($scope, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
+communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
 
-	var basicScoreValues = { true: 'withoutHelp', false: 'withHelp', 1: 'lessThan1mt', 2: 'between1And3Mts', 3: 'moreThan3Mts'};
+	var basicScoreValues = { true: 'withoutHelp', false: 'withHelp', 1: '15cm', 2: '30cm', 3: '60cm', 4: '1mt', 5: '3mt', 6: 'eoh'};
 	
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
-		reachTerminal: true,
 		reachReceiver: true,
-		distanceToTerminal: 0,
 		distanceToReceiver: 0
 	};
 
 	$scope.showInfo = {
-		reachTerminal: false,
 		reachReceiver: false,
-		distanceToTerminal: false,
 		distanceToReceiver: false
 	};
 
@@ -23,9 +19,7 @@ communicatorApp.controller('registryLevel2Ctrl', function($scope, $q, $ionicPopu
 			return;
 		}
 		checkForDefaultScores().then(function(){
-			$scope.registry.reachTerminal = basicScoreValues[$scope.registry.reachTerminal];
 			$scope.registry.reachReceiver = basicScoreValues[$scope.registry.reachReceiver];
-			$scope.registry.distanceToTerminal = basicScoreValues[$scope.registry.distanceToTerminal];
 			$scope.registry.distanceToReceiver = basicScoreValues[$scope.registry.distanceToReceiver];
 			registryService.saveRegistry($scope.registry);
 			$scope.goBack();
@@ -45,7 +39,7 @@ communicatorApp.controller('registryLevel2Ctrl', function($scope, $q, $ionicPopu
 
 	var checkForDefaultScores = function() {
 		var deferred = $q.defer();
-		if ($scope.registry.reachTerminal && $scope.registry.reachReceiver && ($scope.registry.distanceToTerminal > 0) && ($scope.registry.distanceToReceiver > 0)) {
+		if ($scope.registry.reachReceiver && ($scope.registry.distanceToReceiver > 0)) {
 			$ionicPopup.confirm({
 				title: "Advertencia",
 				template: "Usted va a ingresar un registro con todos los pasos correctos. ¿Está seguro que desea hacer esto?"
