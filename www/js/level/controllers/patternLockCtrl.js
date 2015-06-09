@@ -52,7 +52,7 @@ communicatorApp.controller('patternLockCtrl', function($scope, $state, $ionicNav
         		$state.go(receiver.advanced == 'true'? 'app.advancedRegistry' : 'app.basicRegistry');
         	 break;
    		 	 case 2:
-       	 		$state.go('app.registryLevel2');
+       	 		$state.go('app.basicRegistry2Receiver');
         	 break; 			 
 		}
 	}

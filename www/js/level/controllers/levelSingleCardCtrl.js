@@ -18,9 +18,27 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
     };
 
     var showActionSheet = function() {
+
+    var firstButtonText = "";
+
+        switch(registryService.pickedLevelNumber) {
+             
+             //TODO: Fix this (Functionality & CSS)
+             case 1:
+                firstButtonText =  'Puntuar';
+                secondButtonText =  '';
+             break;
+             case 2:
+                firstButtonText =  'Puntuar: Distancia al entrenador';
+                secondButtonText =  'Puntuar: Distancia al dispositivo';
+             break;
+           
+        }
+
         $ionicActionSheet.show({
             buttons: [
-                { text: 'Puntuar' }
+                { text: firstButtonText },
+                { text: secondButtonText }
             ],
             titleText: 'Tarjeta \''+ $scope.card.title +'\'',
             cancelText: 'Cancelar',
@@ -29,7 +47,7 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
                 $ionicNavBarDelegate.back();
             },
             buttonClicked: function(index) {
-                if (index === 0) {
+                if (index === 0 || index ===1) {
                     registryService.pickedCardId = $scope.card.id;
                     $state.go('app.patternLock');
                 }

@@ -1,0 +1,39 @@
+<ion-view title='NIVEL 2 - INTERCAMBIO'>
+  <ion-content class='has-header' >
+    <div class="list list-inset registry">
+      <label class="item item-input">
+        <div class="input-label">
+          RECEPTOR:
+        </div>
+        <div class="receiver-name">
+          {{registry.receiver.name + " " + registry.receiver.lastName}}
+        </div>
+      </label>
+      <label class="item item-input item-toggle">
+        <div class="input-label">
+          EL ALUMNO SE DESPLAZA:
+        </div>
+        <label class="toggle toggle-positive">
+          <input type="checkbox" ng-model="registry.reachReceiver">
+          <div class="track">
+            <div class="handle">{{registry.reachReceiver? 'SÍ': 'NO'}}</div>
+          </div>
+        </label>
+      </label>
+      <label class="item item-input">
+        <div class="input-label">
+          DISTANCIA AL ENTRENADOR:
+        </div>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'1'">15 cm</ion-radio>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'2'">30 cm</ion-radio>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'3'">60 cm</ion-radio>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'4'">1 mt</ion-radio>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'5'">3 mts</ion-radio>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'6'">Se encuentra en otra habitación</ion-radio>
+      </label>
+        <div class='form-buttons'>
+        <a id='accept' class='button padding-right button-positive button-block' ng-click='saveRegistry();'>Aceptar</a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
