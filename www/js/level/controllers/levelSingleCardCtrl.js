@@ -49,7 +49,16 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
             buttonClicked: function(index) {
                 if (index === 0 || index ===1) {
                     registryService.pickedCardId = $scope.card.id;
+                    if (registryService.pickedLevelNumber == 2){
+                        if (index === 0){
+                            registryService.pickedLevelNumber = 21;
+                        }
+                        if (index === 1){
+                            registryService.pickedLevelNumber = 22;
+                        }
+                    }
                     $state.go('app.patternLock');
+                    
                 }
                 return true;
             }

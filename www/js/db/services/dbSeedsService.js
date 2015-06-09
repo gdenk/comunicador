@@ -29,7 +29,9 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"reach"', 1],
                 ['"drop"', 1],
                 ['"reachReceiver"',2],
-                ['"distanceToReceiver"',2]
+                ['"distanceToReceiver"',2],
+                ['"reachTerminal"',2],
+                ['"distanceToTerminal"',2]
             ]),
 
         new TableMigrationService('Score')
@@ -42,7 +44,10 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"60cm"'],
                 ['"1mt"'],
                 ['"3mts"'],
-                ['"eoh"']
+                ['"eoh"'],
+                ['"10cm"'],
+                ['"2mts"'],
+                ['"gt3mts"']
             ]),
 
         new TableMigrationService('Configuration'),

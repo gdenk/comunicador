@@ -134,6 +134,17 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
         }
     })
 
+    .state('app.basicRegistry2Terminal', {
+        url: '/basicRegistry2Terminal',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/registry/basicRegistry2Terminal.html',
+                controller: 'basicRegistry2TerminalCtrl'
+            }
+        }
+    })
+    
+
     
     .state('tutorialBasicRegistry', {
         url: '/tutorial',
