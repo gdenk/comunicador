@@ -1,4 +1,7 @@
 <ion-view title='NIVEL 2 - DISTANCIA AL ENTRENADOR - A'>
+  <ion-nav-buttons side='right'>
+    <a ng-click='ask()' class='button button-icon icon ask-icon'></a>
+  </ion-nav-buttons>
   <ion-content class='has-header' >
     <div class="list list-inset registry">
       <label class="item item-input">
@@ -9,17 +12,17 @@
           {{registry.receiver.name + " " + registry.receiver.lastName}}
         </div>
       </label>
-        <label class="item item-input item-stacked-label">
-          <div class="input-label">
-            EL ALUMNO SE DESPLAZA:
-          </div>
-          <input type="text" style="display: none;" name="reachReceiver" validator="required" ng-model="registry.reachReceiver">
-          <div class="button-bar">
-            <a class="button" ng-class="{'button-positive': isScore('reachReceiver', 'withHelp')}" ng-click="changeScore('reachReceiver', 'withHelp')">Ayuda total</a>
-            <a class="button" ng-class="{'button-positive': isScore('reachReceiver', 'withPartialHelp')}" ng-click="changeScore('reachReceiver', 'withPartialHelp')">Ayuda parcial</a>
-            <a class="button" ng-class="{'button-positive': isScore('reachReceiver', 'withoutHelp')}" ng-click="changeScore('reachReceiver', 'withoutHelp')">Sin ayuda</a>
-          </div>
-        </label>
+      <label class="item item-input item-stacked-label">
+        <div class="input-label">
+          EL ALUMNO SE DESPLAZA:
+        </div>
+        <input type="text" style="display: none;" name="reachReceiver" validator="required" ng-model="registry.reachReceiver">
+        <div class="button-bar">
+          <a class="button" ng-class="{'button-positive': isScore('reachReceiver', 'withHelp')}" ng-click="changeScore('reachReceiver', 'withHelp')">Ayuda total</a>
+          <a class="button" ng-class="{'button-positive': isScore('reachReceiver', 'withPartialHelp')}" ng-click="changeScore('reachReceiver', 'withPartialHelp')">Ayuda parcial</a>
+          <a class="button" ng-class="{'button-positive': isScore('reachReceiver', 'withoutHelp')}" ng-click="changeScore('reachReceiver', 'withoutHelp')">Sin ayuda</a>
+        </div>
+      </label>
       <label class="item item-input">
         <div class="input-label">
           DISTANCIA AL ENTRENADOR:
