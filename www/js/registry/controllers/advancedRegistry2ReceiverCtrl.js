@@ -1,16 +1,19 @@
 communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
 
-	var basicScoreValues = { true: 'withoutHelp', false: 'withHelp', 1: '15cm', 2: '30cm', 3: '60cm', 4: '1mt', 5: '3mts', 6: 'eoh'};
+	var advancedRegistryScores = {1: '15cm', 2: '30cm', 3: '60cm', 4: '1mt', 5: '3mts', 6: 'eoh'};
 	
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
-		reachReceiver: true,
+		reachReceiver: '',
 		distanceToReceiver: 0
 	};
 
-	$scope.showInfo = {
-		reachReceiver: false,
-		distanceToReceiver: false
+	$scope.changeScore = function(step, score) {
+		$scope.registry[step] = score;
+	};
+
+	$scope.isScore = function(step, score) {
+		return $scope.registry[step] === score;
 	};
 
 	$scope.saveRegistry = function() {
@@ -19,22 +22,10 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $q,
 			return;
 		}
 		checkForDefaultScores().then(function(){
-			$scope.registry.reachReceiver = basicScoreValues[$scope.registry.reachReceiver];
-			$scope.registry.distanceToReceiver = basicScoreValues[$scope.registry.distanceToReceiver];
+			$scope.registry.distanceToReceiver = advancedRegistryScores[$scope.registry.distanceToReceiver];
 			registryService.saveRegistry($scope.registry);
 			$scope.goBack();
 		});
-	};
-
-	$scope.goBack = function() {
-		// this is to force a double "back"
-	  	var backView = $scope.$viewHistory.views[$scope.$viewHistory.backView.backViewId];
-	    $scope.$viewHistory.forcedNav = {
-	        viewId:     backView.viewId,
-	        navAction: 'moveBack',
-	        navDirection: 'back'
-	    };
-	    backView.go();
 	};
 
 	var checkForDefaultScores = function() {
@@ -56,9 +47,15 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $q,
 		return deferred.promise;
 	};
 
-	$scope.toggleInfo = function(step) {
-		$scope.showInfo[step] = !$scope.showInfo[step];
+	$scope.goBack = function() {
+		// this is to force a double "back"
+	  	var backView = $scope.$viewHistory.views[$scope.$viewHistory.backView.backViewId];
+	    $scope.$viewHistory.forcedNav = {
+	        viewId:     backView.viewId,
+	        navAction: 'moveBack',
+	        navDirection: 'back'
+	    };
+	    backView.go();
 	};
 
-	tutorialService.showIfActive();
 });

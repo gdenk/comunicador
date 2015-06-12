@@ -9,17 +9,17 @@
           {{registry.receiver.name + " " + registry.receiver.lastName}}
         </div>
       </label>
-      <label class="item item-input item-toggle">
-        <div class="input-label">
-          EL ALUMNO SE DESPLAZA:
-        </div>
-        <label class="toggle toggle-positive">
-          <input type="checkbox" ng-model="registry.reachReceiver">
-          <div class="track">
-            <div class="handle">{{registry.reachReceiver? 'SÍ': 'NO'}}</div>
+        <label class="item item-input item-stacked-label">
+          <div class="input-label">
+            EL ALUMNO SE DESPLAZA:
+          </div>
+          <input type="text" style="display: none;" name="reachReceiver" validator="required" ng-model="registry.reachReceiver">
+          <div class="button-bar">
+            <a class="button" ng-class="{'button-positive': isScore('reachReceiver', 'withHelp')}" ng-click="changeScore('reachReceiver', 'withHelp')">Ayuda total</a>
+            <a class="button" ng-class="{'button-positive': isScore('reachReceiver', 'withPartialHelp')}" ng-click="changeScore('reachReceiver', 'withPartialHelp')">Ayuda parcial</a>
+            <a class="button" ng-class="{'button-positive': isScore('reachReceiver', 'withoutHelp')}" ng-click="changeScore('reachReceiver', 'withoutHelp')">Sin ayuda</a>
           </div>
         </label>
-      </label>
       <label class="item item-input">
         <div class="input-label">
           DISTANCIA AL ENTRENADOR:
