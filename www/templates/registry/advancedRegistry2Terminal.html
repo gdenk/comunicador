@@ -9,27 +9,29 @@
           {{registry.receiver.name + " " + registry.receiver.lastName}}
         </div>
       </label>
-      <label class="item item-input item-toggle">
+      <label class="item item-input item-stacked-label">
         <div class="input-label">
           EL ALUMNO SE DESPLAZA:
         </div>
-        <label class="toggle toggle-positive">
-          <input type="checkbox" ng-model="registry.reachReceiver">
-          <div class="track">
-            <div class="handle">{{registry.reachReceiver? 'SÍ': 'NO'}}</div>
-          </div>
-        </label>
+        <input type="text" style="display: none;" name="reachTerminal" validator="required" ng-model="registry.reachTerminal">
+        <div class="button-bar">
+          <a class="button" ng-class="{'button-positive': isScore('reachTerminal', 'withHelp')}" ng-click="changeScore('reachTerminal', 'withHelp')">Ayuda total</a>
+          <a class="button" ng-class="{'button-positive': isScore('reachTerminal', 'withPartialHelp')}" ng-click="changeScore('reachTerminal', 'withPartialHelp')">Ayuda parcial</a>
+          <a class="button" ng-class="{'button-positive': isScore('reachTerminal', 'withoutHelp')}" ng-click="changeScore('reachTerminal', 'withoutHelp')">Sin ayuda</a>
+        </div>
       </label>
       <label class="item item-input">
         <div class="input-label">
           DISTANCIA AL ENTRENADOR:
         </div>
-        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'1'">15 cm</ion-radio>
-        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'2'">30 cm</ion-radio>
-        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'3'">60 cm</ion-radio>
-        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'4'">1 mt</ion-radio>
-        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'5'">3 mts</ion-radio>
-        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'6'">Se encuentra en otra habitación</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'1'">10 cm</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'2'">15 cm</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'3'">30 cm</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'4'">60 cm</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'5'">1 mt</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'6'">2 mts</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'7'">3 mts</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'8'">Más de 3 mts</ion-radio>
       </label>
         <div class='form-buttons'>
         <a id='accept' class='button padding-right button-positive button-block' ng-click='saveRegistry();'>Aceptar</a>

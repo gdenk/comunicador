@@ -123,7 +123,6 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             }
         }
     })
-
     .state('app.advancedRegistry2Receiver', {
         url: '/advancedRegistry2Receiver',
         views: {
@@ -133,7 +132,6 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             }
         }
     })
-
     .state('app.basicRegistry2Terminal', {
         url: '/basicRegistry2Terminal',
         views: {
@@ -143,9 +141,15 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             }
         }
     })
-    
-
-    
+    .state('app.advancedRegistry2Terminal', {
+        url: '/advancedRegistry2Terminal',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/registry/advancedRegistry2Terminal.html',
+                controller: 'advancedRegistry2TerminalCtrl'
+            }
+        }
+    })
     .state('tutorialBasicRegistry', {
         url: '/tutorial',
         parent: 'app.basicRegistry',

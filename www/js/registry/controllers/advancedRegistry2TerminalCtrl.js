@@ -1,16 +1,19 @@
-communicatorApp.controller('basicRegistry2TerminalCtrl', function($scope, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
+communicatorApp.controller('advancedRegistry2TerminalCtrl', function($scope, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
 
-	var basicScoreValues = { true: 'withoutHelp', false: 'withHelp', 1: '10cm', 2: '15cm', 3: '30cm', 4: '60cm', 5: '1mt', 6: '2mts', 7: '3mts', 8: 'gt3mt'};
+	var advancedRegistryScores = {1: '10cm', 2: '15cm', 3: '30cm', 4: '60cm', 5: '1mt', 6: '2mts', 7: '3mts', 8: 'gt3mt'};
 	
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
-		reachTerminal: true,
+		reachTerminal: '',
 		distanceToTerminal: 0
 	};
 
-	$scope.showInfo = {
-		reachTerminal: false,
-		distanceToTerminal: false
+	$scope.changeScore = function(step, score) {
+		$scope.registry[step] = score;
+	};
+
+	$scope.isScore = function(step, score) {
+		return $scope.registry[step] === score;
 	};
 
 	$scope.saveRegistry = function() {
@@ -19,8 +22,7 @@ communicatorApp.controller('basicRegistry2TerminalCtrl', function($scope, $q, $i
 			return;
 		}
 		checkForDefaultScores().then(function(){
-			$scope.registry.reachTerminal = basicScoreValues[$scope.registry.reachTerminal];
-			$scope.registry.distanceToTerminal = basicScoreValues[$scope.registry.distanceToTerminal];
+			$scope.registry.distanceToTerminal = advancedRegistryScores[$scope.registry.distanceToTerminal];
 			registryService.saveRegistry($scope.registry);
 			$scope.goBack();
 		});
@@ -56,9 +58,5 @@ communicatorApp.controller('basicRegistry2TerminalCtrl', function($scope, $q, $i
 		return deferred.promise;
 	};
 
-	$scope.toggleInfo = function(step) {
-		$scope.showInfo[step] = !$scope.showInfo[step];
-	};
 
-	tutorialService.showIfActive();
 });
