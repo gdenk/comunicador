@@ -1,12 +1,14 @@
 communicatorApp.service('statisticService', function($q,
                                                     receiverDbService, exchangeDbService,
-                                                    exchangeByCardDbService, cardDbService,
+                                                    exchangeByCardDbService, exchangeByLevelDbService,
+                                                    cardDbService,
                                                     scoreByExchangeDbService, scoreDbService,
                                                     stepDbService, relationshipDbService) {
     var r   = receiverDbService;
     var rl  = relationshipDbService;
     var e   = exchangeDbService;
     var ebc = exchangeByCardDbService;
+    var ebl = exchangeByLevelDbService;
     var c   = cardDbService;
     var sbe = scoreByExchangeDbService;
     var s   = scoreDbService;
