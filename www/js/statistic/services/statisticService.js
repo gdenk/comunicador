@@ -36,8 +36,9 @@ communicatorApp.service('statisticService', function($q,
                             receiverRelationshipField + ',' +
                             c.prop('title') + ' as cardTitle,' +
                             s.prop('name')  + ' as scoreName,' +
-                            sp.prop('name') + ' as stepName' +
-                        ' FROM ' + this.tableName +
+                            sp.prop('name') + ' as stepName,' +
+                            ebl.prop('levelId') + ' as level' + 
+                       ' FROM ' + this.tableName +
                        ' JOIN ' + r.tableName   + ' ON ' + r.prop('id') +           ' = ' + this.prop('receiverId') +
                        ' LEFT JOIN ' + rl.tableName + ' ON ' + r.prop('relationshipId') + ' = ' + rl.prop('id') +
                        ' JOIN ' + ebc.tableName + ' ON ' + ebc.prop('exchangeId') + ' = ' + this.prop('id') +
@@ -45,7 +46,8 @@ communicatorApp.service('statisticService', function($q,
                        ' JOIN ' + sbe.tableName + ' ON ' + sbe.prop('exchangeId') + ' = ' + this.prop('id') +
                        ' JOIN ' + s.tableName   + ' ON ' + s.prop('id') +           ' = ' + sbe.prop('scoreId') +
                        ' JOIN ' + sp.tableName  + ' ON ' + sp.prop('id') +          ' = ' + sbe.prop('stepId') +
-                       ' GROUP BY stepId, ' + e.prop('id') + ' , date, ' + r.prop('name') +', cardTitle, scoreName, stepName',
+                       ' JOIN ' + ebl.tableName  + ' ON ' + ebl.prop('exchangeId') + ' = ' + e.prop('id') +
+                       ' GROUP BY stepId, ' + e.prop('id') + ' , date, ' + r.prop('name') +', cardTitle, scoreName, stepName, level',
                 args: []
             };
         });

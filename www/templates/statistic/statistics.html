@@ -25,15 +25,16 @@
         <div class="row table table-header">
           <div class="col">FECHA</div>
           <div class="col col-20">RECEPTOR</div>
-          <div class="col col-33">PICTOGRAMA</div>
+          <div class="col col-20">PICTOGRAMA</div>
           <div class="col col-10">REC</div>
           <div class="col col-10">ALC</div>
           <div class="col col-10">DE</div>
+          <div class="col col-10">NIVEL</div>
         </div>
         <div class="row table" ng-repeat="(id, exchange) in exchanges | objectToArray | orderBy:'date':true">
-          <div class="col">{{ exchange.date | date:'dd/MM' }}</div>
+          <div class="col">{{ exchange.date | date:'dd/MM/yy HH:mm' }}</div>
           <div class="col col-20">{{ exchange.receiverRelationship || 'Otro' }}</div>
-          <div class="col col-33">{{ exchange.cardTitle }}</div>
+          <div class="col col-20">{{ exchange.cardTitle }}</div>
           <div class="col col-10 col-tick">
             <i class="tick-icon {{exchange.pick}}"></i>
             <i class="tick-icon second-halve" ng-show="exchange.pick === 'withPartialHelp'"></i>
@@ -46,6 +47,7 @@
             <i class="tick-icon {{exchange.drop}}"></i>
             <i class="tick-icon second-halve" ng-show="exchange.drop === 'withPartialHelp'"></i>
           </div>
+          <div class="col col-10 col-tick">{{ exchange.level }}</div>
         </div>
       </div>
     </div>
