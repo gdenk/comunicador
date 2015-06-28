@@ -1,4 +1,4 @@
-<ion-view title='NIVEL 2 - DISTANCIA AL ENTRENADOR - A'>
+<ion-view title='NIVEL 2'>
   <ion-nav-buttons side='right'>
     <a ng-click='ask()' class='button button-icon icon ask-icon'></a>
   </ion-nav-buttons>
@@ -33,6 +33,28 @@
         <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'4'">1 mt</ion-radio>
         <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'5'">3 mts</ion-radio>
         <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'6'">Fuera del campo visual</ion-radio>
+      </label>
+            <label class="item item-input item-toggle">
+        <div class="input-label">
+          EXISTE CONTACTO OCULAR?
+        </div>
+        <label class="toggle toggle-positive">
+          <input type="checkbox" ng-model="registry.eyeContact">
+          <div class="track">
+            <div class="handle">{{registry.eyeContact? 'SÍ': 'NO'}}</div>
+          </div>
+        </label>
+      </label>
+      <label class="item item-input">
+        <div class="input-label">
+          EXISTEN EMISIONES ORALES?
+        </div>
+        <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'7'">Ninguna expresión</ion-radio>
+        <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'8'">Grito/llanto</ion-radio>
+        <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'9'">Vocal/consonante</ion-radio>
+        <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'10'">Sílaba</ion-radio>
+        <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'11'">Palabra no representativa de la imagen entregada</ion-radio>
+        <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'12'">Palabra representativa de la imagen entregada</ion-radio>
       </label>
         <div class='form-buttons'>
         <a id='accept' class='button padding-right button-positive button-block' ng-click='saveRegistry();'>Aceptar</a>
