@@ -19,27 +19,24 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
 
     var showActionSheet = function() {
 
-    var firstButtonText = "";
-
         switch(registryService.pickedLevelNumber) {
              
-             //TODO: Fix this (Functionality & CSS)
              case 1:
-                firstButtonText =  'Puntuar';
-                secondButtonText =  '';
+                $scope.buttons= [
+                     {text: 'Puntuar'}
+                ];
              break;
              case 2:
-                firstButtonText =  'Puntuar: Distancia al entrenador';
-                secondButtonText =  'Puntuar: Distancia al dispositivo';
+                 $scope.buttons= [
+                     {text: 'Puntuar: Distancia al entrenador'},
+                     {text: 'Puntuar: Distancia al dispositivo'}
+                 ];
              break;
-           
         }
 
+
         $ionicActionSheet.show({
-            buttons: [
-                { text: firstButtonText },
-                { text: secondButtonText }
-            ],
+            buttons: $scope.buttons,
             titleText: 'Tarjeta \''+ $scope.card.title +'\'',
             cancelText: 'Cancelar',
             cancel: function() {
