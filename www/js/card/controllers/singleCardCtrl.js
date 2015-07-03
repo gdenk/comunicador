@@ -1,4 +1,5 @@
-communicatorApp.controller('singleCardCtrl', function($scope, $stateParams, $ionicNavBarDelegate, cardDbService, imageUploaderService, popupService) {
+communicatorApp.controller('singleCardCtrl', function($scope, $stateParams, $ionicNavBarDelegate, 
+    cardDbService, categoryDbService, imageUploaderService, popupService) {
 
     $scope.creating = !$stateParams.id;
     $scope.cameraIsEnabled = imageUploaderService.cameraIsEnabled;
@@ -6,13 +7,15 @@ communicatorApp.controller('singleCardCtrl', function($scope, $stateParams, $ion
     $scope.card = {
         title: '',
         img: '',
-        enabled: true
+        enabled: true,
+        categoryId: null
     };
 
     $scope.last = {
         title: '',
         img: '',
-        enabled: true
+        enabled: true,
+        categoryId: null
     };
 
     if (!$scope.creating) {
@@ -23,11 +26,16 @@ communicatorApp.controller('singleCardCtrl', function($scope, $stateParams, $ion
         });
     }
 
+    categoryDbService.selectEnabled().then(function(results) {
+        $scope.categories = results;
+    });
+
     $scope.goBack = function() {
         $ionicNavBarDelegate.back();
     };
 
     $scope.save = function() {
+
         if ($scope.creating) {
             cardDbService.insert($scope.card);
         } else {

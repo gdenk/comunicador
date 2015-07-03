@@ -3,6 +3,12 @@ communicatorApp.service('dbMigrationsService', function(TableMigrationService) {
         new TableMigrationService('Card')
             .addColumn('title TEXT')
             .addColumn('img TEXT')
+            .addColumn('categoryId INTEGER')
+            .addColumn('enabled BOOLEAN'),
+
+        new TableMigrationService('Category')
+            .addColumn('title TEXT')
+            .addColumn('img TEXT')
             .addColumn('enabled BOOLEAN'),
 
         new TableMigrationService('Receiver')

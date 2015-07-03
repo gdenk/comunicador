@@ -75,6 +75,24 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             }
         }
     })
+    .state('app.levelCategoryCards', {
+        url: '/levelCards/:levelNumber/category/:category',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/levelCards.html',
+                controller: 'levelCardsCtrl'
+            }
+        }
+    })
+    .state('app.categories', {
+        url: '/categories/level/:levelNumber',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/category/categories.html',
+                controller: 'categoriesCtrl'
+            }
+        }
+    })
     .state('tutorialLevelCards', {
         url: '/tutorial',
         parent: 'app.levelCards'
@@ -222,6 +240,15 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             'menuContent': {
                 templateUrl: 'templates/configuration/configurationSync.html',
                 controller: 'configurationSyncCtrl'
+            }
+        }
+    })
+    .state('app.configurationCategory', {
+        url: '/configuration/category',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/configuration/configurationCategory.html',
+                controller: 'configurationCategory'
             }
         }
     })

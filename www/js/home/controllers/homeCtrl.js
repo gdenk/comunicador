@@ -1,4 +1,10 @@
-communicatorApp.controller('homeCtrl', function($scope, $ionicPopup, $state, $stateParams, tutorialService, levelDbService, appService) {
+communicatorApp.controller('homeCtrl', function($scope, $ionicPopup, $state, $stateParams, tutorialService, 
+        levelDbService, appService, configurationDbService) {
+    
+    configurationDbService.find('categoryEnabled').then(function(results){
+        $scope.categoryEnabled = results[0].value === 'true' ? true : false;
+    });
+
     levelDbService.selectAll().then(function(results) {
         $scope.levels = results;
         var lastLevel = 0;
@@ -13,6 +19,7 @@ communicatorApp.controller('homeCtrl', function($scope, $ionicPopup, $state, $st
     });
 
     $scope.selectLevel = function(level) {
+
         if ($scope.selectedLevel.id === level.id) {
             level.selected = !level.selected;
         } else {

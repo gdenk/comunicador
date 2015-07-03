@@ -8,6 +8,12 @@
         <input type='text' name='cardTitle' ng-model='card.title' placeholder='Nombre del Pictograma' validator="required, inRange, inList">
       </div>
 
+      <div class='item item-select card'>
+        <select name='cardCategory' ng-model="card.categoryId" ng-options='category.id as category.title for category in categories' validator="required">
+          <option value=''>Categoria del Pictograma</option>
+        </select>
+      </div>
+
       <div id='image' class='item item-image card' ng-click="uploadImage()">
         <img ng-src='{{card.img}}'>
         <input ng-show='false' type='text' name='photoSrc' ng-model='card.img' validator="photoRequired">

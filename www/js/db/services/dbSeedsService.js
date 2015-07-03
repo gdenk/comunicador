@@ -1,11 +1,17 @@
 communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidService) {
     return [
         new TableMigrationService('Card')
-            .insertValues(['title', 'enabled', 'img'], [
-                ["'Caramelo'",  '"true"', "'img/candy.png'"],
-                ["'Pelota'",    '"true"', "'img/ball.png'"],
-                ["'Oso'",       '"true"', "'img/bear.png'"],
-                ["'Spaghetti'", '"true"', "'img/spaghetti.png'"]
+            .insertValues(['id', 'title', 'enabled', 'img', 'categoryId'], [
+                [1, "'Caramelo'",  '"true"', "'img/candy.png'", 1],
+                [2, "'Pelota'",    '"true"', "'img/ball.png'", 2],
+                [3, "'Oso'",       '"true"', "'img/bear.png'", 2],
+                [4, "'Spaghetti'", '"true"', "'img/spaghetti.png'", 1]
+            ]),
+
+        new TableMigrationService('Category')
+            .insertValues(['id', 'title', 'enabled', 'img'], [
+                [1, "'Comida'",  '"true"', "'img/comida.jpg'"],
+                [2, "'Juguete'",  '"true"', "'img/juguete.jpg'"]
             ]),
 
         new TableMigrationService('Receiver')
@@ -58,7 +64,10 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"prdie"'],
             ]),
 
-        new TableMigrationService('Configuration'),
+        new TableMigrationService('Configuration')
+            .insertValues(['key', 'value'], [
+                ['"categoryEnabled"', '"false"']
+            ]),
 
         new TableMigrationService('Relationship')
             .insertValues(['name', 'advancedByDefault', 'hasCustomName'], [

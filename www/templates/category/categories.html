@@ -1,0 +1,11 @@
+<ion-view title='CATEGORIAS'>
+	<ion-pane>
+	    <ion-content>
+	        <div class="row responsive-md">
+	            <div class="col col-25" ng-repeat='category in categories'>
+	                <img ng-src='{{category.img}}' ui-sref='app.levelCategoryCards({ levelNumber: levelNumber, category: category.id })' onclick="window.plugins.insomnia.keepAwake()"/>
+	            </div>
+	        </div>
+	    </ion-content>
+	</ion-pane>
+</ion-view>
