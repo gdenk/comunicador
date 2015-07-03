@@ -1,11 +1,13 @@
 communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
 
-	var advancedRegistryScores = {1: '15cm', 2: '30cm', 3: '60cm', 4: '1mt', 5: '3mts', 6: 'eoh'};
+	var advancedRegistryScores = {1: '15cm', 2: '30cm', 3: '60cm', 4: '1mt', 5: '3mts', 6: 'eoh', 7:'ne', 8:'gl', 9:'vc', 10:'sil', 11:'pnrdie', 12:'prdie'};
 	
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
 		reachReceiver: '',
-		distanceToReceiver: 0
+		distanceToReceiver: 0,
+		eyeContact: true,
+		oralOutput: 0
 	};
 
 	$scope.changeScore = function(step, score) {
@@ -23,6 +25,8 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $q,
 		}
 		checkForDefaultScores().then(function(){
 			$scope.registry.distanceToReceiver = advancedRegistryScores[$scope.registry.distanceToReceiver];
+			$scope.registry.eyeContact = advancedRegistryScores[$scope.registry.eyeContact];
+			$scope.registry.oralOutput = advancedRegistryScores[$scope.registry.oralOutput];
 			registryService.saveRegistry($scope.registry);
 			$scope.goBack();
 		});
@@ -30,7 +34,7 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $q,
 
 	var checkForDefaultScores = function() {
 		var deferred = $q.defer();
-		if ($scope.registry.reachReceiver && ($scope.registry.distanceToReceiver > 0)) {
+		if ($scope.registry.reachReceiver && $scope.registry.eyeContact && ($scope.registry.distanceToReceiver > 0) && ($scope.registry.oralOutput > 0)) {
 			$ionicPopup.confirm({
 				title: "Advertencia",
 				template: "Usted va a ingresar un registro con todos los pasos correctos. ¿Está seguro que desea hacer esto?"

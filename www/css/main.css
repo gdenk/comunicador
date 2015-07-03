@@ -31,7 +31,7 @@
 .action-sheet-group:first-child .button {
   background: #00fead;
   color: #000;
-  border: none;
+  border: 1;
   font-weight: bold;
   font-size: 1em;
 }
