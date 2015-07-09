@@ -850,3 +850,12 @@ form p.validation-invalid {
 .card .item:last-child, .list-inset .item:last-child {
    margin-bottom: 2% !important;
 }
+
+.category-content {
+   color:black; 
+   font-weight: bold; 
+   text-align: center;
+   text-transform: uppercase;
+   background: #FFF;
+   display: block;
+}
