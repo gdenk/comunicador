@@ -1,0 +1,20 @@
+<form name="userForm" novalidate>
+  <ion-view title='USUARIO'>
+    <ion-content class='has-header'>
+      <div class='list list-inset'>
+        <label class='item item-input'>
+          <input type='text' name='name' ng-model='user.name' placeholder='Nombre *' validator='required, inRange'>
+        </label>
+        <label class='item item-input'>
+          <input type='text' name='lastName' ng-model='user.lastName' placeholder='Apellido *' validator='required, inRange'>
+        </label>
+        <label class='item item-input'>
+          <input type='text' name='birthdate' ng-model='user.birthdate' placeholder='Fecha de nacimiento dd/mm/yyyy *' validator='required, validDate'>
+        </label>
+        <div class='form-buttons'>
+          <button id='accept' validation-submit="userForm" ng-click="save()" class='button button-block button-positive'>Aceptar</button>
+        </div>
+      </div>
+    </ion-content>
+  </ion-view>
+</form>

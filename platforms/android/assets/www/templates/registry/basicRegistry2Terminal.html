@@ -1,0 +1,44 @@
+<ion-view title='NIVEL 2 - DISTANCIA AL DISPOSITIVO'>
+  <ion-nav-buttons side='right'>
+    <a ng-click='ask()' class='button button-icon icon ask-icon'></a>
+  </ion-nav-buttons>
+  <ion-content class='has-header' >
+    <div class="list list-inset registry">
+      <label class="item item-input">
+        <div class="input-label">
+          RECEPTOR:
+        </div>
+        <div class="receiver-name">
+          {{registry.receiver.name + " " + registry.receiver.lastName}}
+        </div>
+      </label>
+      <label class="item item-input item-toggle">
+        <div class="input-label">
+          EL ALUMNO SE DESPLAZA:
+        </div>
+        <label class="toggle toggle-positive">
+          <input type="checkbox" ng-model="registry.reachTerminal">
+          <div class="track">
+            <div class="handle">{{registry.reachTerminal? 'SÍ': 'NO'}}</div>
+          </div>
+        </label>
+      </label>
+      <label class="item item-input">
+        <div class="input-label">
+          DISTANCIA AL DISPOSITIVO:
+        </div>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'1'">10 cm</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'2'">15 cm</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'3'">30 cm</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'4'">60 cm</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'5'">1 mt</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'6'">2 mts</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'7'">3 mts</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'8'">Más de 3 mts</ion-radio>
+      </label>
+        <div class='form-buttons'>
+        <a id='accept' class='button padding-right button-positive button-block' ng-click='saveRegistry();'>Aceptar</a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

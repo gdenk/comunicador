@@ -1,0 +1,12 @@
+<form name="categoryForm">
+  <ion-view title='CATEGORIAS'>
+    <ion-content class='has-header'>
+      <div class='list list-inset'>
+        <ion-checkbox ng-model="categoryEnabled" ng-change="toggleEnabledCategory(categoryEnabled);">Habilitar Categorias</ion-checkbox>
+        <div class='form-buttons'>
+          <a id='accept' class='button button-block button-positive' ng-click='save();'>Aceptar</a>
+        </div>
+      </div>
+    </ion-content>
+  </ion-view>
+</form>
