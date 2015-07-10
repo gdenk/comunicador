@@ -1,0 +1,26 @@
+/home/user/workspace/comunicador/platforms/android/ant-build/classes.dex : \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/com/ionicframework/starter/R$xml.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/com/ionicframework/starter/R$string.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/com/ionicframework/starter/BuildConfig.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/com/ionicframework/starter/R.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/com/ionicframework/starter/R$attr.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/com/ionicframework/starter/HelloCordova.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/com/ionicframework/starter/R$drawable.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/com/ionic/keyboard/IonicKeyboard.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/com/ionic/keyboard/IonicKeyboard$1.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/nl/xservices/plugins/Insomnia$2.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/nl/xservices/plugins/Insomnia$1.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/nl/xservices/plugins/Insomnia.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/org/apache/cordova/device/Device.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/org/apache/cordova/camera/ExifHelper.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/org/apache/cordova/camera/FileHelper.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/org/apache/cordova/camera/CameraLauncher.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/org/apache/cordova/networkinformation/NetworkManager.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/org/apache/cordova/networkinformation/NetworkManager$1.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/org/pgsqlite/SQLitePlugin$3.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/org/pgsqlite/SQLitePlugin$1.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/org/pgsqlite/SQLitePlugin.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/org/pgsqlite/SQLitePlugin$2.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/org/pgsqlite/SQLitePlugin$Action.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/classes/org/pgsqlite/SQLitePlugin$QueryType.class \
+/home/user/workspace/comunicador/platforms/android/ant-build/dexedLibs/classes-6daa39c983a841f2f16687c65be51bbe.jar \

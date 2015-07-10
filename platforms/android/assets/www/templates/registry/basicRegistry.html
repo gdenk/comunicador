@@ -1,0 +1,50 @@
+<ion-view title='NIVEL 1 - INTERCAMBIO'>
+  <ion-content class='has-header' >
+    <div class="list list-inset registry">
+      <label class="item item-input">
+        <div class="input-label">
+          RECEPTOR:
+        </div>
+        <div class="receiver-name">
+          {{registry.receiver.name + " " + registry.receiver.lastName}}
+        </div>
+      </label>
+      <label class="item item-input item-toggle">
+        <div class="input-label">
+          RECOGER:
+        </div>
+        <label class="toggle toggle-positive">
+          <input type="checkbox" ng-model="registry.pick">
+          <div class="track">
+            <div class="handle">{{registry.pick? 'SÍ': 'NO'}}</div>
+          </div>
+        </label>
+      </label>
+      <label class="item item-input item-toggle">
+        <div class="input-label">
+          ALCANZAR:
+        </div>
+        <label class="toggle toggle-positive">
+          <input type="checkbox" ng-model="registry.reach">
+          <div class="track">
+            <div class="handle">{{registry.reach? 'SÍ': 'NO'}}</div>
+          </div>
+        </label>
+      </label>
+      <label class="item item-input item-toggle">
+        <div class="input-label">
+          DEJAR:
+        </div>
+        <label class="toggle toggle-positive">
+          <input type="checkbox" ng-model="registry.drop">
+          <div class="track">
+            <div class="handle">{{registry.drop? 'SÍ': 'NO'}}</div>
+          </div>
+        </label>
+      </label>
+      <div class='form-buttons'>
+        <a id='accept' class='button padding-right button-positive button-block' ng-click='saveRegistry();'>Aceptar</a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
