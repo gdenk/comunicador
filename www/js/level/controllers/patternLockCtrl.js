@@ -46,18 +46,15 @@ communicatorApp.controller('patternLockCtrl', function($scope, $state, $ionicNav
 
 		currentReceiverService.receiver = receiver;
 
-		//TODO: Refactor: avoid this switch, changing step 1 view & controller's names.
 		switch(registryService.pickedLevelNumber) {
    			 case 1:
         		$state.go(receiver.advanced == 'true'? 'app.advancedRegistry' : 'app.basicRegistry');
         	 break;
    		 	 case 21:
        	 		$state.go(receiver.advanced == 'true'? 'app.advancedRegistry2Receiver' : 'app.basicRegistry2Receiver');
-        	    registryService.pickedLevelNumber = 2;
         	 break; 
         	 case 22:
        	 		$state.go(receiver.advanced == 'true'? 'app.advancedRegistry2Terminal' : 'app.basicRegistry2Terminal');
-        	    registryService.pickedLevelNumber = 2;
         	 break; 			 
 		}
 	}
@@ -97,4 +94,5 @@ communicatorApp.controller('patternLockCtrl', function($scope, $state, $ionicNav
     };
 
     tutorialService.showIfActive();
+
 });
