@@ -10,8 +10,8 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
 
         new TableMigrationService('Category')
             .insertValues(['id', 'title', 'enabled', 'img'], [
-                [1, "'Comida'",  '"true"', "'img/comida.jpg'"],
-                [2, "'Juguete'",  '"true"', "'img/juguete.jpg'"]
+                [1, "'Comidas'",  '"true"', "'img/comida.jpg'"],
+                [2, "'Juguetes'",  '"true"', "'img/juguete.jpg'"]
             ]),
 
         new TableMigrationService('Receiver')
