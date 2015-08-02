@@ -12,9 +12,7 @@ communicatorApp.controller('levelCardsCtrl', function($scope, $stateParams, tuto
 	        $scope.cards = results;
 	        $scope.levelNumber = $stateParams.levelNumber;
 	    });
-
-
-    	tutorialService.showIfActive();
     }
 
+    tutorialService.showIfActive();
 });

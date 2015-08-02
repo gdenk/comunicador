@@ -24,13 +24,20 @@ communicatorApp.service('tutorialService', function($state, $ionicPopup, $timeou
                 case 'tutorialHome':
                     this.step('Iniciar nivel', 'Este tutorial te llevará a través de las funciones básicas de la aplicación.<br/><br/>Para comenzar una actividad se debe presionar IR.', {
                         back: { state: "app.home" },
-                        next: { state: "tutorialLevelCards", params: { levelNumber: 1 } }
+                        next: { state: "tutorialCategories", params: { levelNumber: 1 } }
                     });
                     closeEvent.attach();
                     break;
-                case 'tutorialLevelCards':
-                    this.step('Seleccionar pictograma', 'Al comenzar un intercambio se debe seleccionar un pictograma de la lista.<br/>En esta sección solo se mostrarán los pictogramas habilitados.', {
+                case 'tutorialCategories':
+                    this.step('Seleccionar categoría', 'Si la categorización esta activa debe seleccionar una de la lista.', {
                         back: { state: "tutorialHome" },
+                        next: { state: "tutorialLevelCategoryCards", params: { levelNumber: 1, category: 1 } }
+                    });
+                    closeEvent.attach();
+                    break;
+                case 'tutorialLevelCategoryCards':
+                    this.step('Seleccionar pictograma', 'Al comenzar un intercambio se debe seleccionar un pictograma de la lista.<br/>En esta sección solo se mostrarán los pictogramas habilitados.', {
+                        back: { state: "tutorialCategories", params: { levelNumber: 1 } },
                         next: { state: "tutorialLevelSingleCard", params: { id: 1 } }
                     });
                     break;
