@@ -29,7 +29,7 @@ communicatorApp.service('tutorialService', function($state, $ionicPopup, $timeou
                     closeEvent.attach();
                     break;
                 case 'tutorialCategories':
-                    this.step('Seleccionar categoría', 'Si la categorización se encuentra se debe seleccionar una categoría de la lista.', {
+                    this.step('Seleccionar categoría', 'Si la categorización se encuentra habilitada se debe seleccionar una categoría de la lista.', {
                         back: { state: "tutorialHome" },
                         next: { state: "tutorialLevelCategoryCards", params: { levelNumber: 1, category: 1 } }
                     });
