@@ -63,7 +63,7 @@ communicatorApp.controller('basicRegistry2TerminalCtrl', function($scope, $q, $i
 	$scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'En esta sección se registra la intercambio en función del desplazamiento del alumno respecto del dispositivo. Se registra entonces si el alumno se desplaza o no hacia el dispositivo y la distancia a la que se encuentra el mismo.'
+            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del dispositivo. Se registra entonces si la persona se desplaza o no hacia el dispositivo y la distancia a la que se encuentra el mismo.'
         });
     };
 
