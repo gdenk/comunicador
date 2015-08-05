@@ -11,7 +11,7 @@
       </label>
       <label class="item item-input item-stacked-label">
         <div class="input-label">
-          EL ALUMNO SE DESPLAZA:
+          LA PERSONA SE DESPLAZA:
         </div>
         <input type="text" style="display: none;" name="reachTerminal" validator="required" ng-model="registry.reachTerminal">
         <div class="button-bar">
@@ -44,12 +44,24 @@
           </div>
         </label>
       </label>
+      <label class="item item-input item-toggle">
+        <div class="input-label">
+        EXPRESIÓN FACIAL:
+        </div>
+        <label class="toggle toggle-positive">
+          <input type="checkbox" ng-model="registry.facialExpression">
+          <div class="track">
+            <div class="handle">{{registry.facialExpression? 'SÍ': 'NO'}}</div>
+          </div>
+        </label>
+      </label>
       <label class="item item-input">
         <div class="input-label">
-        EMISIONES ORALES:
+        EMISIÓN ORAL:
         </div>
         <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'9'">Ninguna expresión</ion-radio>
-        <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'10'">Grito/llanto</ion-radio>
+        <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'10'">Llanto</ion-radio>
+        <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'15'">Risa</ion-radio>
         <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'11'">Vocal/consonante</ion-radio>
         <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'12'">Sílaba</ion-radio>
         <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'13'">Palabra no representativa de la imagen entregada</ion-radio>
