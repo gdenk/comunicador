@@ -851,6 +851,10 @@ form p.validation-invalid {
    margin-bottom: 2% !important;
 }
 
+.list:last-child {
+  margin-bottom: 30px;
+}
+
 .category-content {
    color:black; 
    font-weight: bold; 

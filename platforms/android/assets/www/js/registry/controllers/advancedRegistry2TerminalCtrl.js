@@ -1,6 +1,6 @@
 communicatorApp.controller('advancedRegistry2TerminalCtrl', function($scope, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
 
-	var advancedRegistryScores = {1: '10cm', 2: '15cm', 3: '30cm', 4: '60cm', 5: '1mt', 6: '2mts', 7: '3mts', 8: 'gt3mt', 9:'ne', 10:'gl', 11:'vc', 12:'sil', 13:'pnrdie', 14:'prdie'};
+	var advancedRegistryScores = {true: 'withoutHelp', false: 'withHelp', 1: '10cm', 2: '15cm', 3: '30cm', 4: '60cm', 5: '1mt', 6: '2mts', 7: '3mts', 8: 'gt3mt', 9:'ne', 10:'gl', 11:'vc', 12:'sil', 13:'pnrdie', 14:'prdie'};
 	
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,

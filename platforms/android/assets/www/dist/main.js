@@ -75,6 +75,10 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             }
         }
     })
+    .state('tutorialLevelCards', {
+        url: '/tutorial',
+        parent: 'app.levelCards'
+    })
     .state('app.levelCategoryCards', {
         url: '/levelCards/:levelNumber/category/:category',
         views: {
@@ -83,6 +87,10 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
                 controller: 'levelCardsCtrl'
             }
         }
+    })
+    .state('tutorialLevelCategoryCards', {
+        url: '/tutorial',
+        parent: 'app.levelCategoryCards'
     })
     .state('app.categories', {
         url: '/categories/level/:levelNumber',
@@ -93,9 +101,9 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             }
         }
     })
-    .state('tutorialLevelCards', {
+    .state('tutorialCategories', {
         url: '/tutorial',
-        parent: 'app.levelCards'
+        parent: 'app.categories'
     })
     .state('content.levelSingleCard', {
         url: '/levelSingleCard/:id',
@@ -297,7 +305,7 @@ communicatorApp.controller('cardsCtrl', function($scope, $ionicPopup, cardDbServ
     $scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'Para agregar un pictograma se debe presionar el signo "+"" de arriba a la derecha. <br> Para eliminar un pictograma se lo debe mantener presionado unos segundos y aparecerá un signo - a su izquierda que permitirá eliminarlo.'
+            template: 'Para agregar un pictograma se debe presionar el signo "+" de arriba a la derecha. <br> Para eliminar un pictograma se lo debe mantener presionado unos segundos y aparecerá un signo "-"" a su izquierda que permitirá eliminarlo.'
         });
     };
 
@@ -371,13 +379,14 @@ communicatorApp.controller('singleCardCtrl', function($scope, $stateParams, $ion
 
     popupService.start($scope, updateCardImage);
 });
-communicatorApp.controller('categoriesCtrl', function($scope, $stateParams, categoryDbService) {
+communicatorApp.controller('categoriesCtrl', function($scope, $stateParams, categoryDbService, tutorialService) {
     
     categoryDbService.selectEnabled().then(function(results) {
         $scope.categories = results;
         $scope.levelNumber = $stateParams.levelNumber;
     });
 
+	tutorialService.showIfActive();
 });
 communicatorApp.controller('deleteBarCtrl', function($scope, listItemDeleteService) {
     $scope.eraser = listItemDeleteService;
@@ -552,7 +561,7 @@ communicatorApp.service('uuidService', function() {
         }
     };
 });
-communicatorApp.controller('configurationCategory', function($scope, $ionicNavBarDelegate, configurationDbService) {
+communicatorApp.controller('configurationCategory', function($scope, $ionicNavBarDelegate, $ionicPopup, configurationDbService) {
     
     configurationDbService.find('categoryEnabled').then(function(results){
         $scope.categoryEnabled = results[0].value === 'true' ? true : false;
@@ -564,6 +573,13 @@ communicatorApp.controller('configurationCategory', function($scope, $ionicNavBa
 
     $scope.save = function() {
         $ionicNavBarDelegate.back();
+    };
+
+    $scope.ask = function() {
+        $ionicPopup.alert({
+            title: 'Ayuda',
+            template: 'Las categorías permiten agrupar los pictogramas para una busqueda más fácil.'
+        });
     };
 });
 communicatorApp.controller('configurationDeveloperToolsCtrl', function($scope, $ionicNavBarDelegate, serverService, currentUserService) {
@@ -1123,18 +1139,60 @@ communicatorApp.service('dbMigrationsService', function(TableMigrationService) {
 });
 communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidService) {
     return [
-        new TableMigrationService('Card')
+        new TableMigrationService('Card') 
             .insertValues(['id', 'title', 'enabled', 'img', 'categoryId'], [
-                [1, "'Caramelo'",  '"true"', "'img/candy.png'", 1],
-                [2, "'Pelota'",    '"true"', "'img/ball.png'", 2],
-                [3, "'Oso'",       '"true"', "'img/bear.png'", 2],
-                [4, "'Spaghetti'", '"true"', "'img/spaghetti.png'", 1]
+                [1, "'Carne'",  '"true"', "'img/pictogramas/Alimentos/Carne.jpg'", 1],
+                [2, "'Gaseosa'",  '"true"', "'img/pictogramas/Alimentos/Gaseosa.png'", 1],
+                [3, "'Leche'",  '"true"', "'img/pictogramas/Alimentos/Leche.jpg'", 1],
+                [4, "'Cocodrilo'",  '"true"', "'img/pictogramas/Animales/cocodrilo.jpg'", 2],
+                [5, "'Gato'",  '"true"', "'img/pictogramas/Animales/gato.jpg'", 2],  
+                [6, "'Perro'",  '"true"', "'img/pictogramas/Animales/perro.jpg'", 2],
+                [7, "'Heladera'",  '"true"', "'img/pictogramas/Casa/Heladera.jpg'", 3],
+                [8, "'Sillon'",  '"true"', "'img/pictogramas/Casa/sillon.jpg'", 3],         
+                [9, "'Televisor'",  '"true"', "'img/pictogramas/Casa/tv.jpg'", 3],
+                [10, "'Arenero'",  '"true"', "'img/pictogramas/Escuela/arenero.jpg'", 4],  
+                [11, "'Lapiz'",  '"true"', "'img/pictogramas/Escuela/lapiz.png'", 4],  
+                [12, "'Mochila'",  '"true"', "'img/pictogramas/Escuela/mochila.jpg'", 4],  
+                [13, "'Maestro'",  '"true"', "'img/pictogramas/Familia/maestro.jpg'", 5],  
+                [14, "'Mamá'",  '"true"', "'img/pictogramas/Familia/mama.png'", 5], 
+                [15, "'Papá'",  '"true"', "'img/pictogramas/Familia/papa.jpg'", 5], 
+                [16, "'Ducha'",  '"true"', "'img/pictogramas/Higuiene/Ducha.jpg'", 6],
+                [17, "'Lavar manos'",  '"true"', "'img/pictogramas/Higuiene/lavar manos.jpg'", 6],
+                [18, "'Sonarse la nariz'",  '"true"', "'img/pictogramas/Higuiene/sonarse la nariz.png'", 6],
+                [19, "'Auto'",  '"true"', "'img/pictogramas/Juguetes/Auto.png'", 7],
+                [20, "'Cartas'",  '"true"', "'img/pictogramas/Juguetes/Cartas.png'", 7],
+                [21, "'Pelota'",  '"true"', "'img/pictogramas/Juguetes/Pelota.png'", 7],
+                [22, "'Casa'",  '"true"', "'img/pictogramas/Lugares/Casa.png'", 8],  
+                [23, "'Parada'",  '"true"', "'img/pictogramas/Lugares/Parada.jpg'", 8],
+                [24, "'Hospital'",  '"true"', "'img/pictogramas/Lugares/hospital.png'", 8],
+                [25, "'Computadora'",  '"true"', "'img/pictogramas/Oficina/computadora.jpg'", 9], 
+                [26, "'Escritorio'",  '"true"', "'img/pictogramas/Oficina/escritorio.jpg'", 9], 
+                [27, "'Silla'",  '"true"', "'img/pictogramas/Oficina/silla.jpg'", 9], 
+                [28, "'Colectivo'",  '"true"', "'img/pictogramas/Transporte/colectivo.jpg'", 10],    
+                [29, "'Taxi'",  '"true"', "'img/pictogramas/Transporte/taxi.gif'", 10], 
+                [30, "'Tren'",  '"true"', "'img/pictogramas/Transporte/tren.jpg'", 10],  
+                [31, "'Calzoncillo'",  '"true"', "'img/pictogramas/Vestimenta/calzoncillo.jpg'", 11],
+                [32, "'Medias'",  '"true"', "'img/pictogramas/Vestimenta/medias.jpg'", 11],
+                [33, "'Pantalones'",  '"true"', "'img/pictogramas/Vestimenta/pantalones.jpg'", 11],   
+                [34, "'Besar'",  '"true"', "'img/pictogramas/Verbos/Besar.jpg'", 12],
+                [35, "'Correr'",  '"true"', "'img/pictogramas/Verbos/Correr.jpg'", 12],  
+                [36, "'Saltar'",  '"true"', "'img/pictogramas/Verbos/Saltar.jpg'", 12]    
             ]),
 
         new TableMigrationService('Category')
             .insertValues(['id', 'title', 'enabled', 'img'], [
-                [1, "'Comida'",  '"true"', "'img/comida.jpg'"],
-                [2, "'Juguete'",  '"true"', "'img/juguete.jpg'"]
+                [1, "'Alimentos'",  '"true"', "'img/Alimentos.jpg'"],
+                [2, "'Animales'",  '"true"', "'img/Animales.jpg'"],
+                [3, "'Casa'",  '"true"', "'img/Casa.jpg'"],
+                [4, "'Escuela'",  '"true"', "'img/Escuela.jpg'"],
+                [5, "'Familia'",  '"true"', "'img/Familia.jpg'"],
+                [6, "'Higiene'",  '"true"', "'img/Higiene.jpg'"],
+                [7, "'Juguetes'",  '"true"', "'img/Juguetes.jpg'"],
+                [8, "'Lugares'",  '"true"', "'img/Lugares.jpg'"],
+                [9, "'Oficina'",  '"true"', "'img/Oficina.jpg'"],
+                [10, "'Transporte'",  '"true"', "'img/Transporte.jpg'"],
+                [11, "'Vestimenta'",  '"true"', "'img/Vestimenta.jpg'"],
+                [12, "'Verbos'",  '"true"', "'img/Verbos.jpg'"]
             ]),
 
         new TableMigrationService('Receiver')
@@ -1459,11 +1517,9 @@ communicatorApp.controller('levelCardsCtrl', function($scope, $stateParams, tuto
 	        $scope.cards = results;
 	        $scope.levelNumber = $stateParams.levelNumber;
 	    });
-
-
-    	tutorialService.showIfActive();
     }
 
+    tutorialService.showIfActive();
 });
 communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams, $ionicActionSheet, $ionicNavBarDelegate, $state, tutorialService, cardDbService, registryService) {
     $scope.card = {
@@ -1494,6 +1550,18 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
                 ];
              break;
              case 2:
+                 $scope.buttons= [
+                     {text: 'Puntuar: Distancia al entrenador'},
+                     {text: 'Puntuar: Distancia al dispositivo'}
+                 ];
+             break;
+             case 21:
+                 $scope.buttons= [
+                     {text: 'Puntuar: Distancia al entrenador'},
+                     {text: 'Puntuar: Distancia al dispositivo'}
+                 ];
+             break;
+             case 22:
                  $scope.buttons= [
                      {text: 'Puntuar: Distancia al entrenador'},
                      {text: 'Puntuar: Distancia al dispositivo'}
@@ -1582,18 +1650,15 @@ communicatorApp.controller('patternLockCtrl', function($scope, $state, $ionicNav
 
 		currentReceiverService.receiver = receiver;
 
-		//TODO: Refactor: avoid this switch, changing step 1 view & controller's names.
 		switch(registryService.pickedLevelNumber) {
    			 case 1:
         		$state.go(receiver.advanced == 'true'? 'app.advancedRegistry' : 'app.basicRegistry');
         	 break;
    		 	 case 21:
        	 		$state.go(receiver.advanced == 'true'? 'app.advancedRegistry2Receiver' : 'app.basicRegistry2Receiver');
-        	    registryService.pickedLevelNumber = 2;
         	 break; 
         	 case 22:
        	 		$state.go(receiver.advanced == 'true'? 'app.advancedRegistry2Terminal' : 'app.basicRegistry2Terminal');
-        	    registryService.pickedLevelNumber = 2;
         	 break; 			 
 		}
 	}
@@ -1633,6 +1698,7 @@ communicatorApp.controller('patternLockCtrl', function($scope, $state, $ionicNav
     };
 
     tutorialService.showIfActive();
+
 });
 communicatorApp.controller('receiverPatternEditCtrl', function($scope, $state, $ionicNavBarDelegate, $ionicPopup, receiverDbService, currentReceiverService) {
 	
@@ -1806,7 +1872,7 @@ communicatorApp.service('currentReceiverService', function() {
 });
 communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
 
-	var advancedRegistryScores = {1: '15cm', 2: '30cm', 3: '60cm', 4: '1mt', 5: '3mts', 6: 'eoh', 7:'ne', 8:'gl', 9:'vc', 10:'sil', 11:'pnrdie', 12:'prdie'};
+	var advancedRegistryScores = {true: 'withoutHelp', false: 'withHelp', 1: '15cm', 2: '30cm', 3: '60cm', 4: '1mt', 5: '3mts', 6: 'eoh', 7:'ne', 8:'gl', 9:'vc', 10:'sil', 11:'pnrdie', 12:'prdie'};
 	
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
@@ -1878,7 +1944,7 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $q,
 });
 communicatorApp.controller('advancedRegistry2TerminalCtrl', function($scope, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
 
-	var advancedRegistryScores = {1: '10cm', 2: '15cm', 3: '30cm', 4: '60cm', 5: '1mt', 6: '2mts', 7: '3mts', 8: 'gt3mt', 9:'ne', 10:'gl', 11:'vc', 12:'sil', 13:'pnrdie', 14:'prdie'};
+	var advancedRegistryScores = {true: 'withoutHelp', false: 'withHelp', 1: '10cm', 2: '15cm', 3: '30cm', 4: '60cm', 5: '1mt', 6: '2mts', 7: '3mts', 8: 'gt3mt', 9:'ne', 10:'gl', 11:'vc', 12:'sil', 13:'pnrdie', 14:'prdie'};
 	
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
@@ -2522,24 +2588,31 @@ communicatorApp.service('tutorialService', function($state, $ionicPopup, $timeou
                 case 'tutorialHome':
                     this.step('Iniciar nivel', 'Este tutorial te llevará a través de las funciones básicas de la aplicación.<br/><br/>Para comenzar una actividad se debe presionar IR.', {
                         back: { state: "app.home" },
-                        next: { state: "tutorialLevelCards", params: { levelNumber: 1 } }
+                        next: { state: "tutorialCategories", params: { levelNumber: 1 } }
                     });
                     closeEvent.attach();
                     break;
-                case 'tutorialLevelCards':
-                    this.step('Seleccionar pictograma', 'Al comenzar un intercambio se debe seleccionar un pictograma de la lista.<br/>En esta sección solo se mostrarán los pictogramas habilitados.', {
+                case 'tutorialCategories':
+                    this.step('Seleccionar categoría', 'Si la categorización se encuentra habilitada se debe seleccionar una categoría de la lista.', {
                         back: { state: "tutorialHome" },
+                        next: { state: "tutorialLevelCategoryCards", params: { levelNumber: 1, category: 1 } }
+                    });
+                    closeEvent.attach();
+                    break;
+                case 'tutorialLevelCategoryCards':
+                    this.step('Seleccionar pictograma', 'Al comenzar un intercambio se debe seleccionar un pictograma de la lista.<br/>En esta sección sólo se mostrarán los pictogramas habilitados.', {
+                        back: { state: "tutorialCategories", params: { levelNumber: 1 } },
                         next: { state: "tutorialLevelSingleCard", params: { id: 1 } }
                     });
                     break;
                 case 'tutorialLevelSingleCard':
-                    this.step('Intercambio', 'Se muestra el pictograma para que pueda ser visto claramente y entregado al receptor por el usuario.<br /><br />Para puntuar el intercambio, puede presionarce el botón de menú o mantener presionado sobre la imagen.', {
+                    this.step('Intercambio', 'Se muestra el pictograma en pantalla completa para realizar el intercambio.<br /><br />Para puntuar el intercambio, puede presionarse el botón de menú o bien mantener presionado el pictograma.', {
                         back: { state: "tutorialLevelCards", params: { levelNumber: 1 } },
                         next: { state: "tutorialPatternLock" }
                     });
                     break;
                 case 'tutorialPatternLock':
-                    this.step('Desbloqueo', 'Al querer registrar un intercambio, se debe ingresar un patrón de seguridad.<br /><br />Este patrón previene que la interacción del usuario con el dispositivo registre accidentalmente interacciones y es configurado al agregar un nuevo receptor.', {
+                    this.step('Desbloqueo', 'Al querer registrar un intercambio, se debe ingresar un patrón de seguridad.<br /><br />Este patrón previene que la interacción del usuario con el dispositivo registre accidentalmente interacciones. El mismo es configurable al momento de agregar un nuevo receptor.', {
                         back: { state: "tutorialLevelSingleCard", params: { id: 1 } },
                         next: { state: "tutorialBasicRegistry" }
                     });
@@ -2550,8 +2623,8 @@ communicatorApp.service('tutorialService', function($state, $ionicPopup, $timeou
                         next: function() {
                             $state.transitionTo("app.home").then(function() {
                                 var lastPopup = $ionicPopup.alert({
-                                    title: 'Fin!',
-                                    template: 'Eso es todo, ya puedes realizar intercambios! <br />Para ver el tutorial nuevamente, puedes iniciarlo desde Menú -> Configuración.'
+                                    title: 'Fin',
+                                    template: 'Eso es todo, ya es posible realizar intercambios. <br />Para ver el tutorial nuevamente, se puede acceder al mismo desde Menú -> Configuración.'
                                 });
                                 closeEvent.remove();
                             });

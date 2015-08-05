@@ -19,7 +19,7 @@ communicatorApp.controller('cardsCtrl', function($scope, $ionicPopup, cardDbServ
     $scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'Para agregar un pictograma se debe presionar el signo "+"" de arriba a la derecha. <br> Para eliminar un pictograma se lo debe mantener presionado unos segundos y aparecerá un signo - a su izquierda que permitirá eliminarlo.'
+            template: 'Para agregar un pictograma se debe presionar el signo "+" de arriba a la derecha. <br> Para eliminar un pictograma se lo debe mantener presionado unos segundos y aparecerá un signo "-"" a su izquierda que permitirá eliminarlo.'
         });
     };
 

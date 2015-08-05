@@ -1,17 +1,59 @@
 communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidService) {
     return [
-        new TableMigrationService('Card')
+        new TableMigrationService('Card') 
             .insertValues(['id', 'title', 'enabled', 'img', 'categoryId'], [
-                [1, "'Caramelo'",  '"true"', "'img/candy.png'", 1],
-                [2, "'Pelota'",    '"true"', "'img/ball.png'", 2],
-                [3, "'Oso'",       '"true"', "'img/bear.png'", 2],
-                [4, "'Spaghetti'", '"true"', "'img/spaghetti.png'", 1]
+                [1, "'Carne'",  '"true"', "'img/pictogramas/Alimentos/Carne.jpg'", 1],
+                [2, "'Gaseosa'",  '"true"', "'img/pictogramas/Alimentos/Gaseosa.png'", 1],
+                [3, "'Leche'",  '"true"', "'img/pictogramas/Alimentos/Leche.jpg'", 1],
+                [4, "'Cocodrilo'",  '"true"', "'img/pictogramas/Animales/cocodrilo.jpg'", 2],
+                [5, "'Gato'",  '"true"', "'img/pictogramas/Animales/gato.jpg'", 2],  
+                [6, "'Perro'",  '"true"', "'img/pictogramas/Animales/perro.jpg'", 2],
+                [7, "'Heladera'",  '"true"', "'img/pictogramas/Casa/Heladera.jpg'", 3],
+                [8, "'Sillon'",  '"true"', "'img/pictogramas/Casa/sillon.jpg'", 3],         
+                [9, "'Televisor'",  '"true"', "'img/pictogramas/Casa/tv.jpg'", 3],
+                [10, "'Arenero'",  '"true"', "'img/pictogramas/Escuela/arenero.jpg'", 4],  
+                [11, "'Lapiz'",  '"true"', "'img/pictogramas/Escuela/lapiz.png'", 4],  
+                [12, "'Mochila'",  '"true"', "'img/pictogramas/Escuela/mochila.jpg'", 4],  
+                [13, "'Maestro'",  '"true"', "'img/pictogramas/Familia/maestro.jpg'", 5],  
+                [14, "'Mamá'",  '"true"', "'img/pictogramas/Familia/mama.png'", 5], 
+                [15, "'Papá'",  '"true"', "'img/pictogramas/Familia/papa.jpg'", 5], 
+                [16, "'Ducha'",  '"true"', "'img/pictogramas/Higuiene/Ducha.jpg'", 6],
+                [17, "'Lavar manos'",  '"true"', "'img/pictogramas/Higuiene/lavar manos.jpg'", 6],
+                [18, "'Sonarse la nariz'",  '"true"', "'img/pictogramas/Higuiene/sonarse la nariz.png'", 6],
+                [19, "'Auto'",  '"true"', "'img/pictogramas/Juguetes/Auto.png'", 7],
+                [20, "'Cartas'",  '"true"', "'img/pictogramas/Juguetes/Cartas.png'", 7],
+                [21, "'Pelota'",  '"true"', "'img/pictogramas/Juguetes/Pelota.png'", 7],
+                [22, "'Casa'",  '"true"', "'img/pictogramas/Lugares/Casa.png'", 8],  
+                [23, "'Parada'",  '"true"', "'img/pictogramas/Lugares/Parada.jpg'", 8],
+                [24, "'Hospital'",  '"true"', "'img/pictogramas/Lugares/hospital.png'", 8],
+                [25, "'Computadora'",  '"true"', "'img/pictogramas/Oficina/computadora.jpg'", 9], 
+                [26, "'Escritorio'",  '"true"', "'img/pictogramas/Oficina/escritorio.jpg'", 9], 
+                [27, "'Silla'",  '"true"', "'img/pictogramas/Oficina/silla.jpg'", 9], 
+                [28, "'Colectivo'",  '"true"', "'img/pictogramas/Transporte/colectivo.jpg'", 10],    
+                [29, "'Taxi'",  '"true"', "'img/pictogramas/Transporte/taxi.gif'", 10], 
+                [30, "'Tren'",  '"true"', "'img/pictogramas/Transporte/tren.jpg'", 10],  
+                [31, "'Calzoncillo'",  '"true"', "'img/pictogramas/Vestimenta/calzoncillo.jpg'", 11],
+                [32, "'Medias'",  '"true"', "'img/pictogramas/Vestimenta/medias.jpg'", 11],
+                [33, "'Pantalones'",  '"true"', "'img/pictogramas/Vestimenta/pantalones.jpg'", 11],   
+                [34, "'Besar'",  '"true"', "'img/pictogramas/Verbos/Besar.jpg'", 12],
+                [35, "'Correr'",  '"true"', "'img/pictogramas/Verbos/Correr.jpg'", 12],  
+                [36, "'Saltar'",  '"true"', "'img/pictogramas/Verbos/Saltar.jpg'", 12]    
             ]),
 
         new TableMigrationService('Category')
             .insertValues(['id', 'title', 'enabled', 'img'], [
-                [1, "'Comida'",  '"true"', "'img/comida.jpg'"],
-                [2, "'Juguete'",  '"true"', "'img/juguete.jpg'"]
+                [1, "'Alimentos'",  '"true"', "'img/Alimentos.jpg'"],
+                [2, "'Animales'",  '"true"', "'img/Animales.jpg'"],
+                [3, "'Casa'",  '"true"', "'img/Casa.jpg'"],
+                [4, "'Escuela'",  '"true"', "'img/Escuela.jpg'"],
+                [5, "'Familia'",  '"true"', "'img/Familia.jpg'"],
+                [6, "'Higiene'",  '"true"', "'img/Higiene.jpg'"],
+                [7, "'Juguetes'",  '"true"', "'img/Juguetes.jpg'"],
+                [8, "'Lugares'",  '"true"', "'img/Lugares.jpg'"],
+                [9, "'Oficina'",  '"true"', "'img/Oficina.jpg'"],
+                [10, "'Transporte'",  '"true"', "'img/Transporte.jpg'"],
+                [11, "'Vestimenta'",  '"true"', "'img/Vestimenta.jpg'"],
+                [12, "'Verbos'",  '"true"', "'img/Verbos.jpg'"]
             ]),
 
         new TableMigrationService('Receiver')

@@ -24,24 +24,31 @@ communicatorApp.service('tutorialService', function($state, $ionicPopup, $timeou
                 case 'tutorialHome':
                     this.step('Iniciar nivel', 'Este tutorial te llevará a través de las funciones básicas de la aplicación.<br/><br/>Para comenzar una actividad se debe presionar IR.', {
                         back: { state: "app.home" },
-                        next: { state: "tutorialLevelCards", params: { levelNumber: 1 } }
+                        next: { state: "tutorialCategories", params: { levelNumber: 1 } }
                     });
                     closeEvent.attach();
                     break;
-                case 'tutorialLevelCards':
-                    this.step('Seleccionar pictograma', 'Al comenzar un intercambio se debe seleccionar un pictograma de la lista.<br/>En esta sección solo se mostrarán los pictogramas habilitados.', {
+                case 'tutorialCategories':
+                    this.step('Seleccionar categoría', 'Si la categorización se encuentra habilitada se debe seleccionar una categoría de la lista.', {
                         back: { state: "tutorialHome" },
+                        next: { state: "tutorialLevelCategoryCards", params: { levelNumber: 1, category: 1 } }
+                    });
+                    closeEvent.attach();
+                    break;
+                case 'tutorialLevelCategoryCards':
+                    this.step('Seleccionar pictograma', 'Al comenzar un intercambio se debe seleccionar un pictograma de la lista.<br/>En esta sección sólo se mostrarán los pictogramas habilitados.', {
+                        back: { state: "tutorialCategories", params: { levelNumber: 1 } },
                         next: { state: "tutorialLevelSingleCard", params: { id: 1 } }
                     });
                     break;
                 case 'tutorialLevelSingleCard':
-                    this.step('Intercambio', 'Se muestra el pictograma para que pueda ser visto claramente y entregado al receptor por el usuario.<br /><br />Para puntuar el intercambio, puede presionarce el botón de menú o mantener presionado sobre la imagen.', {
+                    this.step('Intercambio', 'Se muestra el pictograma en pantalla completa para realizar el intercambio.<br /><br />Para puntuar el intercambio, puede presionarse el botón de menú o bien mantener presionado el pictograma.', {
                         back: { state: "tutorialLevelCards", params: { levelNumber: 1 } },
                         next: { state: "tutorialPatternLock" }
                     });
                     break;
                 case 'tutorialPatternLock':
-                    this.step('Desbloqueo', 'Al querer registrar un intercambio, se debe ingresar un patrón de seguridad.<br /><br />Este patrón previene que la interacción del usuario con el dispositivo registre accidentalmente interacciones y es configurado al agregar un nuevo receptor.', {
+                    this.step('Desbloqueo', 'Al querer registrar un intercambio, se debe ingresar un patrón de seguridad.<br /><br />Este patrón previene que la interacción del usuario con el dispositivo registre accidentalmente interacciones. El mismo es configurable al momento de agregar un nuevo receptor.', {
                         back: { state: "tutorialLevelSingleCard", params: { id: 1 } },
                         next: { state: "tutorialBasicRegistry" }
                     });
@@ -52,8 +59,8 @@ communicatorApp.service('tutorialService', function($state, $ionicPopup, $timeou
                         next: function() {
                             $state.transitionTo("app.home").then(function() {
                                 var lastPopup = $ionicPopup.alert({
-                                    title: 'Fin!',
-                                    template: 'Eso es todo, ya puedes realizar intercambios! <br />Para ver el tutorial nuevamente, puedes iniciarlo desde Menú -> Configuración.'
+                                    title: 'Fin',
+                                    template: 'Eso es todo, ya es posible realizar intercambios. <br />Para ver el tutorial nuevamente, se puede acceder al mismo desde Menú -> Configuración.'
                                 });
                                 closeEvent.remove();
                             });

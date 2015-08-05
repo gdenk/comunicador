@@ -32,6 +32,18 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
                      {text: 'Puntuar: Distancia al dispositivo'}
                  ];
              break;
+             case 21:
+                 $scope.buttons= [
+                     {text: 'Puntuar: Distancia al entrenador'},
+                     {text: 'Puntuar: Distancia al dispositivo'}
+                 ];
+             break;
+             case 22:
+                 $scope.buttons= [
+                     {text: 'Puntuar: Distancia al entrenador'},
+                     {text: 'Puntuar: Distancia al dispositivo'}
+                 ];
+             break;
         }
 
 
