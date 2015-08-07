@@ -1,6 +1,4 @@
 communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticService, levelDbService) {
-    
-    $scope.test = "";
 
     $scope.loaded = false;
     $scope.hasExchanges = false;
@@ -10,13 +8,25 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
     levelDbService.selectAll().then(function(levels){
         $scope.levels = levels;
         $scope.myLevel = levels[0];
+    }).then(function(){
+        statisticService.exchangeCountByReceiver($scope.myLevel.levelNumber).then(function(result) {
+        $scope.exchangeCountByReceiver = result;
     });
 
+    });
 
-
-    $scope.showLevelStatistics = function() {
-        //aca deberia mostrar el html de las estadisticas en cuestión
-    };
+    $scope.getLevelData = function(myLevel){
+        if(myLevel.levelNumber == 2){
+             statisticService.exchangeCountByReceiverForLevelSubleveled().then(function(result) {
+                $scope.exchangeCountByReceiver = result;
+             }); 
+        }
+        else{
+            statisticService.exchangeCountByReceiver(myLevel.levelNumber).then(function(result) {
+                $scope.exchangeCountByReceiver = result;
+             });
+        }
+    };   
 
     $scope.score = {
         withHelp: 'AT',
@@ -32,8 +42,6 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
         $scope.loaded = true;
     });
 
-    statisticService.exchangeCountByReceiver().then(function(result) {
-        $scope.exchangeCountByReceiver = result;
-    });
+
 
 });

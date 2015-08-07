@@ -17,13 +17,26 @@ communicatorApp.service('statisticService', function($q,
     var receiverRelationshipField = 'CASE WHEN '+ r.prop('relationshipName') + ' IS NULL THEN ' + rl.prop('name') + ' ELSE '+ r.prop('relationshipName') +' END as receiverRelationship';
 
     receiverDbService
-        .define("exchangeCountByReceiver", function(key) {
+        .define("exchangeCountByReceiver", function(myLevel) {
             return {
                 query: 'SELECT avatar as receiverAvatar, '+ receiverRelationshipField +', COUNT(receiverId) as count FROM ' + this.tableName +
                        ' LEFT JOIN ' + e.tableName + ' ON ' + this.prop('id') + ' = receiverId' +
                        ' LEFT JOIN ' + rl.tableName + ' ON ' + this.prop('relationshipId') + ' = ' + rl.prop('id') +
                        ' LEFT JOIN ' + ebl.tableName + ' ON ' + ebl.prop('exchangeId') + ' = ' + e.prop('id') +
-                       ' WHERE ' + ebl.prop('levelId') + ' = 1 ' + 
+                       ' WHERE ' + ebl.prop('levelId') + ' = ? ' + 
+                       ' GROUP BY receiverId, ' + r.prop('name'),
+                args: [myLevel]
+            };
+        });
+
+    receiverDbService
+        .define("exchangeCountByReceiverForLevelSubleveled", function() {
+            return {
+                query: 'SELECT avatar as receiverAvatar, '+ receiverRelationshipField +', COUNT(receiverId) as count FROM ' + this.tableName +
+                       ' LEFT JOIN ' + e.tableName + ' ON ' + this.prop('id') + ' = receiverId' +
+                       ' LEFT JOIN ' + rl.tableName + ' ON ' + this.prop('relationshipId') + ' = ' + rl.prop('id') +
+                       ' LEFT JOIN ' + ebl.tableName + ' ON ' + ebl.prop('exchangeId') + ' = ' + e.prop('id') +
+                       ' WHERE ' + ebl.prop('levelId') + ' = 21 OR ' + ebl.prop('levelId') + ' = 22 ' +
                        ' GROUP BY receiverId, ' + r.prop('name'),
                 args: []
             };
@@ -55,8 +68,11 @@ communicatorApp.service('statisticService', function($q,
         });
 
     return {
-        exchangeCountByReceiver: function() {
-            return receiverDbService.exchangeCountByReceiver();
+        exchangeCountByReceiver: function(myLevel) {
+            return receiverDbService.exchangeCountByReceiver(myLevel);
+        },
+        exchangeCountByReceiverForLevelSubleveled: function() {
+            return receiverDbService.exchangeCountByReceiverForLevelSubleveled();
         },
         exchanges: function() {
             var deferred = $q.defer();
