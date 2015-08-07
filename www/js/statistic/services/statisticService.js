@@ -22,6 +22,8 @@ communicatorApp.service('statisticService', function($q,
                 query: 'SELECT avatar as receiverAvatar, '+ receiverRelationshipField +', COUNT(receiverId) as count FROM ' + this.tableName +
                        ' LEFT JOIN ' + e.tableName + ' ON ' + this.prop('id') + ' = receiverId' +
                        ' LEFT JOIN ' + rl.tableName + ' ON ' + this.prop('relationshipId') + ' = ' + rl.prop('id') +
+                       ' LEFT JOIN ' + ebl.tableName + ' ON ' + ebl.prop('exchangeId') + ' = ' + e.prop('id') +
+                       ' WHERE ' + ebl.prop('levelId') + ' = 1 ' + 
                        ' GROUP BY receiverId, ' + r.prop('name'),
                 args: []
             };
