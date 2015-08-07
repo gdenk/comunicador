@@ -43,7 +43,7 @@ communicatorApp.service('statisticService', function($q,
         });
 
     exchangeDbService
-        .define("exchanges", function(key) {
+        .define("exchanges", function(myLevel) {
             return {
                 query: 'SELECT ' +
                             e.prop('id')    + ' as id,' +
@@ -62,10 +62,38 @@ communicatorApp.service('statisticService', function($q,
                        ' JOIN ' + s.tableName   + ' ON ' + s.prop('id') +           ' = ' + sbe.prop('scoreId') +
                        ' JOIN ' + sp.tableName  + ' ON ' + sp.prop('id') +          ' = ' + sbe.prop('stepId') +
                        ' JOIN ' + ebl.tableName  + ' ON ' + ebl.prop('exchangeId') + ' = ' + e.prop('id') +
+                       ' WHERE ' + ebl.prop('levelId') + ' = ? ' + 
+                       ' GROUP BY stepId, ' + e.prop('id') + ' , date, ' + r.prop('name') +', cardTitle, scoreName, stepName, level',
+                args: [myLevel]
+            };
+        });
+
+    exchangeDbService
+        .define("exchangesForLevelSubleveled", function() {
+            return {
+                query: 'SELECT ' +
+                            e.prop('id')    + ' as id,' +
+                            e.prop('date')  + ' as date,' +
+                            receiverRelationshipField + ',' +
+                            c.prop('title') + ' as cardTitle,' +
+                            s.prop('name')  + ' as scoreName,' +
+                            sp.prop('name') + ' as stepName,' +
+                            ebl.prop('levelId') + ' as level' + 
+                       ' FROM ' + this.tableName +
+                       ' JOIN ' + r.tableName   + ' ON ' + r.prop('id') +           ' = ' + this.prop('receiverId') +
+                       ' LEFT JOIN ' + rl.tableName + ' ON ' + r.prop('relationshipId') + ' = ' + rl.prop('id') +
+                       ' JOIN ' + ebc.tableName + ' ON ' + ebc.prop('exchangeId') + ' = ' + this.prop('id') +
+                       ' JOIN ' + c.tableName   + ' ON ' + c.prop('id') +           ' = ' + ebc.prop('cardId') +
+                       ' JOIN ' + sbe.tableName + ' ON ' + sbe.prop('exchangeId') + ' = ' + this.prop('id') +
+                       ' JOIN ' + s.tableName   + ' ON ' + s.prop('id') +           ' = ' + sbe.prop('scoreId') +
+                       ' JOIN ' + sp.tableName  + ' ON ' + sp.prop('id') +          ' = ' + sbe.prop('stepId') +
+                       ' JOIN ' + ebl.tableName  + ' ON ' + ebl.prop('exchangeId') + ' = ' + e.prop('id') +
+                       ' WHERE ' + ebl.prop('levelId') + ' = 21 OR ' + ebl.prop('levelId') + ' = 22 ' +
                        ' GROUP BY stepId, ' + e.prop('id') + ' , date, ' + r.prop('name') +', cardTitle, scoreName, stepName, level',
                 args: []
             };
         });
+
 
     return {
         exchangeCountByReceiver: function(myLevel) {
@@ -74,10 +102,26 @@ communicatorApp.service('statisticService', function($q,
         exchangeCountByReceiverForLevelSubleveled: function() {
             return receiverDbService.exchangeCountByReceiverForLevelSubleveled();
         },
-        exchanges: function() {
+        exchanges: function(myLevel) {
             var deferred = $q.defer();
 
-            exchangeDbService.exchanges().then(function(result) {
+            exchangeDbService.exchanges(myLevel).then(function(result) {
+                var exchanges = result.reduce(function(memo, current) {
+                    if (!memo[current.id]) {
+                        memo[current.id] = current;
+                    }
+                    memo[current.id][current.stepName] = current.scoreName;
+                    return memo;
+                }, {});
+                deferred.resolve(exchanges);
+            });
+            
+            return deferred.promise;
+        },
+        exchangesForLevelSubleveled: function() {
+            var deferred = $q.defer();
+
+            exchangeDbService.exchangesForLevelSubleveled().then(function(result) {
                 var exchanges = result.reduce(function(memo, current) {
                     if (!memo[current.id]) {
                         memo[current.id] = current;
