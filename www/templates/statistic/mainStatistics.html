@@ -1,0 +1,116 @@
+<ion-view title='ESTADÍSTICAS'>
+  <ion-content class='has-header'>
+
+      <label class="item item-input item-select">
+        <div class="select-placeholder">Nivel</div>
+           <select ng-model="myLevel" ng-options="level.levelNumber for level in levels" ng-change="getLevelData(myLevel)">
+                <option value="">-- Seleccionar nivel --</option>
+           </select>
+      </label>
+
+
+      
+      <div ng-show="hasExchanges && myLevel.levelNumber == 1">
+
+      <div class="exchange-count">
+        <div class="row table table-title">
+          <div class="col">INTERCAMBIOS POR RECEPTOR</div>
+        </div>
+        <div class="row table table-header">
+          <div class="col">RECEPTOR</div>
+          <div class="col">INTERCAMBIOS</div>
+        </div>
+        <div class="row table" ng-repeat='exchange in exchangeCountByReceiver' ng-show="exchange.count > 0">
+          <div class="col">
+            <img class="table-avatar" ng-src="{{exchange.receiverAvatar}}" ng-if="exchange.receiverAvatar"></img>
+            <i class="table-avatar icon ion-android-social-user" ng-if="!exchange.receiverAvatar"></i>
+            <span>{{ exchange.receiverRelationship || 'Otro' }}</span>
+          </div>
+          <div class="col">{{ exchange.count }}</div>
+        </div>
+      </div>
+      
+      <div class="exchange-history">
+        <div class="row table table-title"><div class="col">HISTORIAL DE INTERCAMBIOS</div></div>
+        <div class="row table table-header">
+          <div class="col">FECHA</div>
+          <div class="col col-20">RECEPTOR</div>
+          <div class="col col-20">PICTOGRAMA</div>
+          <div class="col col-10">REC</div>
+          <div class="col col-10">ALC</div>
+          <div class="col col-10">DE</div>
+        </div>
+        <div class="row table" ng-repeat="(id, exchange) in exchanges | objectToArray | orderBy:'date':true">
+          <div class="col">{{ exchange.date | date:'dd/MM/yy HH:mm' }}</div>
+          <div class="col col-20">{{ exchange.receiverRelationship || 'Otro' }}</div>
+          <div class="col col-20">{{ exchange.cardTitle }}</div>
+          <div class="col col-10 col-tick">
+            <i class="tick-icon {{exchange.pick}}"></i>
+            <i class="tick-icon second-halve" ng-show="exchange.pick === 'withPartialHelp'"></i>
+          </div>
+          <div class="col col-10 col-tick">
+            <i class="tick-icon {{exchange.reach}}"></i>
+            <i class="tick-icon second-halve" ng-show="exchange.reach === 'withPartialHelp'"></i>
+          </div>
+          <div class="col col-10 col-tick">
+            <i class="tick-icon {{exchange.drop}}"></i>
+            <i class="tick-icon second-halve" ng-show="exchange.drop === 'withPartialHelp'"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <div ng-show="hasExchanges && myLevel.levelNumber == 2">
+
+      <div class="exchange-count">
+        <div class="row table table-title">
+          <div class="col">INTERCAMBIOS POR RECEPTOR</div>
+        </div>
+        <div class="row table table-header">
+          <div class="col">RECEPTOR</div>
+          <div class="col">INTERCAMBIOS</div>
+        </div>
+        <div class="row table" ng-repeat='exchange in exchangeCountByReceiver' ng-show="exchange.count > 0">
+          <div class="col">
+            <img class="table-avatar" ng-src="{{exchange.receiverAvatar}}" ng-if="exchange.receiverAvatar"></img>
+            <i class="table-avatar icon ion-android-social-user" ng-if="!exchange.receiverAvatar"></i>
+            <span>{{ exchange.receiverRelationship || 'Otro' }}</span>
+          </div>
+          <div class="col">{{ exchange.count }}</div>
+        </div>
+      </div>
+      
+      <div class="exchange-history">
+        <div class="row table table-title"><div class="col">HISTORIAL DE INTERCAMBIOS</div></div>
+        <div class="row table table-header">
+          <div class="col col-20">FECHA</div>
+          <div class="col col-10">RECEPTOR</div>
+          <div class="col col-10">PICTOGRAMA</div>
+          <div class="col col-10">DESP</div>
+          <div class="col col-10">DIST</div>
+          <div class="col col-10">C.O.</div>
+          <div class="col col-10">E.F.</div>
+          <div class="col col-10">E.O.</div>
+          <div class="col col-10">SUBNIVEL</div>
+        </div>
+        <div class="row table" ng-repeat="(id, exchange) in exchanges | objectToArray | orderBy:'date':true">
+          <div class="col col-20">{{ exchange.date | date:'dd/MM/yy HH:mm' }}</div>
+          <div class="col col-10">{{ exchange.receiverRelationship || 'Otro' }}</div>
+          <div class="col col-10">{{ exchange.cardTitle }}</div>
+          <div class="col col-10 col-tick">
+            <i class="tick-icon {{exchange.reachReceiver}}"></i>
+            <i class="tick-icon second-halve" ng-show="exchange.reachReceiver === 'withPartialHelp'"></i>
+          </div>
+          <div class="col col-10 col-tick">{{exchange.distanceToReceiver}}</div>
+          <div class="col col-10 col-tick">{{exchange.eyeContact | yes_no_spanish}}</div>
+          <div class="col col-10 col-tick">{{exchange.facialExpression | yes_no_spanish}}</div>
+          <div class="col col-10 col-tick">{{exchange.oralOutput | oral_output}}</div>
+          <div class="col col-10 col-tick">{{ exchange.level | level_sublevel }}</div>
+        </div>
+      </div>
+    </div>
+    <div ng-show="loaded && !hasExchanges">
+      <h4 class="empty-notice">Aún no se registraron intercambios</h4>
+    </div>
+  </ion-content>
+</ion-view>
