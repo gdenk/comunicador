@@ -65,6 +65,11 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 	}
 
 	function setLevelInitDate (levelNumber) {
+
+		if (levelNumber == 21 | levelNumber == 22){
+			levelNumber = 2;
+		}
+
 		var initDate = getLevelDate(levelNumber);
 		if (initDate === null) {
 			var date = new Date();
@@ -104,36 +109,24 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 	}
 
 	function getLevelDate(levelNumber){
-		if (levelNumber == 21 | levelNumber == 22){
-			levelNumber = 2;
-		}
 		return levels.filter(function(level) {
 			return level.levelNumber === levelNumber;
 		})[0].initDate;
 	}
 
 	function getLevelId (levelNumber){
-		if (levelNumber == 21 | levelNumber == 22){
-			levelNumber = 2;
-		}
 		return levels.filter(function(level) {
 			return level.levelNumber === levelNumber;
 		})[0].id;
 	}
 
 	function getLevelDescription (levelNumber){
-		if (levelNumber == 21 | levelNumber == 22){
-			levelNumber = 2;
-		}
 		return levels.filter(function(level) {
 			return level.levelNumber === levelNumber;
 		})[0].description;
 	}
 
 	function getLevelEnabled(levelNumber) {
-		if (levelNumber == 21 | levelNumber == 22){
-			levelNumber = 2;
-		}
 		return levels.filter(function(level) {
 			return level.levelNumber === levelNumber;
 		})[0].enabled;
