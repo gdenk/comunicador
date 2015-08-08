@@ -66,7 +66,7 @@ communicatorApp.filter('yes_no_spanish', function() {
             return 'Si';
         }
         return 'No';
-    }
+    };
 });
 
 communicatorApp.filter('oral_output', function() {
@@ -92,7 +92,7 @@ communicatorApp.filter('oral_output', function() {
         if (text == 'prdie') {
             return 'Palabra RI';
         }
-    }
+    };
 });
 
 communicatorApp.filter('level_sublevel', function() {
@@ -103,5 +103,5 @@ communicatorApp.filter('level_sublevel', function() {
         if (text == '22') {
             return 'Dispositivo';
         }
-    }
+    };
 });
