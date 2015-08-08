@@ -58,9 +58,50 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
         withPartialHelp: 'AP',
         withoutHelp: '✓'
     };
+});
 
+communicatorApp.filter('yes_no_spanish', function() {
+    return function(text, length, end) {
+        if (text == 'withoutHelp') {
+            return 'Si';
+        }
+        return 'No';
+    }
+});
 
+communicatorApp.filter('oral_output', function() {
+    return function(text, length, end) {
+        if (text == 'ne') {
+            return 'Ninguna';
+        }
+        if (text == 'gl') {
+            return 'Llanto';
+        }
+        if (text == 'risa') {
+            return 'Risa';
+        }
+        if (text == 'vc') {
+            return 'Vocal/Consonante';
+        }
+        if (text == 'sil') {
+            return 'Sílaba';
+        }
+        if (text == 'pnrdie') {
+            return 'Palabra NRI';
+        }
+        if (text == 'prdie') {
+            return 'Palabra RI';
+        }
+    }
+});
 
-
-
+communicatorApp.filter('level_sublevel', function() {
+    return function(text, length, end) {
+        if (text == '21') {
+            return 'Entrenador';
+        }
+        if (text == '22') {
+            return 'Dispositivo';
+        }
+    }
 });

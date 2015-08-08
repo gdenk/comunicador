@@ -6,7 +6,6 @@
 // 'starter.controllers' is found in controllers.js
 var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 'validation.rules'])
 
-
 .run(function($ionicPlatform, $rootScope) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
