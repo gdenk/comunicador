@@ -60,8 +60,8 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
         url: '/statistics',
         views: {
             'menuContent': {
-                templateUrl: 'templates/statistic/statistics.html',
-                controller: 'statisticsCtrl'
+                templateUrl: 'templates/statistic/mainStatistics.html',
+                controller: 'mainStatisticsCtrl'
             }
         }
     })
