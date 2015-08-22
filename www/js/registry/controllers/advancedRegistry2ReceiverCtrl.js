@@ -67,7 +67,7 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $q,
 	$scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del entrenador. Se registra entonces si la persona se desplaza o no hacia el entrenador y la distancia a la que se encuentra el mismo.'
+            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del receptor. Se registra entonces si la persona se desplaza o no hacia el receptor y la distancia a la que se encuentra el mismo.'
         });
     };
 

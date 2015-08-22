@@ -28,19 +28,19 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
              break;
              case 2:
                  $scope.buttons= [
-                     {text: 'Puntuar: Distancia al entrenador'},
+                     {text: 'Puntuar: Distancia al receptor'},
                      {text: 'Puntuar: Distancia al dispositivo'}
                  ];
              break;
              case 21:
                  $scope.buttons= [
-                     {text: 'Puntuar: Distancia al entrenador'},
+                     {text: 'Puntuar: Distancia al receptor'},
                      {text: 'Puntuar: Distancia al dispositivo'}
                  ];
              break;
              case 22:
                  $scope.buttons= [
-                     {text: 'Puntuar: Distancia al entrenador'},
+                     {text: 'Puntuar: Distancia al receptor'},
                      {text: 'Puntuar: Distancia al dispositivo'}
                  ];
              break;

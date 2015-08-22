@@ -98,7 +98,7 @@ communicatorApp.filter('oral_output', function() {
 communicatorApp.filter('level_sublevel', function() {
     return function(text, length, end) {
         if (text == '21') {
-            return 'Entrenador';
+            return 'Receptor';
         }
         if (text == '22') {
             return 'Dispositivo';
