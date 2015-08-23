@@ -1,7 +1,12 @@
-communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
+communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $ionicScrollDelegate, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
 
 	var advancedRegistryScores = {true: 'withoutHelp', false: 'withHelp', 1: '15cm', 2: '30cm', 3: '60cm', 4: '1mt', 5: '3mts', 6: 'eoh', 7:'ne', 8:'gl', 9:'vc', 10:'sil', 11:'pnrdie', 12:'prdie', 13: 'risa'};
 	
+	$scope.$on("$destroy", function() {
+       var delegate = $ionicScrollDelegate.$getByHandle('resetScroll');
+       delegate.forgetScrollPosition();
+    });
+
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
 		reachReceiver: '',
@@ -10,6 +15,7 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $q,
 		facialExpression: false,
 		oralOutput: 0
 	};
+
 
 	$scope.changeScore = function(step, score) {
 		$scope.registry[step] = score;

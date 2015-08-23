@@ -2,6 +2,11 @@ communicatorApp.controller('basicRegistry2ReceiverCtrl', function($scope, $q, $i
 
 	var basicScoreValues = { true: 'withoutHelp', false: 'withHelp', 1: '15cm', 2: '30cm', 3: '60cm', 4: '1mt', 5: '3mts', 6: 'eoh'};
 	
+	$scope.$on("$destroy", function() {
+       var delegate = $ionicScrollDelegate.$getByHandle('resetScroll');
+       delegate.forgetScrollPosition();
+    });
+
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
 		reachReceiver: true,
