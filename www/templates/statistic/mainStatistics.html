@@ -100,6 +100,52 @@
     </div>
   </div>
 </div>
+<div ng-show="hasExchanges && myLevel.levelNumber == 3">
+  <div class="exchange-count">
+    <div class="row table table-title">
+      <div class="col">INTERCAMBIOS POR RECEPTOR</div>
+    </div>
+    <div class="row table table-header">
+      <div class="col">RECEPTOR</div>
+      <div class="col">INTERCAMBIOS</div>
+    </div>
+    <div class="row table" ng-repeat='exchange in exchangeCountByReceiver' ng-show="exchange.count > 0">
+      <div class="col">
+        <img class="table-avatar" ng-src="{{exchange.receiverAvatar}}" ng-if="exchange.receiverAvatar"></img>
+        <i class="table-avatar icon ion-android-social-user" ng-if="!exchange.receiverAvatar"></i>
+        <span>{{ exchange.receiverRelationship || 'Otro' }}</span>
+      </div>
+      <div class="col">{{ exchange.count }}</div>
+    </div>
+  </div>
+  <div class="exchange-history">
+    <div class="row table table-title"><div class="col">HISTORIAL DE INTERCAMBIOS</div></div>
+    <div class="row table table-header">
+      <div class="col col-10">FECHA</div>
+      <div class="col col-10">RECEPTOR</div>
+      <div class="col col-10">PICTOGRAMAS</div>
+      <div class="col col-10">P. ELEGIDO</div>
+      <div class="col col-10">REACCION NEGATIVA</div>
+      <div class="col col-10">NIVEL DE DISCRIMINACION</div>
+      <div class="col col-10">COM. DE CORRESPONDENCIA</div>
+      <div class="col col-10">DISTANCIA AL RECEPTOR</div>
+      <div class="col col-10">DISTANCIA AL OBJETO</div>
+      <div class="col col-10">SUBNIVEL</div>
+    </div>
+    <div class="row table" ng-repeat="(id, exchange) in exchanges | objectToArray | orderBy:'date':true">
+      <div class="col col-10">{{ exchange.date | date:'dd/MM/yy HH:mm' }}</div>
+      <div class="col col-10">{{ exchange.receiverRelationship || 'Otro' }}</div>
+      <div class="col col-10">{{ exchange.cardTitle }}</div>
+      <div class="col col-10 col-tick">OSO</div>
+      <div class="col col-10 col-tick">NO</div>
+      <div class="col col-10 col-tick">P+D</div>
+      <div class="col col-10 col-tick">+</div>
+      <div class="col col-10 col-tick">2mts</div>
+      <div class="col col-10 col-tick">sala</div>
+      <div class="col col-10 col-tick">{{ exchange.level | level_sublevel }}</div>
+    </div>
+  </div>
+</div>
 <div ng-show="loaded && !hasExchanges">
   <h4 class="empty-notice">Aún no se registraron intercambios</h4>
 </div>
