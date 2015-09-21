@@ -2,7 +2,7 @@ communicatorApp.controller('categoriesCtrl', function($scope, $stateParams, cate
     
     categoryDbService.selectEnabled().then(function(results) {
         $scope.categories = results;
-        $scope.levelNumber = $stateParams.levelNumber;
+        $scope.levelNumber = $stateParams.levelNumber; 
     });
 
 	tutorialService.showIfActive();
