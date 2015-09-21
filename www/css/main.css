@@ -863,3 +863,8 @@ form p.validation-invalid {
    background: #FFF;
    display: block;
 }
+
+.item-select select {
+  color: #00ffae;
+  padding:8px 45px 15px 15px;
+}
