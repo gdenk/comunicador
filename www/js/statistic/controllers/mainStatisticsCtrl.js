@@ -31,23 +31,30 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
            statisticService.exchangeCountByReceiverForLevelSubleveled().then(function(result) {
             $scope.exchangeCountByReceiver = result;
         }); 
-           statisticService.exchangesForLevelSubleveled($scope.myLevel.levelNumber).then(function(result) {
+           statisticService.exchangesForLevelSubleveled(myLevel.levelNumber).then(function(result) {
                if (Object.keys(result).length > 0) {
-                $scope.hasExchanges = true;
-                $scope.exchanges = result;
-            }
+                    $scope.hasExchanges = true;
+                }
+                else{
+                    $scope.hasExchanges = false;
+                }
+            $scope.exchanges = result;
             $scope.loaded = true;
+           
         });
        }
        else{
         statisticService.exchangeCountByReceiver(myLevel.levelNumber).then(function(result) {
             $scope.exchangeCountByReceiver = result;
         });
-        statisticService.exchanges($scope.myLevel.levelNumber).then(function(result) {
+        statisticService.exchanges(myLevel.levelNumber).then(function(result) {
             if (Object.keys(result).length > 0) {
                 $scope.hasExchanges = true;
-                $scope.exchanges = result;
             }
+            else{
+                $scope.hasExchanges = false;
+            }
+            $scope.exchanges = result;
             $scope.loaded = true;
         });
     }
