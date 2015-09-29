@@ -863,3 +863,7 @@ form p.validation-invalid {
    background: #FFF;
    display: block;
 }
+
+.statisticLevelOption {
+  color: #00ffae;
+}

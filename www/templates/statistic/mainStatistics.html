@@ -3,7 +3,7 @@
 <label class="item item-input item-select">
   <div class="select-placeholder">Nivel</div>
   <select ng-model="myLevel" ng-options="level.levelNumber for level in levels" ng-change="getLevelData(myLevel)">
-    <option value="">-- Seleccionar nivel --</option>
+
   </select>
 </label>
 <div ng-show="hasExchanges && myLevel.levelNumber == 1">
