@@ -1,4 +1,31 @@
-communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams, $ionicActionSheet, $ionicNavBarDelegate, $state, tutorialService, cardDbService, registryService) {
+communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams, $location, $ionicActionSheet, $ionicNavBarDelegate, $state, tutorialService, cardDbService, registryService) {
+
+    var levelNumber = registryService.pickedLevelNumber;
+
+    if(levelNumber == 3){
+
+        if(!(registryService.firstSelectCardId && registryService.secondSelectCardId)){
+
+            if(registryService.firstSelectCardId === 0){
+                registryService.firstSelectCardId = $stateParams.id;
+            }
+            else if(registryService.secondSelectCardId === 0){
+                registryService.secondSelectCardId = $stateParams.id;
+            }
+
+            if(registryService.firstSelectCardId && registryService.secondSelectCardId){
+                registryService.startLevel = true;
+            }
+
+            $location.path("app/selectImage/" + levelNumber);
+            return;
+        }
+
+        registryService.firstSelectCardId = 0;
+        registryService.secondSelectCardId = 0;
+        registryService.startLevel = false;
+    }
+
     $scope.card = {
         id: $stateParams.id,
         title: '',
@@ -19,7 +46,7 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
 
     var showActionSheet = function() {
 
-        switch(registryService.pickedLevelNumber) {
+        switch(levelNumber) {
              
              case 1:
                 $scope.buttons= [

@@ -117,6 +117,15 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
         url: '/tutorial',
         parent: 'content.levelSingleCard'
     })
+    .state('app.selectImage', {
+        url: '/selectImage/:levelNumber',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/selectImage.html',
+                controller: 'selectImageCtrl'
+            }
+        }
+    })
     .state('app.patternLock', {
         url: '/patternLock',
         views: {

@@ -11,9 +11,16 @@
           <label class="level-init-date" ng-show='level.initDate != null'>Iniciado el {{level.initDate}}</label>
           <label>{{level.description}}</label>
         
-          <a class="button button-positive" ui-sref="app.levelCards({ levelNumber: {{level.levelNumber}} })" ng-if="!categoryEnabled">Ir</a>
+          <!-- Level 1 and 2 -->
 
-          <a class="button button-positive" ui-sref="app.categories({ levelNumber: {{level.levelNumber}} })" ng-if="categoryEnabled">Ir</a>
+          <a class="button button-positive" ui-sref="app.levelCards({ levelNumber: {{level.levelNumber}} })" ng-if="!categoryEnabled && level.levelNumber <= 2">Ir</a>
+
+          <a class="button button-positive" ui-sref="app.categories({ levelNumber: {{level.levelNumber}} })" ng-if="categoryEnabled && level.levelNumber <= 2">Ir</a>
+
+          <!-- Level 3 -->
+
+          <a class="button button-positive" ui-sref="app.selectImage({ levelNumber: {{level.levelNumber}}, categoryEnabled: {{categoryEnabled}} })" ng-if="level.levelNumber == 3">Ir</a>
+
         </div>
       </ion-item>
     </ion-list>

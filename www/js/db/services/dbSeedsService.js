@@ -65,7 +65,7 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
             .insertValues(['levelNumber', 'title', 'description', 'enabled'], [
             	[1, "'Cómo comunicarse'", "'Al ver un objeto muy preferido la persona recogerá el celular con una imagen del objeto, alcanzará al receptor comunicativo y dejará el dispositivo con la imagen en la mano de este.'" , '"true"'],
                 [2, '"Distancia y persistencia"', "'Utilizando todavía una sola imagen a la vez, la persona aprende a generalizar esta nueva habilidad utilizándola en diferentes lugares, con diferentes personas y a lo largo de diversas distancias.'", '"true"'],
-                [3, '"Discriminar imágenes"', "'Las personas aprenden a seleccionar de entre dos o más imágenes para pedir sus objetos o actividades favoritas.'", '"false"'],
+                [3, '"Discriminar imágenes"', "'Las personas aprenden a seleccionar de entre dos imágenes para pedir sus objetos o actividades favoritas.'", '"true"'],
                 [4, '"Estructura oración"', "'Las personas aprenden a construir oraciones simples en una “tira-frase”, utilizando una imagen de “quiero” seguida de una imagen del elemento que está pidiendo en ese momento.'", '"false"'],
                 [5, '"Responder preguntas"', "'Las personas aprenden a usar el comunicador para responder a la pregunta: ¿Qué deseas?'", '"false"'],
                 [6, '"Comentar"', "''", '"false"']
@@ -110,7 +110,8 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
 
         new TableMigrationService('Configuration')
             .insertValues(['key', 'value'], [
-                ['"categoryEnabled"', '"false"']
+                ['"categoryEnabled"', '"false"'],
+                ['"selectImage"', '"img/select.png"']
             ]),
 
         new TableMigrationService('Relationship')
