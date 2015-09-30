@@ -1,0 +1,36 @@
+<ion-view title='NIVEL 3'>
+  <ion-nav-buttons side='right'>
+    <a ng-click='ask()' class='button button-icon icon ask-icon'></a>
+  </ion-nav-buttons>
+  <ion-content class='has-header' delegate-handle="resetScroll">
+    <div class="list list-inset registry">
+      <label class="item item-input">
+        <span class="input-label">FECHA: {{registry.date}}</span>
+      </label>
+      <label class="item item-input">
+        <div class="input-label">
+          NIVEL DE DISCRIMINACION:
+        </div>
+        <ion-radio name="discriminationLevel" ng-model="registry.discriminationLevel" ng-value="'1'">Preferido</ion-radio>
+        <ion-radio name="discriminationLevel" ng-model="registry.discriminationLevel" ng-value="'2'">Distractor</ion-radio>
+      </label>
+      <label class="item item-input item-toggle">
+        <div class="input-label">
+          REACCION NEGATIVA:
+        </div>
+        <label class="toggle toggle-positive">
+          <input type="checkbox" ng-model="registry.reactionNegative">
+          <div class="track">
+            <div class="handle">{{registry.reactionNegative? 'SÍ': 'NO'}}</div>
+          </div>
+        </label>
+      </label>
+        <div class='item item-image'>
+          <img ng-src='{{card.img}}' alt='{{card.title}}'>
+        </div>
+        <div class='form-buttons'>
+        <a id='accept' class='button padding-right button-positive button-block' ng-click='saveRegistry();'>Aceptar</a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

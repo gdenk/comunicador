@@ -1,0 +1,60 @@
+<ion-view title='NIVEL 3'>
+  <ion-nav-buttons side='right'>
+    <a ng-click='ask()' class='button button-icon icon ask-icon'></a>
+  </ion-nav-buttons>
+  <ion-content class='has-header' delegate-handle="resetScroll">
+    <div class="list list-inset registry">
+      <label class="item item-input">
+        <span class="input-label">FECHA: {{registry.date}}</span>
+      </label>
+      <label class="item item-input">
+        <div class="input-label">
+          NIVEL DE DISCRIMINACION:
+        </div>
+        <ion-radio name="discriminationLevel" ng-model="registry.discriminationLevel" ng-value="'1'">Preferido</ion-radio>
+        <ion-radio name="discriminationLevel" ng-model="registry.discriminationLevel" ng-value="'2'">Distractor</ion-radio>
+      </label>
+      <label class="item item-input item-toggle">
+        <div class="input-label">
+          COM. DE CORRESPONDENCIA:
+        </div>
+        <label class="toggle toggle-positive">
+          <input type="checkbox" ng-model="registry.correspondence">
+          <div class="track">
+            <div class="handle">{{registry.correspondence? '+': '-'}}</div>
+          </div>
+        </label>
+      </label>
+      <label class="item item-input">
+        <div class="input-label">
+          DISTANCIA AL INSTRUCTOR:
+        </div>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'1'">10 cm</ion-radio>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'2'">15 cm</ion-radio>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'3'">30 cm</ion-radio>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'4'">60 cm</ion-radio>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'5'">1 mt</ion-radio>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'6'">3 mts</ion-radio>
+        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'7'">Mas de 3 mts</ion-radio>
+      </label>
+      <label class="item item-input">
+        <div class="input-label">
+          DISTANCIA AL DISPOSITIVO:
+        </div>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'1'">10 cm</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'2'">15 cm</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'3'">30 cm</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'4'">60 cm</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'5'">1 mt</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'6'">3 mts</ion-radio>
+        <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'7'">Mas de 3 mts</ion-radio>
+      </label>
+        <div class='item item-image'>
+          <img ng-src='{{card.img}}' alt='{{card.title}}'>
+        </div>
+        <div class='form-buttons'>
+        <a id='accept' class='button padding-right button-positive button-block' ng-click='saveRegistry();'>Aceptar</a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
