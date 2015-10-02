@@ -197,6 +197,24 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             }
         }
     })
+    .state('app.basicRegistry3A', {
+        url: '/basicRegistry3A',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/registry/basicRegistry3A.html',
+                controller: 'basicRegistry3ACtrl'
+            }
+        }
+    })
+    .state('app.basicRegistry3B', {
+        url: '/basicRegistry3B',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/registry/basicRegistry3B.html',
+                controller: 'basicRegistry3BCtrl'
+            }
+        }
+    })
     .state('app.cards', {
         url: '/cards',
         views: {

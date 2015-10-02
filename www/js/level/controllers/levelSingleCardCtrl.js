@@ -71,6 +71,12 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
                      {text: 'Puntuar: Distancia al dispositivo'}
                  ];
              break;
+             case 3:
+                 $scope.buttons= [
+                     {text: 'Puntuar: Preferencia'},
+                     {text: 'Puntuar: Preferencia y Distancias'}
+                 ];
+             break;
         }
 
 
@@ -91,6 +97,14 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
                         }
                         if (index === 1){
                             registryService.pickedLevelNumber = 22;
+                        }
+                    }
+                    if (registryService.pickedLevelNumber == 3){
+                        if (index === 0){
+                            registryService.pickedLevelNumber = 31;
+                        }
+                        if (index === 1){
+                            registryService.pickedLevelNumber = 32;
                         }
                     }
                     $state.go('app.patternLock');
