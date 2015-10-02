@@ -110,8 +110,7 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
 
         new TableMigrationService('Configuration')
             .insertValues(['key', 'value'], [
-                ['"categoryEnabled"', '"false"'],
-                ['"selectImage"', '"img/select.png"']
+                ['"categoryEnabled"', '"false"']
             ]),
 
         new TableMigrationService('Relationship')

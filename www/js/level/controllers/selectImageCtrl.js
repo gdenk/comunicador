@@ -7,9 +7,7 @@ communicatorApp.controller('selectImageCtrl', function($scope, $stateParams, con
     	});
 	}
 	else{
-		configurationDbService.find('selectImage').then(function(results){
-	        $scope.select_1 = results[0].value;
-	    });
+	    $scope.select_1 = "img/plus-4-xxl.png";
 	}
 
 	if(registryService.secondSelectCardId){
@@ -18,9 +16,7 @@ communicatorApp.controller('selectImageCtrl', function($scope, $stateParams, con
     	});
 	}
 	else{
-		configurationDbService.find('selectImage').then(function(results){
-	        $scope.select_2 = results[0].value;
-	    });
+		$scope.select_2 = "img/plus-4-xxl.png";
 	}
 
     $scope.levelNumber = $stateParams.levelNumber; 
