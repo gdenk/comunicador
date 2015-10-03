@@ -27,11 +27,11 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
 
     $scope.getLevelData = function(myLevel){
 
-        if(myLevel.levelNumber == 2){
-           statisticService.exchangeCountByReceiverForLevelSubleveled().then(function(result) {
+        if(myLevel.levelNumber == 2 || myLevel.levelNumber == 3){
+            statisticService.exchangeCountByReceiverForLevelSubleveled(myLevel.levelNumber + '1',myLevel.levelNumber + '2').then(function(result) {
             $scope.exchangeCountByReceiver = result;
         }); 
-           statisticService.exchangesForLevelSubleveled(myLevel.levelNumber).then(function(result) {
+           statisticService.exchangesForLevelSubleveled(myLevel.levelNumber + '1',myLevel.levelNumber + '2').then(function(result) {
                if (Object.keys(result).length > 0) {
                     $scope.hasExchanges = true;
                 }
