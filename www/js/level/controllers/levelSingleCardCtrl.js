@@ -69,8 +69,13 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
              break;
              case 3:
                  $scope.buttons= [
+<<<<<<< HEAD
                      {text: 'Puntuar: Fase III A'},
                      {text: 'Puntuar: Fase III B'}
+=======
+                     {text: 'Puntuar: Nivel IIIA'},
+                     {text: 'Puntuar: Nivel IIIB'}
+>>>>>>> 3ec86ba6fabbef8bb2aa873c8a22fe699bd537bf
                  ];
              break;
         }
