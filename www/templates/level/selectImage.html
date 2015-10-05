@@ -1,32 +1,52 @@
-<ion-view title='NIVEL {{levelNumber}}'>
-  <ion-pane>
-	    <ion-content>
-	        <div class="row">
-	            <div class="col col-100 rotate">
-	            	<a class="item item-image" ng-if="startLevel">
-				        <img ng-src='{{select_1}}' width="100%" height="50%" ui-sref='content.levelSingleCard({ id: {{card_1}} })' onclick="window.plugins.insomnia.keepAwake()">
-      				</a>
-	            	<a class="item item-image" ng-if="!categoryEnabled && !startLevel">
-				        <img ng-src='{{select_1}}' width="100%" height="50%" ui-sref='app.levelCards({ levelNumber: {{levelNumber}} })' onclick="window.plugins.insomnia.keepAwake()">
-      				</a>
-      				<a class="item item-image" ng-if="categoryEnabled && !startLevel">
-				        <img ng-src='{{select_1}}' width="100%" height="50%" ui-sref='app.categories({ levelNumber: {{levelNumber}} })' onclick="window.plugins.insomnia.keepAwake()">
-      				</a>
-	            </div>
-	        </div>
-	        <div class="row">
-	            <div class="col col-100 rotate">
-	                <a class="item item-image" ng-if="startLevel">
-				        <img ng-src='{{select_2}}' width="100%" height="50%" ui-sref='content.levelSingleCard({ id: {{card_2}} })' onclick="window.plugins.insomnia.keepAwake()">
-      				</a>
-	            	<a class="item item-image" ng-if="!categoryEnabled && !startLevel">
-				        <img ng-src='{{select_2}}' width="100%" height="50%" ui-sref='app.levelCards({ levelNumber: {{levelNumber}} })' onclick="window.plugins.insomnia.keepAwake()">
-      				</a>
-      				<a class="item item-image" ng-if="categoryEnabled && !startLevel">
-				        <img ng-src='{{select_2}}' width="100%" height="50%" ui-sref='app.categories({ levelNumber: {{levelNumber}} })' onclick="window.plugins.insomnia.keepAwake()">
-      				</a>
-	            </div>
-	        </div>
-	    </ion-content>
-	</ion-pane>
-</ion-view>
+<form novalidate>
+  <ion-view title='NIVEL {{levelNumber}}'>
+
+    <ion-nav-buttons side='right'>
+	    <div ng-click='startLevel()' class='start-level3' ng-if="!select.levelStarted">
+	    </div>
+    </ion-nav-buttons>
+
+    <ion-content class='has-header'>
+
+      <div class="row" ng-if="!select.levelStarted && !categoryEnabled">
+            <div class="col col-50">
+		      <div class='item item-image' ui-sref="app.levelCards3({ levelNumber: {{levelNumber}}, select: 'A', levelInfo: {{levelInfo}} })">
+		        <img ng-src='{{select.imgSrcA}}'>
+		      </div>
+            </div>
+            <div class="col col-50">
+		      <div class='item item-image' ui-sref="app.levelCards3({ levelNumber: {{levelNumber}}, select: 'B', levelInfo: {{levelInfo}} })">
+		        <img ng-src='{{select.imgSrcB}}'>
+		      </div>
+            </div>
+      </div>
+
+      <div class="row" ng-if="!select.levelStarted && categoryEnabled">
+            <div class="col col-50">
+		      <div class='item item-image' ui-sref="app.categories3({ levelNumber: {{levelNumber}}, select: 'A', levelInfo: {{levelInfo}} })">
+		        <img ng-src='{{select.imgSrcA}}'>
+		      </div>
+            </div>
+            <div class="col col-50">
+		      <div class='item item-image' ui-sref="app.categories3({ levelNumber: {{levelNumber}}, select: 'B', levelInfo: {{levelInfo}} })">
+		        <img ng-src='{{select.imgSrcB}}'>
+		      </div>
+            </div>
+      </div>
+
+      <div class="row" ng-if="select.levelStarted">
+            <div class="col col-50">
+		      <div class='item item-image' ui-sref="content.levelSingleCard({ id: {{select.imgIdA}} })">
+		        <img ng-src='{{select.imgSrcA}}'>
+		      </div>
+            </div>
+            <div class="col col-50">
+		      <div class='item item-image' ui-sref="content.levelSingleCard({ id: {{select.imgIdB}} })">
+		        <img ng-src='{{select.imgSrcB}}'>
+		      </div>
+            </div>
+      </div>
+  
+    </ion-content>
+  </ion-view>
+</form>

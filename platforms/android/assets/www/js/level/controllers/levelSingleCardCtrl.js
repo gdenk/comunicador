@@ -1,15 +1,38 @@
-communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams, $ionicActionSheet, $ionicNavBarDelegate, $state, tutorialService, cardDbService, registryService) {
+communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams, $location, $ionicActionSheet, $ionicNavBarDelegate, $state, tutorialService, cardDbService, registryService) {
+
+    var levelNumber = registryService.pickedLevelNumber;
+
     $scope.card = {
         id: $stateParams.id,
         title: '',
         img: ''
     };
 
-    var actionSheetUp = false;
-
     cardDbService.find($stateParams.id).then(function(results) {
         $scope.card = results[0];
     });
+
+    if(levelNumber == 3 && $stateParams.levelInfo){
+
+        var levelInfo = JSON.parse(decodeURI($stateParams.levelInfo));
+
+        if(levelInfo.levelStarted === false){
+
+            if($stateParams.select === 'A'){
+                levelInfo.imgIdA = $scope.card.id;
+            }
+            else{
+                levelInfo.imgIdB = $scope.card.id;
+            }
+
+            $location.path("app/selectImage/" + levelNumber + "/levelInfo/" + 
+                encodeURI(JSON.stringify(levelInfo)));
+
+            return;
+        }
+    }
+
+    var actionSheetUp = false;
 
     $scope.menuButtonPressed = function() {
         if (!actionSheetUp) {
@@ -19,7 +42,7 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
 
     var showActionSheet = function() {
 
-        switch(registryService.pickedLevelNumber) {
+        switch(levelNumber) {
              
              case 1:
                 $scope.buttons= [
@@ -28,20 +51,26 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
              break;
              case 2:
                  $scope.buttons= [
-                     {text: 'Puntuar: Distancia al entrenador'},
+                     {text: 'Puntuar: Distancia al receptor'},
                      {text: 'Puntuar: Distancia al dispositivo'}
                  ];
              break;
              case 21:
                  $scope.buttons= [
-                     {text: 'Puntuar: Distancia al entrenador'},
+                     {text: 'Puntuar: Distancia al receptor'},
                      {text: 'Puntuar: Distancia al dispositivo'}
                  ];
              break;
              case 22:
                  $scope.buttons= [
-                     {text: 'Puntuar: Distancia al entrenador'},
+                     {text: 'Puntuar: Distancia al receptor'},
                      {text: 'Puntuar: Distancia al dispositivo'}
+                 ];
+             break;
+             case 3:
+                 $scope.buttons= [
+                     {text: 'Puntuar: Preferencia'},
+                     {text: 'Puntuar: Preferencia y Distancias'}
                  ];
              break;
         }
@@ -64,6 +93,14 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
                         }
                         if (index === 1){
                             registryService.pickedLevelNumber = 22;
+                        }
+                    }
+                    if (registryService.pickedLevelNumber == 3){
+                        if (index === 0){
+                            registryService.pickedLevelNumber = 31;
+                        }
+                        if (index === 1){
+                            registryService.pickedLevelNumber = 32;
                         }
                     }
                     $state.go('app.patternLock');

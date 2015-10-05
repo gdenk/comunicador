@@ -2,6 +2,11 @@ communicatorApp.controller('basicRegistry2TerminalCtrl', function($scope, $q, $i
 
 	var basicScoreValues = { true: 'withoutHelp', false: 'withHelp', 1: '10cm', 2: '15cm', 3: '30cm', 4: '60cm', 5: '1mt', 6: '2mts', 7: '3mts', 8: 'gt3mt'};
 	
+	$scope.$on("$destroy", function() {
+       var delegate = $ionicScrollDelegate.$getByHandle('resetScroll');
+       delegate.forgetScrollPosition();
+    });
+
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
 		reachTerminal: true,
@@ -63,7 +68,7 @@ communicatorApp.controller('basicRegistry2TerminalCtrl', function($scope, $q, $i
 	$scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'En esta sección se registra la intercambio en función del desplazamiento del alumno respecto del dispositivo. Se registra entonces si el alumno se desplaza o no hacia el dispositivo y la distancia a la que se encuentra el mismo.'
+            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del dispositivo. Se registra entonces si la persona se desplaza o no hacia el dispositivo y la distancia a la que se encuentra el mismo.'
         });
     };
 

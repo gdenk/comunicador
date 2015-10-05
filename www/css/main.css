@@ -876,3 +876,14 @@ form p.validation-invalid {
     -ms-transform: rotate(270deg);
     transform: rotate(270deg);
 }
+
+.start-level3 {
+  background-image: url('../img/tick-icon.png');
+  width: 31px;
+  height: 31px;
+  background-size: 31px 31px;
+  margin-right: 7px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}

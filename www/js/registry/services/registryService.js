@@ -4,12 +4,6 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 	registryService.pickedCardId = 0;
 
 	registryService.pickedLevelNumber = 1;
-
-	registryService.firstSelectCardId = 0;
-
-	registryService.secondSelectCardId = 0;
-
-	registryService.startLevel = false;
 	
 	var steps = [];
 	stepDbService.selectAll().then(function(results) {
@@ -74,6 +68,9 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 
 		if (levelNumber == 21 | levelNumber == 22){
 			levelNumber = 2;
+		}
+		if (levelNumber == 31 | levelNumber == 32){
+			levelNumber = 3;
 		}
 
 		var initDate = getLevelDate(levelNumber);

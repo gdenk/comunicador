@@ -2,41 +2,37 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
 
     var levelNumber = registryService.pickedLevelNumber;
 
-    if(levelNumber == 3){
-
-        if(!(registryService.firstSelectCardId && registryService.secondSelectCardId)){
-
-            if(registryService.firstSelectCardId === 0){
-                registryService.firstSelectCardId = $stateParams.id;
-            }
-            else if(registryService.secondSelectCardId === 0){
-                registryService.secondSelectCardId = $stateParams.id;
-            }
-
-            if(registryService.firstSelectCardId && registryService.secondSelectCardId){
-                registryService.startLevel = true;
-            }
-
-            $location.path("app/selectImage/" + levelNumber);
-            return;
-        }
-
-        registryService.firstSelectCardId = 0;
-        registryService.secondSelectCardId = 0;
-        registryService.startLevel = false;
-    }
-
     $scope.card = {
         id: $stateParams.id,
         title: '',
         img: ''
     };
 
-    var actionSheetUp = false;
-
     cardDbService.find($stateParams.id).then(function(results) {
         $scope.card = results[0];
     });
+
+    if(levelNumber == 3 && $stateParams.levelInfo){
+
+        var levelInfo = JSON.parse(decodeURI($stateParams.levelInfo));
+
+        if(levelInfo.levelStarted === false){
+
+            if($stateParams.select === 'A'){
+                levelInfo.imgIdA = $scope.card.id;
+            }
+            else{
+                levelInfo.imgIdB = $scope.card.id;
+            }
+
+            $location.path("app/selectImage/" + levelNumber + "/levelInfo/" + 
+                encodeURI(JSON.stringify(levelInfo)));
+
+            return;
+        }
+    }
+
+    var actionSheetUp = false;
 
     $scope.menuButtonPressed = function() {
         if (!actionSheetUp) {
@@ -73,8 +69,8 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
              break;
              case 3:
                  $scope.buttons= [
-                     {text: 'Puntuar: Preferencia'},
-                     {text: 'Puntuar: Preferencia y Distancias'}
+                     {text: 'Puntuar: Fase III A'},
+                     {text: 'Puntuar: Fase III B'}
                  ];
              break;
         }

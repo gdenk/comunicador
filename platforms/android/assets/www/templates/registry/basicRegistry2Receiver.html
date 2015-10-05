@@ -2,7 +2,7 @@
   <ion-nav-buttons side='right'>
     <a ng-click='ask()' class='button button-icon icon ask-icon'></a>
   </ion-nav-buttons>
-  <ion-content class='has-header' >
+  <ion-content class='has-header' delegate-handle="resetScroll">
     <div class="list list-inset registry">
       <label class="item item-input">
       <div class="input-label">
@@ -11,7 +11,7 @@
       </label>
       <label class="item item-input item-toggle">
         <div class="input-label">
-          EL ALUMNO SE DESPLAZA:
+          DESPLAZAMIENTO DE LA PERSONA:
         </div>
         <label class="toggle toggle-positive">
           <input type="checkbox" ng-model="registry.reachReceiver">
@@ -22,7 +22,7 @@
       </label>
       <label class="item item-input">
         <div class="input-label">
-          DISTANCIA AL ENTRENADOR:
+          DISTANCIA AL RECEPTOR:
         </div>
         <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'1'">15 cm</ion-radio>
         <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'2'">30 cm</ion-radio>

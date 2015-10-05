@@ -34,8 +34,14 @@ communicatorApp.controller('basicRegistry3ACtrl', function($scope, $q, $ionicPop
 	};
 
 	$scope.goBack = function() {
-		$location.path("app");
-        return;
+		// this is to force a double "back"
+	  	var backView = $scope.$viewHistory.views[$scope.$viewHistory.backView.backViewId];
+	    $scope.$viewHistory.forcedNav = {
+	        viewId:     backView.viewId,
+	        navAction: 'moveBack',
+	        navDirection: 'back'
+	    };
+	    backView.go();
 	};
 
 	var checkForDefaultScores = function() {

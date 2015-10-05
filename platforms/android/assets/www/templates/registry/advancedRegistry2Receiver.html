@@ -2,7 +2,7 @@
   <ion-nav-buttons side='right'>
     <a ng-click='ask()' class='button button-icon icon ask-icon'></a>
   </ion-nav-buttons>
-  <ion-content class='has-header' >
+  <ion-content class='has-header' delegate-handle="resetScroll">
     <div class="list list-inset registry">
       <label class="item item-input">
       <div class="input-label">
@@ -11,7 +11,7 @@
       </label>
       <label class="item item-input item-stacked-label">
         <div class="input-label">
-          EL ALUMNO SE DESPLAZA:
+          DESPLAZAMIENTO DE LA PERSONA:
         </div>
         <input type="text" style="display: none;" name="reachReceiver" validator="required" ng-model="registry.reachReceiver">
         <div class="button-bar">
@@ -22,7 +22,7 @@
       </label>
       <label class="item item-input">
         <div class="input-label">
-          DISTANCIA AL ENTRENADOR:
+          DISTANCIA AL RECEPTOR:
         </div>
         <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'1'">15 cm</ion-radio>
         <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'2'">30 cm</ion-radio>
@@ -31,7 +31,7 @@
         <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'5'">3 mts</ion-radio>
         <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'6'">Fuera del campo visual</ion-radio>
       </label>
-            <label class="item item-input item-toggle">
+      <label class="item item-input item-toggle">
         <div class="input-label">
         CONTACTO OCULAR:
         </div>
@@ -42,12 +42,24 @@
           </div>
         </label>
       </label>
+      <label class="item item-input item-toggle">
+        <div class="input-label">
+        EXPRESIÓN FACIAL:
+        </div>
+        <label class="toggle toggle-positive">
+          <input type="checkbox" ng-model="registry.facialExpression">
+          <div class="track">
+            <div class="handle">{{registry.facialExpression? 'SÍ': 'NO'}}</div>
+          </div>
+        </label>
+      </label>
       <label class="item item-input">
         <div class="input-label">
-         EMISIONES ORALES:
+         EMISIÓN ORAL:
         </div>
         <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'7'">Ninguna expresión</ion-radio>
-        <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'8'">Grito/llanto</ion-radio>
+        <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'8'">Llanto</ion-radio>
+        <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'13'">Risa</ion-radio>
         <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'9'">Vocal/consonante</ion-radio>
         <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'10'">Sílaba</ion-radio>
         <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'11'">Palabra no representativa de la imagen entregada</ion-radio>

@@ -65,6 +65,11 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 	}
 
 	function setLevelInitDate (levelNumber) {
+
+		if (levelNumber == 21 | levelNumber == 22){
+			levelNumber = 2;
+		}
+
 		var initDate = getLevelDate(levelNumber);
 		if (initDate === null) {
 			var date = new Date();

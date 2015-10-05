@@ -87,12 +87,39 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             }
         }
     })
+    .state('app.levelCategoryCards3', {
+        url: '/levelCards/:levelNumber/category/:category/:select/levelInfo/:levelInfo',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/levelCards.html',
+                controller: 'levelCardsCtrl'
+            }
+        }
+    })
+    .state('app.levelCards3', {
+        url: '/levelCards/:levelNumber/:select/levelInfo/:levelInfo',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/levelCards.html',
+                controller: 'levelCardsCtrl'
+            }
+        }
+    })
     .state('tutorialLevelCategoryCards', {
         url: '/tutorial',
         parent: 'app.levelCategoryCards'
     })
     .state('app.categories', {
         url: '/categories/level/:levelNumber',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/category/categories.html',
+                controller: 'categoriesCtrl'
+            }
+        }
+    })
+    .state('app.categories3', {
+        url: '/categories/level/:levelNumber/:select/levelInfo/:levelInfo',
         views: {
             'menuContent': {
                 templateUrl: 'templates/category/categories.html',
@@ -113,12 +140,30 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             }
         }
     })
+    .state('content.levelSingleCardLevelInfo', {
+        url: '/levelSingleCard/:id/:select/levelInfo/:levelInfo',
+        views: {
+            'content': {
+                templateUrl: 'templates/level/levelSingleCard.html',
+                controller: 'levelSingleCardCtrl'
+            }
+        }
+    })
     .state('tutorialLevelSingleCard', {
         url: '/tutorial',
         parent: 'content.levelSingleCard'
     })
     .state('app.selectImage', {
         url: '/selectImage/:levelNumber',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/selectImage.html',
+                controller: 'selectImageCtrl'
+            }
+        }
+    })
+    .state('app.selectImageLevelInfo', {
+        url: '/selectImage/:levelNumber/levelInfo/:levelInfo',
         views: {
             'menuContent': {
                 templateUrl: 'templates/level/selectImage.html',
