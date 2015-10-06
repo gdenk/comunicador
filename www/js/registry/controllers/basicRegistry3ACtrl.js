@@ -3,34 +3,17 @@ communicatorApp.controller('basicRegistry3ACtrl', function($scope, $q, $ionicPop
 	var basicScoreValues = { true: 'reactionNegative', false: 'reactionPositive', 1: 'favorite', 
 	                         2: 'distractor'};
 
-	var date = new Date();
-    var today =  date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear().toString().substr(2,2);
-
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
-		date: today,
 		discriminationLevel: 0,
-		reactionNegative: false,
-		image: registryService.pickedCardId
+		reactionNegative: false
 	};
 
-	cardDbService.find(registryService.pickedCardId).then(function(results) {
-        $scope.card = results[0];
-    });
-
-	$scope.$on("$destroy", function() {
-       var delegate = $ionicScrollDelegate.$getByHandle('resetScroll');
-       delegate.forgetScrollPosition();
-    });
-
 	$scope.saveRegistry = function() {
-	
-		checkForDefaultScores().then(function(){
-			$scope.registry.discriminationLevel = basicScoreValues[$scope.registry.discriminationLevel];
-			$scope.registry.reactionNegative = basicScoreValues[$scope.registry.reactionNegative];
-			registryService.saveRegistry($scope.registry);
-			$scope.goBack();
-		});
+		$scope.registry.discriminationLevel = basicScoreValues[$scope.registry.discriminationLevel];
+		$scope.registry.reactionNegative = basicScoreValues[$scope.registry.reactionNegative];
+		registryService.saveRegistry($scope.registry);
+		$scope.goBack();
 	};
 
 	$scope.goBack = function() {
@@ -55,7 +38,7 @@ communicatorApp.controller('basicRegistry3ACtrl', function($scope, $q, $ionicPop
 					deferred.resolve();
 				} else {
 					deferred.reject();
-				}
+				} 
 			});
 		} else {
 			deferred.resolve();
