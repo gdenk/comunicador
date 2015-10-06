@@ -82,7 +82,10 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"distanceToTerminal"',2],
                 ['"eyeContact"',2],
                 ['"facialExpression"',2],
-                ['"oralOutput"',2]
+                ['"oralOutput"',2],
+                ['"discriminationLevel"',3],
+                ['"reactionNegative"',3],
+                ['"correspondence"',3]
             ]),
 
         new TableMigrationService('Score')
@@ -105,7 +108,15 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"sil"'],
                 ['"pnrdie"'],
                 ['"prdie"'],
-                ['"risa"']
+                ['"risa"'],
+                ['"reactionNegative"'],
+                ['"reactionPositive"'],
+                ['"favorite"'],
+                ['"distractor"'],
+                ['"+"'],
+                ['"-"'],
+                ['"1mts"'],
+                ['"+3mts"']
             ]),
 
         new TableMigrationService('Configuration')
@@ -122,4 +133,5 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"Otro"', '"false"', '"true"']
             ])
     ];
+
 });
