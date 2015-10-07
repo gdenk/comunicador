@@ -50,5 +50,12 @@ communicatorApp.controller('selectImageCtrl', function($scope, $stateParams, $io
         }
     };
 
+    $scope.ask = function() {
+        $ionicPopup.alert({
+            title: 'Ayuda',
+            template: 'Para agregar los pictogramas correspondientes a este nivel, se deben presionar los signos "+". Para comenzar con el intercambio, debe presionar a continuación, el tilde que se visualiza en la parte superior derecha de la pantalla. Por último deberá seleccionar el pictograma para registrar el intercambio y mantener presionado el mismo para realizar el registro propiamente dicho.'
+        });
+    };
+
 	tutorialService.showIfActive();
 });
