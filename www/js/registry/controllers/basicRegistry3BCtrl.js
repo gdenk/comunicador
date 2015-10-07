@@ -64,7 +64,7 @@ communicatorApp.controller('basicRegistry3BCtrl', function($scope, $q, $ionicPop
 	$scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del receptor. Se registra entonces si la persona se desplaza o no hacia el receptor y la distancia a la que se encuentra el mismo.'
+            template: 'En esta sección se registra el intercambio en función del nivel de discriminación, comprobación de correspondencia, distancia al instructor y al dispositivo.'
         });
     };
 
