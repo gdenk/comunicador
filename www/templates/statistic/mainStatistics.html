@@ -123,24 +123,24 @@
       <div class="col col-10">FECHA</div>
       <div class="col col-10">RECEPTOR</div>
       <div class="col col-10">PICTOGRAMAS</div>
-      <div class="col col-10">P. ELEGIDO</div>
-      <div class="col col-10">REACCIÓN NEGATIVA</div>
+      <div class="col col-10">ELEGIDO</div>
+      <div class="col col-10">REACCIÓN NEGATIVA(IIIA)</div>
       <div class="col col-10">NIVEL DE DISCRIMINACIÓN</div>
-      <div class="col col-10">COM. DE CORRESPONDENCIA</div>
-      <div class="col col-10">DISTANCIA AL RECEPTOR</div>
-      <div class="col col-10">DISTANCIA AL OBJETO</div>
+      <div class="col col-10">CORRESPONDENCIA(IIIB)</div>
+      <div class="col col-10">DISTANCIA AL RECEPTOR(IIIB)</div>
+      <div class="col col-10">DISTANCIA AL OBJETO(IIIB)</div>
       <div class="col col-10">SUBNIVEL</div>
     </div>
     <div class="row table" ng-repeat="(id, exchange) in exchanges | objectToArray | orderBy:'date':true">
       <div class="col col-10">{{ exchange.date | date:'dd/MM/yy HH:mm' }}</div>
       <div class="col col-10">{{ exchange.receiverRelationship || 'Otro' }}</div>
-      <div class="col col-10">{{ exchange.cardTitle }}</div>
-      <div class="col col-10 col-tick">OSO</div>
-      <div class="col col-10 col-tick">NO</div>
-      <div class="col col-10 col-tick">P+D</div>
-      <div class="col col-10 col-tick">+</div>
-      <div class="col col-10 col-tick">2mts</div>
-      <div class="col col-10 col-tick">sala</div>
+      <div class="col col-10">{{ exchange.cardTitle }}</div> <!--Missing other pic (just one?)-->
+      <div class="col col-10 col-tick">{{ exchange.cardTitle }}</div>
+      <div class="col col-10 col-tick">{{ exchange.reactionNegative | reaction}}</div>
+      <div class="col col-10 col-tick">{{ exchange.discriminationLevel | discrimination }}</div>
+      <div class="col col-10 col-tick">{{ exchange.correspondence }}</div>
+      <div class="col col-10 col-tick">{{ exchange.distanceToReceiver }}</div>
+      <div class="col col-10 col-tick">{{ exchange.distanceToTerminal }}</div>
       <div class="col col-10 col-tick">{{ exchange.level | level_sublevel }}</div>
     </div>
   </div>

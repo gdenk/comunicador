@@ -450,179 +450,6 @@ communicatorApp.controller('singleCardCtrl', function($scope, $stateParams, $ion
 
     popupService.start($scope, updateCardImage);
 });
-communicatorApp.controller('deleteBarCtrl', function($scope, listItemDeleteService) {
-    $scope.eraser = listItemDeleteService;
-});
-communicatorApp.directive('cmDeletegestures', function($ionicGesture, listItemDeleteService) {
-    return {
-        link : function(scope, elem, attrs) {
-            $ionicGesture.on('hold', listItemDeleteService.showDeleteButton, elem);
-
-            $ionicGesture.on('tap', function() {
-                var model = scope[attrs.modeltodelete];
-                if (model) {
-                    listItemDeleteService.modelTap(model.id, scope.redirectState);
-                }
-            }, elem);
-        }
-    };
-});
-communicatorApp.directive('menuOnhold', function($ionicGesture) {
-    return {
-        link : function(scope, elem, attrs) {
-            $ionicGesture.on('hold', scope.menuButtonPressed, elem);
-        }
-    };
-});
-communicatorApp.filter("objectToArray", function(){
-    return function(obj) {
-        var result = [];
-        angular.forEach(obj, function(val, key) {
-            result.push(val);
-        });
-        return result;
-    };
-});
-
-communicatorApp.service('listItemDeleteService', function($rootScope, $timeout, $state) {
-    var touchedDeleteButton = false;
-    var selectedModelsToDelete = [];
-
-    var eraser = {
-        showConfirmAndHideAddButton: false,
-        showDelete: false,
-        showDeleteButton: function() {
-            $timeout(function() {
-                eraser.showDelete = true;
-                touchedDeleteButton = false;
-                selectedModelsToDelete = [];
-            });
-        },
-        modelTap: function(id, redirectState) {
-            $timeout(function() {
-                if(eraser.showDelete || touchedDeleteButton){
-                    if(touchedDeleteButton) {   
-                        touchedDeleteButton = false;
-                    } else {
-                        eraser.showConfirmAndHideAddButton = false;
-                        eraser.showDelete = false;
-                        eraser.deleteCanceled();
-                    }
-                } else {
-                    if (redirectState) {
-                        $state.go(redirectState, {id: id});
-                    }
-                }
-            });
-        },
-        selectToDelete: function(model) {
-            touchedDeleteButton = true;
-            if(selectedModelsToDelete.indexOf(model) === -1){
-                model.selectedToDelete = true;
-                selectedModelsToDelete.push(model);
-                this.currentCSSClass(model);
-                eraser.showConfirmAndHideAddButton = true;
-            } else {
-                eraser.itemDeleteCanceled(model);
-                this.currentCSSClass(model);
-            }
-        },
-        currentCSSClass: function(model) {
-            return model.selectedToDelete ? "selected-to-delete" : "normal-item";
-        },
-        delete: function() {
-            selectedModelsToDelete.forEach(function(model){
-                $rootScope.$broadcast("delete", model);
-            });
-            eraser.showConfirmAndHideAddButton = false;
-            eraser.showDelete = false;
-        },
-        deleteCanceled: function() {
-            selectedModelsToDelete.forEach(function(model) {
-                for (var i = selectedModelsToDelete.length - 1; i > -1; i--) {
-                    eraser.itemDeleteCanceled(selectedModelsToDelete[i]);
-                }
-            });
-            touchedDeleteButton = false;
-        },
-        itemDeleteCanceled: function(model){
-            delete model.selectedToDelete;
-            eraser.currentCSSClass(model);
-            selectedModelsToDelete.splice(selectedModelsToDelete.indexOf(model), 1);
-            if(selectedModelsToDelete.length === 0){
-                eraser.showConfirmAndHideAddButton = false;
-                this.showDelete = false;
-            }
-        }
-    };
-    return eraser;
-});
-communicatorApp.service('popupService', function($ionicPopup, imageUploaderService) {
-    var popup, pictureCallback, scope;
-
-    var popupEvent = function() {
-        if (event.target.classList.contains('closeTutorial')) {
-            if(popup) {
-                popup.close();
-            }
-        }
-    };
-
-    var showUploadImagePopup = function() {
-        return $ionicPopup.show({
-            template: '¿Desea tomar una nueva foto o subir una foto de la galería?',
-            title: 'Subir foto' + '&nbsp;<span class="closeTutorial">X</span>',
-            scope: scope,
-            buttons: [
-                {
-                    text: '<b>Tomar foto</b>',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        imageUploaderService.takePicture(pictureCallback);
-                    }
-                },
-                {
-                    text: '<b>Abrir galería</b>',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        imageUploaderService.pictureFromDevice(pictureCallback);
-                    }
-                }
-            ]
-        });
-    };
-
-    return {
-        start: function($scope, callback) {
-            scope = $scope;
-            pictureCallback = callback;
-
-            document.addEventListener('click', popupEvent, false);
-
-            $scope.$on("$destroy", function() {
-                console.log("destroy");
-                document.removeEventListener('click', popupEvent);
-            });
-        },
-        show: function() {
-            popup = showUploadImagePopup();
-        }
-    };
-});   
-
-communicatorApp.service('uuidService', function() {
-    return {
-        generate: function() {
-            var now = Date.now();
-            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(repl) {
-                var rnd = (now + Math.random()*16)%16 | 0;
-                now = Math.floor(now/16);
-                return (repl === 'x' ? rnd : (rnd&0x7|0x8)).toString(16);
-            });
-            return uuid;
-        }
-    };
-});
 communicatorApp.controller('categoriesCtrl', function($scope, $stateParams, categoryDbService, tutorialService) {
     
     categoryDbService.selectEnabled().then(function(results) {
@@ -641,320 +468,6 @@ communicatorApp.controller('categoriesCtrl', function($scope, $stateParams, cate
 
 	tutorialService.showIfActive();
 });
-communicatorApp.controller('configurationCategory', function($scope, $ionicNavBarDelegate, $ionicPopup, configurationDbService) {
-    
-    configurationDbService.find('categoryEnabled').then(function(results){
-        $scope.categoryEnabled = results[0].value === 'true' ? true : false;
-    });
-
-    $scope.toggleEnabledCategory = function(enabled) {
-        configurationDbService.changeCategoryEnabled(enabled);
-    };
-
-    $scope.save = function() {
-        $ionicNavBarDelegate.back();
-    };
-
-    $scope.ask = function() {
-        $ionicPopup.alert({
-            title: 'Ayuda',
-            template: 'Las categorías permiten agrupar los pictogramas para una busqueda más fácil.'
-        });
-    };
-});
-communicatorApp.controller('configurationDeveloperToolsCtrl', function($scope, $ionicNavBarDelegate, serverService, currentUserService) {
-    $scope.url = {
-        base: ''
-    };
-    $scope.userSet = true;
-    $scope.hasSyncData = false;
-
-    serverService.getBaseURL().then(function(baseURL) {
-        $scope.url.base = baseURL;
-    });
-
-    currentUserService.get().then(function(user) {
-        $scope.userSet = !!user.name;
-    });
-
-    serverService.getCurrentConfiguration().then(function(configuration) {
-        $scope.hasSyncData = configuration.dataToSync !== undefined;
-    });
-
-    $scope.clear = function() {
-        serverService.clearSyncData();
-        $scope.hasSyncData = false;
-    };
-
-    $scope.save = function() {
-        serverService.setBaseURL($scope.url.base);
-        $ionicNavBarDelegate.back();
-    };
-});
-communicatorApp.controller('configurationSyncCtrl', function($scope, $ionicNavBarDelegate, serverService, currentUserService) {
-    $scope.lastSyncTime = '';
-    $scope.autoSyncEnabled = false;
-    $scope.shouldSync = true;
-
-    serverService.getCurrentConfiguration().then(function(configuration) {
-        $scope.lastSyncTime = configuration.lastSyncTime && new Date(configuration.lastSyncTime);
-        $scope.autoSyncEnabled = configuration.autoSyncEnabled === 'true' ? true : false;
-        $scope.shouldSync = configuration.dataToSync !== undefined;
-    });
-
-    $scope.toggleAutoSync = function(enabled) {
-        serverService.setAutoSync(enabled);
-    };
-
-    $scope.sync = function() {
-        serverService.sync().then(function(syncTime) {
-            $scope.lastSyncTime = new Date(syncTime);
-            $scope.shouldSync = false;
-        });
-    };
-
-    $scope.save = function() {
-        $ionicNavBarDelegate.back();
-    };
-});
-communicatorApp.controller('configurationsCurrentUserCtrl', function($scope, $ionicNavBarDelegate, currentUserService) {
-    $scope.user = {
-        name: '',
-        lastName: '',
-        birthdate: ''
-    };
-
-    currentUserService.get().then(function(user) {
-        $scope.user = user;
-    });
-    
-    $scope.goBack = function() {
-        $ionicNavBarDelegate.back();
-    };
-
-    $scope.save = function() {
-        currentUserService.set($scope.user);
-        $scope.goBack();
-    };
-});
-communicatorApp.service('appService', function($q, configurationService) {
-    var initKey = "app_initialized";
-    return {
-        uninitialized: function() {
-            var self = this;
-            var deferred = $q.defer();
-            if (!localStorage.getItem(initKey)) {
-                configurationService.get(initKey).then(function(value) {
-                    if (value) {
-                        deferred.reject();
-                        localStorage.setItem(initKey, true);
-                    } else {
-                        deferred.resolve();
-                        self.initialize();
-                    }
-                });
-            } else {
-                deferred.reject();
-            }
-            return deferred.promise;
-        },
-        initialize: function() {
-            configurationService.set(initKey, true);
-            localStorage.setItem(initKey, true);
-        }
-    };
-});
-
-communicatorApp.service('configurationService', function($q, configurationDbService) {
-    var db = configurationDbService;
-    var addToPartialResult = function(keyName) {
-        var returnValue = {};
-        return function(result) {
-            returnValue[keyName] = result;
-            return returnValue;
-        };
-    };
-
-    return {
-        find: db.find.bind(db),
-        get: function(key) {
-            var deferred = $q.defer();
-            db.find(key).then(function(results) {
-                var configuration = results.length > 0 ? results[0] : { value: undefined };
-                deferred.resolve(configuration.value);
-            });
-            return deferred.promise;
-        },
-        getMultiple: function(keys) {
-            var deferred = $q.defer();
-            var promises = [];
-
-            for(var keyName in keys) {
-                promises.push(
-                    this.get(keyName).then(addToPartialResult(keys[keyName]))
-                );
-            }
-
-            $q.all(promises).then(function(results) {
-                var mergedResult = results.reduce(function(memo, current) {
-                    return angular.extend(memo, current);
-                }, {});
-                deferred.resolve(mergedResult);
-            });
-
-            return deferred.promise;
-        },
-        insert: db.insert.bind(db),
-        set: function(key, value) {
-            var configuration = { key: key, value: value };
-
-            return db.find(key).then(function(results) {
-                if (results.length) {
-                    configuration.id = results[0].id;
-                    return db.update(configuration);
-                } else {
-                    return db.insert(configuration);
-                }
-            });
-        },
-        setMultiple: function(configurations) {
-            var deferred = $q.defer();
-            var promises = [];           
-
-            for(var key in configurations) {
-                promises.push(
-                    this.set(key, configurations[key])
-                );
-            }
- 
-            $q.all(promises).then(function(results) {
-                deferred.resolve(results);
-            });
-            return deferred.promise;
-        },
-        delete: db.delete.bind(db),
-        deleteByKey: function(key) {
-            db.find(key).then(function(configurations) {
-                configurations.forEach(function(configuration, index) {
-                    db.delete(configuration);
-                });
-            });
-        }
-    };
-});
-communicatorApp.service('serverService', function($http, $q, configurationService) {
-    return {
-        timeout: 20,
-        getBaseURL: function() {
-            var deferred = $q.defer();
-            var promise = deferred.promise;
-
-            if (this.baseURL) {
-                deferred.resolve(this.baseURL);
-            } else {
-                promise = configurationService.get("server_base_url"); 
-            }
-            return promise;
-        },
-        setBaseURL: function(baseURL) {
-            if(baseURL !== undefined) {
-                this.baseURL = baseURL;
-                configurationService.set("server_base_url", baseURL);
-            }
-        },
-        send: function(json) {
-            var self = this;
-            configurationService.get("autosync_enabled").then(function(autoSyncEnabled) {
-                if (autoSyncEnabled === "true" && navigator.onLine) {
-                    self.post({ value: json });
-                } else {
-                    configurationService.insert({ key: "data_to_sync", value: JSON.stringify(json) }).then(function() {
-                        if (autoSyncEnabled === "true" && !navigator.onLine) {
-                            self.sync();
-                        }
-                        if(self.getDataToSyncCount() >= 50) {
-                            self.clearSyncData();
-                        }
-                    });
-                }
-            });
-        },
-        sync: function() {
-            var self = this;
-            var deferred = $q.defer();
-
-            if (navigator.onLine) {
-                this.timeout = 20;
-                configurationService.find("data_to_sync").then(function(configurations) {
-                    configurations.forEach(function(configuration, index) {
-                        setTimeout(function() {
-                            self.post(configuration);
-                        }, index * 20);
-                    });
-                    if (configurations.length) {
-                        deferred.resolve(self.syncTime());
-                    }
-                });
-            } else {
-                setTimeout(this.sync.bind(this), this.timeout);
-                this._incrementTimeout();
-                deferred.reject();
-            }
-            return deferred.promise;
-        },
-        post: function(configuration) {
-            var self = this;
-            var stringifiedData = typeof(configuration.value) === "string" ? configuration.value : JSON.stringify(configuration.value);
-
-            this.getBaseURL().then(function(baseURL) {
-                if (!baseURL) { return; }
-
-                $.post(self._addProtocol(baseURL) + "/exchanges", { data: stringifiedData }).complete(function() {
-                    if (configuration.id) {
-                        configurationService.delete(configuration);
-                    }
-                });
-
-                configurationService.set("server_last_sync_time", self.syncTime());
-            });
-        },
-        syncTime: function() {
-            return new Date().toString();
-        },
-        setAutoSync: function(value) {
-            configurationService.set("autosync_enabled", !!value);
-        },
-        clearSyncData: function() {
-            configurationService.deleteByKey("data_to_sync");
-        },
-        getDataToSyncCount: function() {
-            var count = localStorage.getItem('data_to_sync_count');
-            if (count === null) {
-                configurationService.find("data_to_sync").then(function(configurations) {
-                    count = configurations.length;
-                    localStorage.setItem('data_to_sync_count', count);
-                });
-            }
-            return count;
-        },
-        getCurrentConfiguration: function() {
-            return configurationService.getMultiple({
-                "server_last_sync_time": "lastSyncTime",
-                "autosync_enabled": "autoSyncEnabled",
-                "data_to_sync": "dataToSync"
-            });
-        },
-        _incrementTimeout: function() {
-            if (this.timeout < 20000) {
-                this.timeout = this.timeout * 1.5;
-            }
-        },
-        _addProtocol: function(url) {
-            return url.search(/^(https?:\/\/)/) !== -1 ? url : "http://" + url;
-        }
-    };
-});
-
 // Note:
 //  If you want a specific method for your service, you can add it here or you could use 'define()' like this:
 //
@@ -1301,7 +814,10 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"distanceToTerminal"',2],
                 ['"eyeContact"',2],
                 ['"facialExpression"',2],
-                ['"oralOutput"',2]
+                ['"oralOutput"',2],
+                ['"discriminationLevel"',3],
+                ['"reactionNegative"',3],
+                ['"correspondence"',3]
             ]),
 
         new TableMigrationService('Score')
@@ -1324,7 +840,15 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"sil"'],
                 ['"pnrdie"'],
                 ['"prdie"'],
-                ['"risa"']
+                ['"risa"'],
+                ['"reactionNegative"'],
+                ['"reactionPositive"'],
+                ['"favorite"'],
+                ['"distractor"'],
+                ['"+"'],
+                ['"-"'],
+                ['"1mts"'],
+                ['"+3mts"']
             ]),
 
         new TableMigrationService('Configuration')
@@ -1341,6 +865,7 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"Otro"', '"false"', '"true"']
             ])
     ];
+
 });
 communicatorApp.service('dbService', function($q, dbMigrationsService, dbSeedsService) {
     var dbService = {};
@@ -1476,6 +1001,179 @@ communicatorApp.service('scoreDbService', function(QueryBuilderService) {
 communicatorApp.service('stepDbService', function(QueryBuilderService) {
     return new QueryBuilderService('Step');
 });
+communicatorApp.controller('deleteBarCtrl', function($scope, listItemDeleteService) {
+    $scope.eraser = listItemDeleteService;
+});
+communicatorApp.directive('cmDeletegestures', function($ionicGesture, listItemDeleteService) {
+    return {
+        link : function(scope, elem, attrs) {
+            $ionicGesture.on('hold', listItemDeleteService.showDeleteButton, elem);
+
+            $ionicGesture.on('tap', function() {
+                var model = scope[attrs.modeltodelete];
+                if (model) {
+                    listItemDeleteService.modelTap(model.id, scope.redirectState);
+                }
+            }, elem);
+        }
+    };
+});
+communicatorApp.directive('menuOnhold', function($ionicGesture) {
+    return {
+        link : function(scope, elem, attrs) {
+            $ionicGesture.on('hold', scope.menuButtonPressed, elem);
+        }
+    };
+});
+communicatorApp.filter("objectToArray", function(){
+    return function(obj) {
+        var result = [];
+        angular.forEach(obj, function(val, key) {
+            result.push(val);
+        });
+        return result;
+    };
+});
+
+communicatorApp.service('listItemDeleteService', function($rootScope, $timeout, $state) {
+    var touchedDeleteButton = false;
+    var selectedModelsToDelete = [];
+
+    var eraser = {
+        showConfirmAndHideAddButton: false,
+        showDelete: false,
+        showDeleteButton: function() {
+            $timeout(function() {
+                eraser.showDelete = true;
+                touchedDeleteButton = false;
+                selectedModelsToDelete = [];
+            });
+        },
+        modelTap: function(id, redirectState) {
+            $timeout(function() {
+                if(eraser.showDelete || touchedDeleteButton){
+                    if(touchedDeleteButton) {   
+                        touchedDeleteButton = false;
+                    } else {
+                        eraser.showConfirmAndHideAddButton = false;
+                        eraser.showDelete = false;
+                        eraser.deleteCanceled();
+                    }
+                } else {
+                    if (redirectState) {
+                        $state.go(redirectState, {id: id});
+                    }
+                }
+            });
+        },
+        selectToDelete: function(model) {
+            touchedDeleteButton = true;
+            if(selectedModelsToDelete.indexOf(model) === -1){
+                model.selectedToDelete = true;
+                selectedModelsToDelete.push(model);
+                this.currentCSSClass(model);
+                eraser.showConfirmAndHideAddButton = true;
+            } else {
+                eraser.itemDeleteCanceled(model);
+                this.currentCSSClass(model);
+            }
+        },
+        currentCSSClass: function(model) {
+            return model.selectedToDelete ? "selected-to-delete" : "normal-item";
+        },
+        delete: function() {
+            selectedModelsToDelete.forEach(function(model){
+                $rootScope.$broadcast("delete", model);
+            });
+            eraser.showConfirmAndHideAddButton = false;
+            eraser.showDelete = false;
+        },
+        deleteCanceled: function() {
+            selectedModelsToDelete.forEach(function(model) {
+                for (var i = selectedModelsToDelete.length - 1; i > -1; i--) {
+                    eraser.itemDeleteCanceled(selectedModelsToDelete[i]);
+                }
+            });
+            touchedDeleteButton = false;
+        },
+        itemDeleteCanceled: function(model){
+            delete model.selectedToDelete;
+            eraser.currentCSSClass(model);
+            selectedModelsToDelete.splice(selectedModelsToDelete.indexOf(model), 1);
+            if(selectedModelsToDelete.length === 0){
+                eraser.showConfirmAndHideAddButton = false;
+                this.showDelete = false;
+            }
+        }
+    };
+    return eraser;
+});
+communicatorApp.service('popupService', function($ionicPopup, imageUploaderService) {
+    var popup, pictureCallback, scope;
+
+    var popupEvent = function() {
+        if (event.target.classList.contains('closeTutorial')) {
+            if(popup) {
+                popup.close();
+            }
+        }
+    };
+
+    var showUploadImagePopup = function() {
+        return $ionicPopup.show({
+            template: '¿Desea tomar una nueva foto o subir una foto de la galería?',
+            title: 'Subir foto' + '&nbsp;<span class="closeTutorial">X</span>',
+            scope: scope,
+            buttons: [
+                {
+                    text: '<b>Tomar foto</b>',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        imageUploaderService.takePicture(pictureCallback);
+                    }
+                },
+                {
+                    text: '<b>Abrir galería</b>',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        imageUploaderService.pictureFromDevice(pictureCallback);
+                    }
+                }
+            ]
+        });
+    };
+
+    return {
+        start: function($scope, callback) {
+            scope = $scope;
+            pictureCallback = callback;
+
+            document.addEventListener('click', popupEvent, false);
+
+            $scope.$on("$destroy", function() {
+                console.log("destroy");
+                document.removeEventListener('click', popupEvent);
+            });
+        },
+        show: function() {
+            popup = showUploadImagePopup();
+        }
+    };
+});   
+
+communicatorApp.service('uuidService', function() {
+    return {
+        generate: function() {
+            var now = Date.now();
+            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(repl) {
+                var rnd = (now + Math.random()*16)%16 | 0;
+                now = Math.floor(now/16);
+                return (repl === 'x' ? rnd : (rnd&0x7|0x8)).toString(16);
+            });
+            return uuid;
+        }
+    };
+});
 communicatorApp.controller('homeCtrl', function($scope, $ionicPopup, $state, $stateParams, tutorialService, 
         levelDbService, appService, configurationDbService) {
     
@@ -1584,6 +1282,176 @@ communicatorApp.service('imageUploaderService', function() {
     	takePicture      : cameraIsEnabled ? device.takePicture : webView.takePicture,
         pictureFromDevice: cameraIsEnabled ? device.pictureFromDevice : webView.takePicture
     };
+});
+communicatorApp.controller('receiverPatternEditCtrl', function($scope, $state, $ionicNavBarDelegate, $ionicPopup, receiverDbService, currentReceiverService) {
+	
+	$scope.lock = {};
+	$scope.tempPattern = '';
+	$scope.patternError = false;
+
+	$scope.$on('modal.shown', function() {
+		$scope.lock = new PatternLock("#lock", { 
+			margin: 15,
+			onDraw: validatePattern
+		});
+	});
+
+	$scope.closeModal = function() {
+		$scope.patternModal.hide();
+	};
+
+	$scope.save = function () {
+		if (!$scope.patternError) {
+			if ($scope.tempPattern) {
+				$scope.receiver.pattern = $scope.tempPattern;
+			}
+			$scope.closeModal();
+		}
+	};
+
+	function validatePattern (pattern) {
+		$scope.tempPattern = pattern;
+		if (pattern.length >= 3) {
+			hideShortPatternError();
+		} else {
+			showShortPatternError();
+		}
+	}
+
+	function hideShortPatternError () {
+		$scope.patternError = false;	
+		$scope.$apply();	
+	}
+
+	function showShortPatternError () {
+		$scope.lock.error();
+		$scope.patternError = true;	
+		$scope.$apply();
+	}
+});
+communicatorApp.controller('receiversCtrl', function($scope, $state, $timeout, $ionicPopup, receiverDbService, listItemDeleteService) {
+    $scope.loaded = false;
+    $scope.receivers = [];
+    $scope.eraser = listItemDeleteService;
+    $scope.redirectState = "app.singleReceiver";
+    $scope.eraser.showDelete = false;
+
+    receiverDbService.notInternal().then(function(results) {
+        $scope.receivers = results;
+        $scope.loaded = true;
+    });
+
+    $scope.$on("delete", function(scope, card) {
+        receiverDbService.delete(card);
+        $scope.receivers.splice($scope.receivers.indexOf(card), 1);
+    });
+
+    $scope.ask = function() {
+        $ionicPopup.alert({
+            title: 'Ayuda',
+            template: 'Para agregar un receptor se debe presionar el signo + de arriba a la derecha. <br> Para eliminar un receptor se lo debe mantener presionado unos segundos y aparecerá un signo - a su izquierda que permitirá eliminarlo.'
+        });
+    };
+
+});
+
+communicatorApp.controller('singleReceiverCtrl', function($scope, $stateParams, $state, $ionicNavBarDelegate, $ionicModal, receiverDbService, relationshipDbService, imageUploaderService, uuidService, popupService) {
+    $scope.creating = !$stateParams.id;
+    $scope.cameraIsEnabled = imageUploaderService.cameraIsEnabled;
+
+    $scope.receiver = {
+        name: '',
+        lastName: '',
+        relationshipId: 0,
+        avatar: '',
+        advanced: false,
+        pattern: ''
+    };
+
+    relationshipDbService.selectAll().then(function(relationships){
+        $scope.relationships = relationships;
+    });
+
+    if (!$scope.creating) {
+        receiverDbService.find($stateParams.id).then(function(results) {
+            $scope.receiver = results[0];
+            $scope.receiver.advanced = $scope.receiver.advanced === 'true' ? true : false;
+            $scope.receiver.avatar = $scope.receiver.avatar;
+            $scope.checkIfHasCustomName();
+        });
+    }
+
+    $scope.uploadImage = function() {
+    if (imageUploaderService.cameraIsEnabled) {
+            popupService.show();
+        } else {
+           takePictureFromWebview();
+        }
+    };
+
+    var takePictureFromWebview = function() {
+        imageUploaderService.pictureFromDevice(updateReceiverAvatar);
+    };
+
+    var updateReceiverAvatar = function(newImageSrc) {
+        $scope.receiver.avatar = newImageSrc;
+        $scope.$apply();
+    };
+
+    $ionicModal.fromTemplateUrl('templates/receiver/receiverPatternEdit.html', {
+        scope: $scope,
+        animation: 'slide-in-right',
+        backdropClickToClose: true
+    }).then(function(modal) {
+        $scope.patternModal = modal;
+    });
+
+    popupService.start($scope, updateReceiverAvatar);
+
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+        if ($scope.patternModal) {
+            $scope.patternModal.remove();
+        }
+    });
+
+    $scope.editPattern = function() {
+        $scope.patternModal.show();
+    };
+
+    $scope.save = function() {
+        if ($scope.creating) {
+            $scope.receiver.uuid = uuidService.generate();
+            receiverDbService.insert($scope.receiver);
+        } else {
+            receiverDbService.update($scope.receiver);
+        }
+        $ionicNavBarDelegate.back();
+    };
+
+    $scope.checkIfAdvancedByDefault = function() {
+        var relationship = getRelationshipById($scope.receiver.relationshipId);
+        $scope.receiver.advanced = relationship.advancedByDefault === 'true';
+    };
+
+    $scope.checkIfHasCustomName = function() {
+        var relationship = getRelationshipById($scope.receiver.relationshipId);
+        $scope.showRelationshipName = relationship && relationship.hasCustomName === 'true';
+    };
+
+    var getRelationshipById = function(relationshipId) {
+        var matchedRelationships = $scope.relationships.filter(function(relationship){
+            return relationship.id === relationshipId;
+        });
+        return matchedRelationships.length ? matchedRelationships[0] : undefined;
+    };
+});
+
+communicatorApp.service('currentReceiverService', function() {
+	var currentReceiverService = {
+		receiver: {}
+	};
+	return currentReceiverService;
 });
 communicatorApp.controller('levelCardsCtrl', function($scope, $stateParams, tutorialService, cardDbService, registryService) {
     registryService.pickedLevelNumber = parseInt($stateParams.levelNumber, 10);
@@ -1881,177 +1749,14 @@ communicatorApp.controller('selectImageCtrl', function($scope, $stateParams, $io
         }
     };
 
-	tutorialService.showIfActive();
-});
-communicatorApp.controller('receiverPatternEditCtrl', function($scope, $state, $ionicNavBarDelegate, $ionicPopup, receiverDbService, currentReceiverService) {
-	
-	$scope.lock = {};
-	$scope.tempPattern = '';
-	$scope.patternError = false;
-
-	$scope.$on('modal.shown', function() {
-		$scope.lock = new PatternLock("#lock", { 
-			margin: 15,
-			onDraw: validatePattern
-		});
-	});
-
-	$scope.closeModal = function() {
-		$scope.patternModal.hide();
-	};
-
-	$scope.save = function () {
-		if (!$scope.patternError) {
-			if ($scope.tempPattern) {
-				$scope.receiver.pattern = $scope.tempPattern;
-			}
-			$scope.closeModal();
-		}
-	};
-
-	function validatePattern (pattern) {
-		$scope.tempPattern = pattern;
-		if (pattern.length >= 3) {
-			hideShortPatternError();
-		} else {
-			showShortPatternError();
-		}
-	}
-
-	function hideShortPatternError () {
-		$scope.patternError = false;	
-		$scope.$apply();	
-	}
-
-	function showShortPatternError () {
-		$scope.lock.error();
-		$scope.patternError = true;	
-		$scope.$apply();
-	}
-});
-communicatorApp.controller('receiversCtrl', function($scope, $state, $timeout, $ionicPopup, receiverDbService, listItemDeleteService) {
-    $scope.loaded = false;
-    $scope.receivers = [];
-    $scope.eraser = listItemDeleteService;
-    $scope.redirectState = "app.singleReceiver";
-    $scope.eraser.showDelete = false;
-
-    receiverDbService.notInternal().then(function(results) {
-        $scope.receivers = results;
-        $scope.loaded = true;
-    });
-
-    $scope.$on("delete", function(scope, card) {
-        receiverDbService.delete(card);
-        $scope.receivers.splice($scope.receivers.indexOf(card), 1);
-    });
-
     $scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'Para agregar un receptor se debe presionar el signo + de arriba a la derecha. <br> Para eliminar un receptor se lo debe mantener presionado unos segundos y aparecerá un signo - a su izquierda que permitirá eliminarlo.'
+            template: 'Para agregar los pictogramas correspondientes a este nivel, se deben presionar los signos "+". Para comenzar con el intercambio, debe presionar a continuación, el tilde que se visualiza en la parte superior derecha de la pantalla. Por último deberá seleccionar el pictograma para registrar el intercambio y mantener presionado el mismo para realizar el registro propiamente dicho.'
         });
     };
 
-});
-
-communicatorApp.controller('singleReceiverCtrl', function($scope, $stateParams, $state, $ionicNavBarDelegate, $ionicModal, receiverDbService, relationshipDbService, imageUploaderService, uuidService, popupService) {
-    $scope.creating = !$stateParams.id;
-    $scope.cameraIsEnabled = imageUploaderService.cameraIsEnabled;
-
-    $scope.receiver = {
-        name: '',
-        lastName: '',
-        relationshipId: 0,
-        avatar: '',
-        advanced: false,
-        pattern: ''
-    };
-
-    relationshipDbService.selectAll().then(function(relationships){
-        $scope.relationships = relationships;
-    });
-
-    if (!$scope.creating) {
-        receiverDbService.find($stateParams.id).then(function(results) {
-            $scope.receiver = results[0];
-            $scope.receiver.advanced = $scope.receiver.advanced === 'true' ? true : false;
-            $scope.receiver.avatar = $scope.receiver.avatar;
-            $scope.checkIfHasCustomName();
-        });
-    }
-
-    $scope.uploadImage = function() {
-    if (imageUploaderService.cameraIsEnabled) {
-            popupService.show();
-        } else {
-           takePictureFromWebview();
-        }
-    };
-
-    var takePictureFromWebview = function() {
-        imageUploaderService.pictureFromDevice(updateReceiverAvatar);
-    };
-
-    var updateReceiverAvatar = function(newImageSrc) {
-        $scope.receiver.avatar = newImageSrc;
-        $scope.$apply();
-    };
-
-    $ionicModal.fromTemplateUrl('templates/receiver/receiverPatternEdit.html', {
-        scope: $scope,
-        animation: 'slide-in-right',
-        backdropClickToClose: true
-    }).then(function(modal) {
-        $scope.patternModal = modal;
-    });
-
-    popupService.start($scope, updateReceiverAvatar);
-
-    //Cleanup the modal when we're done with it!
-    $scope.$on('$destroy', function() {
-        if ($scope.patternModal) {
-            $scope.patternModal.remove();
-        }
-    });
-
-    $scope.editPattern = function() {
-        $scope.patternModal.show();
-    };
-
-    $scope.save = function() {
-        if ($scope.creating) {
-            $scope.receiver.uuid = uuidService.generate();
-            receiverDbService.insert($scope.receiver);
-        } else {
-            receiverDbService.update($scope.receiver);
-        }
-        $ionicNavBarDelegate.back();
-    };
-
-    $scope.checkIfAdvancedByDefault = function() {
-        var relationship = getRelationshipById($scope.receiver.relationshipId);
-        $scope.receiver.advanced = relationship.advancedByDefault === 'true';
-    };
-
-    $scope.checkIfHasCustomName = function() {
-        var relationship = getRelationshipById($scope.receiver.relationshipId);
-        $scope.showRelationshipName = relationship && relationship.hasCustomName === 'true';
-    };
-
-    var getRelationshipById = function(relationshipId) {
-        var matchedRelationships = $scope.relationships.filter(function(relationship){
-            return relationship.id === relationshipId;
-        });
-        return matchedRelationships.length ? matchedRelationships[0] : undefined;
-    };
-});
-
-communicatorApp.service('currentReceiverService', function() {
-	var currentReceiverService = {
-		receiver: {}
-	};
-	return currentReceiverService;
+	tutorialService.showIfActive();
 });
 communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $ionicScrollDelegate, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
 
@@ -2457,7 +2162,7 @@ communicatorApp.controller('basicRegistry3ACtrl', function($scope, $q, $ionicPop
 	$scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del receptor. Se registra entonces si la persona se desplaza o no hacia el receptor y la distancia a la que se encuentra el mismo.'
+            template: 'En esta sección se registra el intercambio en función del nivel de discriminación y de la reacción de la persona.'
         });
     };
 
@@ -2530,7 +2235,7 @@ communicatorApp.controller('basicRegistry3BCtrl', function($scope, $q, $ionicPop
 	$scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del receptor. Se registra entonces si la persona se desplaza o no hacia el receptor y la distancia a la que se encuentra el mismo.'
+            template: 'En esta sección se registra el intercambio en función del nivel de discriminación, comprobación de correspondencia, distancia al instructor y al dispositivo.'
         });
     };
 
@@ -2813,145 +2518,6 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 
 	return registryService;
 });
-communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticService, levelDbService) {
-
-    $scope.loaded = false;
-    $scope.hasExchanges = false;
-    $scope.exchanges = {};
-    $scope.exchangeCountByReceiver = [];
-
-    levelDbService.selectAll().then(function(levels){
-        $scope.levels = levels;
-        $scope.myLevel = levels[0];
-        
-    }).then(function(){
-        statisticService.exchangeCountByReceiver($scope.myLevel.levelNumber).then(function(result) {
-            $scope.exchangeCountByReceiver = result;
-        });
-        
-    }).then(function(){
-        statisticService.exchanges($scope.myLevel.levelNumber).then(function(result) {
-            if (Object.keys(result).length > 0) {
-                $scope.hasExchanges = true;
-                $scope.exchanges = result;
-            }
-            $scope.loaded = true;
-        });
-
-    });
-
-    $scope.getLevelData = function(myLevel){
-
-        if(myLevel.levelNumber == 2 || myLevel.levelNumber == 3){
-            statisticService.exchangeCountByReceiverForLevelSubleveled(myLevel.levelNumber + '1',myLevel.levelNumber + '2').then(function(result) {
-            $scope.exchangeCountByReceiver = result;
-        }); 
-           statisticService.exchangesForLevelSubleveled(myLevel.levelNumber + '1',myLevel.levelNumber + '2').then(function(result) {
-               if (Object.keys(result).length > 0) {
-                    $scope.hasExchanges = true;
-                }
-                else{
-                    $scope.hasExchanges = false;
-                }
-            $scope.exchanges = result;
-            $scope.loaded = true;
-           
-        });
-       }
-       else{
-        statisticService.exchangeCountByReceiver(myLevel.levelNumber).then(function(result) {
-            $scope.exchangeCountByReceiver = result;
-        });
-        statisticService.exchanges(myLevel.levelNumber).then(function(result) {
-            if (Object.keys(result).length > 0) {
-                $scope.hasExchanges = true;
-            }
-            else{
-                $scope.hasExchanges = false;
-            }
-            $scope.exchanges = result;
-            $scope.loaded = true;
-        });
-    }
-};   
-
-$scope.score = {
-    withHelp: 'AT',
-    withPartialHelp: 'AP',
-    withoutHelp: '✓'
-};
-});
-
-communicatorApp.filter('yes_no_spanish', function() {
-    return function(text, length, end) {
-        if (text == 'withoutHelp') {
-            return 'Si';
-        }
-        return 'No';
-    };
-});
-
-communicatorApp.filter('oral_output', function() {
-    return function(text, length, end) {
-        if (text == 'ne') {
-            return 'Ninguna';
-        }
-        if (text == 'gl') {
-            return 'Llanto';
-        }
-        if (text == 'risa') {
-            return 'Risa';
-        }
-        if (text == 'vc') {
-            return 'Vocal/Consonante';
-        }
-        if (text == 'sil') {
-            return 'Sílaba';
-        }
-        if (text == 'pnrdie') {
-            return 'Palabra NRI';
-        }
-        if (text == 'prdie') {
-            return 'Palabra RI';
-        }
-    };
-});
-
-communicatorApp.filter('level_sublevel', function() {
-    return function(text, length, end) {
-        if (text == '21') {
-            return 'Receptor';
-        }
-        if (text == '22') {
-            return 'Dispositivo';
-        }
-    };
-});
-
-communicatorApp.controller('statisticsCtrl', function($scope, statisticService) {
-    $scope.loaded = false;
-    $scope.hasExchanges = false;
-    $scope.exchanges = {};
-    $scope.exchangeCountByReceiver = [];
-    
-    $scope.score = {
-        withHelp: 'AT',
-        withPartialHelp: 'AP',
-        withoutHelp: '✓'
-    };
-
-    statisticService.exchanges().then(function(result) {
-        if (Object.keys(result).length > 0) {
-            $scope.hasExchanges = true;
-            $scope.exchanges = result;
-        }
-        $scope.loaded = true;
-    });
-
-    statisticService.exchangeCountByReceiver().then(function(result) {
-        $scope.exchangeCountByReceiver = result;
-    });
-});
 communicatorApp.service('statisticService', function($q,
                                                     receiverDbService, exchangeDbService,
                                                     exchangeByCardDbService, exchangeByLevelDbService,
@@ -3207,4 +2773,485 @@ communicatorApp.service('currentUserService', function(configurationService, uui
             });
         }
     };
+});
+communicatorApp.controller('configurationCategory', function($scope, $ionicNavBarDelegate, $ionicPopup, configurationDbService) {
+    
+    configurationDbService.find('categoryEnabled').then(function(results){
+        $scope.categoryEnabled = results[0].value === 'true' ? true : false;
+    });
+
+    $scope.toggleEnabledCategory = function(enabled) {
+        configurationDbService.changeCategoryEnabled(enabled);
+    };
+
+    $scope.save = function() {
+        $ionicNavBarDelegate.back();
+    };
+
+    $scope.ask = function() {
+        $ionicPopup.alert({
+            title: 'Ayuda',
+            template: 'Las categorías permiten agrupar los pictogramas para una busqueda más fácil.'
+        });
+    };
+});
+communicatorApp.controller('configurationDeveloperToolsCtrl', function($scope, $ionicNavBarDelegate, serverService, currentUserService) {
+    $scope.url = {
+        base: ''
+    };
+    $scope.userSet = true;
+    $scope.hasSyncData = false;
+
+    serverService.getBaseURL().then(function(baseURL) {
+        $scope.url.base = baseURL;
+    });
+
+    currentUserService.get().then(function(user) {
+        $scope.userSet = !!user.name;
+    });
+
+    serverService.getCurrentConfiguration().then(function(configuration) {
+        $scope.hasSyncData = configuration.dataToSync !== undefined;
+    });
+
+    $scope.clear = function() {
+        serverService.clearSyncData();
+        $scope.hasSyncData = false;
+    };
+
+    $scope.save = function() {
+        serverService.setBaseURL($scope.url.base);
+        $ionicNavBarDelegate.back();
+    };
+});
+communicatorApp.controller('configurationSyncCtrl', function($scope, $ionicNavBarDelegate, serverService, currentUserService) {
+    $scope.lastSyncTime = '';
+    $scope.autoSyncEnabled = false;
+    $scope.shouldSync = true;
+
+    serverService.getCurrentConfiguration().then(function(configuration) {
+        $scope.lastSyncTime = configuration.lastSyncTime && new Date(configuration.lastSyncTime);
+        $scope.autoSyncEnabled = configuration.autoSyncEnabled === 'true' ? true : false;
+        $scope.shouldSync = configuration.dataToSync !== undefined;
+    });
+
+    $scope.toggleAutoSync = function(enabled) {
+        serverService.setAutoSync(enabled);
+    };
+
+    $scope.sync = function() {
+        serverService.sync().then(function(syncTime) {
+            $scope.lastSyncTime = new Date(syncTime);
+            $scope.shouldSync = false;
+        });
+    };
+
+    $scope.save = function() {
+        $ionicNavBarDelegate.back();
+    };
+});
+communicatorApp.controller('configurationsCurrentUserCtrl', function($scope, $ionicNavBarDelegate, currentUserService) {
+    $scope.user = {
+        name: '',
+        lastName: '',
+        birthdate: ''
+    };
+
+    currentUserService.get().then(function(user) {
+        $scope.user = user;
+    });
+    
+    $scope.goBack = function() {
+        $ionicNavBarDelegate.back();
+    };
+
+    $scope.save = function() {
+        currentUserService.set($scope.user);
+        $scope.goBack();
+    };
+});
+communicatorApp.service('appService', function($q, configurationService) {
+    var initKey = "app_initialized";
+    return {
+        uninitialized: function() {
+            var self = this;
+            var deferred = $q.defer();
+            if (!localStorage.getItem(initKey)) {
+                configurationService.get(initKey).then(function(value) {
+                    if (value) {
+                        deferred.reject();
+                        localStorage.setItem(initKey, true);
+                    } else {
+                        deferred.resolve();
+                        self.initialize();
+                    }
+                });
+            } else {
+                deferred.reject();
+            }
+            return deferred.promise;
+        },
+        initialize: function() {
+            configurationService.set(initKey, true);
+            localStorage.setItem(initKey, true);
+        }
+    };
+});
+
+communicatorApp.service('configurationService', function($q, configurationDbService) {
+    var db = configurationDbService;
+    var addToPartialResult = function(keyName) {
+        var returnValue = {};
+        return function(result) {
+            returnValue[keyName] = result;
+            return returnValue;
+        };
+    };
+
+    return {
+        find: db.find.bind(db),
+        get: function(key) {
+            var deferred = $q.defer();
+            db.find(key).then(function(results) {
+                var configuration = results.length > 0 ? results[0] : { value: undefined };
+                deferred.resolve(configuration.value);
+            });
+            return deferred.promise;
+        },
+        getMultiple: function(keys) {
+            var deferred = $q.defer();
+            var promises = [];
+
+            for(var keyName in keys) {
+                promises.push(
+                    this.get(keyName).then(addToPartialResult(keys[keyName]))
+                );
+            }
+
+            $q.all(promises).then(function(results) {
+                var mergedResult = results.reduce(function(memo, current) {
+                    return angular.extend(memo, current);
+                }, {});
+                deferred.resolve(mergedResult);
+            });
+
+            return deferred.promise;
+        },
+        insert: db.insert.bind(db),
+        set: function(key, value) {
+            var configuration = { key: key, value: value };
+
+            return db.find(key).then(function(results) {
+                if (results.length) {
+                    configuration.id = results[0].id;
+                    return db.update(configuration);
+                } else {
+                    return db.insert(configuration);
+                }
+            });
+        },
+        setMultiple: function(configurations) {
+            var deferred = $q.defer();
+            var promises = [];           
+
+            for(var key in configurations) {
+                promises.push(
+                    this.set(key, configurations[key])
+                );
+            }
+ 
+            $q.all(promises).then(function(results) {
+                deferred.resolve(results);
+            });
+            return deferred.promise;
+        },
+        delete: db.delete.bind(db),
+        deleteByKey: function(key) {
+            db.find(key).then(function(configurations) {
+                configurations.forEach(function(configuration, index) {
+                    db.delete(configuration);
+                });
+            });
+        }
+    };
+});
+communicatorApp.service('serverService', function($http, $q, configurationService) {
+    return {
+        timeout: 20,
+        getBaseURL: function() {
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+
+            if (this.baseURL) {
+                deferred.resolve(this.baseURL);
+            } else {
+                promise = configurationService.get("server_base_url"); 
+            }
+            return promise;
+        },
+        setBaseURL: function(baseURL) {
+            if(baseURL !== undefined) {
+                this.baseURL = baseURL;
+                configurationService.set("server_base_url", baseURL);
+            }
+        },
+        send: function(json) {
+            var self = this;
+            configurationService.get("autosync_enabled").then(function(autoSyncEnabled) {
+                if (autoSyncEnabled === "true" && navigator.onLine) {
+                    self.post({ value: json });
+                } else {
+                    configurationService.insert({ key: "data_to_sync", value: JSON.stringify(json) }).then(function() {
+                        if (autoSyncEnabled === "true" && !navigator.onLine) {
+                            self.sync();
+                        }
+                        if(self.getDataToSyncCount() >= 50) {
+                            self.clearSyncData();
+                        }
+                    });
+                }
+            });
+        },
+        sync: function() {
+            var self = this;
+            var deferred = $q.defer();
+
+            if (navigator.onLine) {
+                this.timeout = 20;
+                configurationService.find("data_to_sync").then(function(configurations) {
+                    configurations.forEach(function(configuration, index) {
+                        setTimeout(function() {
+                            self.post(configuration);
+                        }, index * 20);
+                    });
+                    if (configurations.length) {
+                        deferred.resolve(self.syncTime());
+                    }
+                });
+            } else {
+                setTimeout(this.sync.bind(this), this.timeout);
+                this._incrementTimeout();
+                deferred.reject();
+            }
+            return deferred.promise;
+        },
+        post: function(configuration) {
+            var self = this;
+            var stringifiedData = typeof(configuration.value) === "string" ? configuration.value : JSON.stringify(configuration.value);
+
+            this.getBaseURL().then(function(baseURL) {
+                if (!baseURL) { return; }
+
+                $.post(self._addProtocol(baseURL) + "/exchanges", { data: stringifiedData }).complete(function() {
+                    if (configuration.id) {
+                        configurationService.delete(configuration);
+                    }
+                });
+
+                configurationService.set("server_last_sync_time", self.syncTime());
+            });
+        },
+        syncTime: function() {
+            return new Date().toString();
+        },
+        setAutoSync: function(value) {
+            configurationService.set("autosync_enabled", !!value);
+        },
+        clearSyncData: function() {
+            configurationService.deleteByKey("data_to_sync");
+        },
+        getDataToSyncCount: function() {
+            var count = localStorage.getItem('data_to_sync_count');
+            if (count === null) {
+                configurationService.find("data_to_sync").then(function(configurations) {
+                    count = configurations.length;
+                    localStorage.setItem('data_to_sync_count', count);
+                });
+            }
+            return count;
+        },
+        getCurrentConfiguration: function() {
+            return configurationService.getMultiple({
+                "server_last_sync_time": "lastSyncTime",
+                "autosync_enabled": "autoSyncEnabled",
+                "data_to_sync": "dataToSync"
+            });
+        },
+        _incrementTimeout: function() {
+            if (this.timeout < 20000) {
+                this.timeout = this.timeout * 1.5;
+            }
+        },
+        _addProtocol: function(url) {
+            return url.search(/^(https?:\/\/)/) !== -1 ? url : "http://" + url;
+        }
+    };
+});
+
+communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticService, levelDbService) {
+
+    $scope.loaded = false;
+    $scope.hasExchanges = false;
+    $scope.exchanges = {};
+    $scope.exchangeCountByReceiver = [];
+
+    levelDbService.selectAll().then(function(levels){
+        $scope.levels = levels;
+        $scope.myLevel = levels[0];
+        
+    }).then(function(){
+        statisticService.exchangeCountByReceiver($scope.myLevel.levelNumber).then(function(result) {
+            $scope.exchangeCountByReceiver = result;
+        });
+        
+    }).then(function(){
+        statisticService.exchanges($scope.myLevel.levelNumber).then(function(result) {
+            if (Object.keys(result).length > 0) {
+                $scope.hasExchanges = true;
+                $scope.exchanges = result;
+            }
+            $scope.loaded = true;
+        });
+
+    });
+
+    $scope.getLevelData = function(myLevel){
+
+        if(myLevel.levelNumber == 2 || myLevel.levelNumber == 3){
+            statisticService.exchangeCountByReceiverForLevelSubleveled(myLevel.levelNumber + '1',myLevel.levelNumber + '2').then(function(result) {
+            $scope.exchangeCountByReceiver = result;
+        }); 
+           statisticService.exchangesForLevelSubleveled(myLevel.levelNumber + '1',myLevel.levelNumber + '2').then(function(result) {
+               if (Object.keys(result).length > 0) {
+                    $scope.hasExchanges = true;
+                }
+                else{
+                    $scope.hasExchanges = false;
+                }
+            $scope.exchanges = result;
+            $scope.loaded = true;
+           
+        });
+       }
+       else{
+        statisticService.exchangeCountByReceiver(myLevel.levelNumber).then(function(result) {
+            $scope.exchangeCountByReceiver = result;
+        });
+        statisticService.exchanges(myLevel.levelNumber).then(function(result) {
+            if (Object.keys(result).length > 0) {
+                $scope.hasExchanges = true;
+            }
+            else{
+                $scope.hasExchanges = false;
+            }
+            $scope.exchanges = result;
+            $scope.loaded = true;
+        });
+    }
+};   
+
+$scope.score = {
+    withHelp: 'AT',
+    withPartialHelp: 'AP',
+    withoutHelp: '✓'
+};
+});
+
+communicatorApp.filter('yes_no_spanish', function() {
+    return function(text, length, end) {
+        if (text == 'withoutHelp') {
+            return 'Si';
+        }
+        return 'No';
+    };
+});
+
+communicatorApp.filter('oral_output', function() {
+    return function(text, length, end) {
+        if (text == 'ne') {
+            return 'Ninguna';
+        }
+        if (text == 'gl') {
+            return 'Llanto';
+        }
+        if (text == 'risa') {
+            return 'Risa';
+        }
+        if (text == 'vc') {
+            return 'Vocal/Consonante';
+        }
+        if (text == 'sil') {
+            return 'Sílaba';
+        }
+        if (text == 'pnrdie') {
+            return 'Palabra NRI';
+        }
+        if (text == 'prdie') {
+            return 'Palabra RI';
+        }
+    };
+});
+
+communicatorApp.filter('level_sublevel', function() {
+    return function(text, length, end) {
+        if (text == '21') {
+            return 'Receptor';
+        }
+        if (text == '22') {
+            return 'Dispositivo';
+        }
+        if (text == '31') {
+            return 'IIIA';
+        }
+        if (text == '32') {
+            return 'IIIB';
+        }
+    };
+});
+
+communicatorApp.filter('reaction', function() {
+    return function(text, length, end) {
+        if (text == 'reactionNegative') {
+            return 'Sí';
+        }
+        if (text == 'reactionPositive') {
+            return 'No';
+        }
+    };
+});
+
+communicatorApp.filter('discrimination', function() {
+    return function(text, length, end) {
+        if (text == 'favorite') {
+            return 'Favorito';
+        }
+        if (text == 'distractor') {
+            return 'Distractor';
+        }
+    };
+});
+
+communicatorApp.controller('statisticsCtrl', function($scope, statisticService) {
+    $scope.loaded = false;
+    $scope.hasExchanges = false;
+    $scope.exchanges = {};
+    $scope.exchangeCountByReceiver = [];
+    
+    $scope.score = {
+        withHelp: 'AT',
+        withPartialHelp: 'AP',
+        withoutHelp: '✓'
+    };
+
+    statisticService.exchanges().then(function(result) {
+        if (Object.keys(result).length > 0) {
+            $scope.hasExchanges = true;
+            $scope.exchanges = result;
+        }
+        $scope.loaded = true;
+    });
+
+    statisticService.exchangeCountByReceiver().then(function(result) {
+        $scope.exchangeCountByReceiver = result;
+    });
 });
