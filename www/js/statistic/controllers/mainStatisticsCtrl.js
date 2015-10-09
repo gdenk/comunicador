@@ -110,5 +110,34 @@ communicatorApp.filter('level_sublevel', function() {
         if (text == '22') {
             return 'Dispositivo';
         }
+        if (text == '31') {
+            return 'IIIA';
+        }
+        if (text == '32') {
+            return 'IIIB';
+        }
     };
+});
+
+communicatorApp.filter('reaction', function() {
+    return function(text, length, end) {
+        if (text == 'reactionNegative') {
+            return 'Sí';
+        }
+        if (text == 'reactionPositive') {
+            return 'No';
+        }
+    };
+});
+
+communicatorApp.filter('discrimination', function() {
+    return function(text, length, end) {
+        if (text == 'favorite') {
+            return 'Favorito';
+        }
+        if (text == 'distractor') {
+            return 'Distractor';
+        }
+    };
+
 });
