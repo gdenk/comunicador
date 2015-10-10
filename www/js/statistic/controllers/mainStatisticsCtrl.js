@@ -3,6 +3,8 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
     $scope.loaded = false;
     $scope.hasExchanges = false;
     $scope.exchanges = {};
+    $scope.exchanges3A = {};
+    $scope.exchanges3B = {};
     $scope.exchangeCountByReceiver = [];
 
     levelDbService.selectAll().then(function(levels){
@@ -27,7 +29,23 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
 
     $scope.getLevelData = function(myLevel){
 
-        if(myLevel.levelNumber == 2 || myLevel.levelNumber == 3){
+        if(myLevel.levelNumber == 1){
+            statisticService.exchangeCountByReceiver(myLevel.levelNumber).then(function(result) {
+                $scope.exchangeCountByReceiver = result;
+            });
+            statisticService.exchanges(myLevel.levelNumber).then(function(result) {
+                if (Object.keys(result).length > 0) {
+                    $scope.hasExchanges = true;
+                }
+                else{
+                    $scope.hasExchanges = false;
+                }
+                $scope.exchanges = result;
+                $scope.loaded = true;
+            });
+       }
+
+        if(myLevel.levelNumber == 2){
             statisticService.exchangeCountByReceiverForLevelSubleveled(myLevel.levelNumber + '1',myLevel.levelNumber + '2').then(function(result) {
             $scope.exchangeCountByReceiver = result;
         }); 
@@ -43,21 +61,37 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
            
         });
        }
-       else{
-        statisticService.exchangeCountByReceiver(myLevel.levelNumber).then(function(result) {
+
+       if(myLevel.levelNumber == 3){
+            statisticService.exchangeCountByReceiverForLevelSubleveled(myLevel.levelNumber + '1',myLevel.levelNumber + '2').then(function(result) {
             $scope.exchangeCountByReceiver = result;
-        });
-        statisticService.exchanges(myLevel.levelNumber).then(function(result) {
-            if (Object.keys(result).length > 0) {
-                $scope.hasExchanges = true;
-            }
-            else{
-                $scope.hasExchanges = false;
-            }
-            $scope.exchanges = result;
+        }); 
+           statisticService.exchangesForLevelSubleveled3(myLevel.levelNumber + '1').then(function(result) {
+               if (Object.keys(result).length > 0) {
+                    $scope.hasExchanges = true;
+                    $scope.exchanges3A = result;
+                }
+                else{
+                    $scope.hasExchanges = false;
+                }
             $scope.loaded = true;
+           
         });
-    }
+            statisticService.exchangesForLevelSubleveled3(myLevel.levelNumber + '2').then(function(result) {
+               if (Object.keys(result).length > 0) {
+                    $scope.hasExchanges = true;
+                    $scope.exchanges3B = result;
+                }
+                else{
+                    $scope.hasExchanges = false;
+                }
+           
+           
+        });
+        $scope.loaded = true;
+       }
+       
+
 };   
 
 $scope.score = {
