@@ -40,14 +40,30 @@ communicatorApp.controller('selectImageCtrl', function($scope, $stateParams, $io
         if ($scope.select.imgIdA === 0 || $scope.select.imgIdB === 0) {
             $ionicPopup.alert({
                 title: "Advertencia",
-                template: "Debe seleccionar dos imagenes"
+                template: "Debe seleccionar dos pictogramas para continuar."
             });
         } 
         else if($scope.select.imgIdA == $scope.select.imgIdB){
-            $ionicPopup.alert({
-                title: "Advertencia",
-                template: "Debe seleccionar imagenes distintas"
-            });
+        $ionicPopup.show({
+            title: 'Ha seleccionado dos pictogramas idénticos.<br>Para continuar presione &apos;Aceptar&apos; o bien, &apos;Cancelar&apos; para continuar modificándolos',
+            scope: $scope,
+            buttons: [
+                { 
+                    text: 'Cancelar',
+                    onTap: function() {
+                        $scope.select.levelStarted = false;
+                    }
+                },
+                {
+                    text: 'Aceptar',
+                    type: 'button-positive',
+                    onTap: function() {
+                        $scope.select.levelStarted = true;
+                    }
+                }
+            ]
+        });
+         
         }
         else {
             $scope.select.levelStarted = true;
