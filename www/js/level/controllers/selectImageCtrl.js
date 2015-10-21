@@ -16,12 +16,16 @@ communicatorApp.controller('selectImageCtrl', function($scope, $stateParams, $io
     	$scope.select = JSON.parse(decodeURI($stateParams.levelInfo));
 
     	cardDbService.find($scope.select.imgIdA).then(function(results) {
-	        $scope.select.imgSrcA = results[0].img;
-	    });
+            if (Object.keys(results).length > 0) {
+	           $scope.select.imgSrcA = results[0].img;
+	        }
+        });
 
 	    cardDbService.find($scope.select.imgIdB).then(function(results) {
-	        $scope.select.imgSrcB = results[0].img;
-	    });
+            if (Object.keys(results).length > 0) {
+               $scope.select.imgSrcB = results[0].img;
+            }
+        });
     }
     else{
     	$scope.levelInfo = '\'' + encodeURI(JSON.stringify($scope.select)) + '\'';
