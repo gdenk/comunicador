@@ -10,6 +10,8 @@ communicatorApp.service('statisticService', function($q,
     var ebc = exchangeByCardDbService;
     var ebl = exchangeByLevelDbService;
     var c   = cardDbService;
+    var c1   = cardDbService;
+    var c2   = cardDbService;
     var sbe = scoreByExchangeDbService;
     var s   = scoreDbService;
     var sp  = stepDbService;
@@ -101,7 +103,8 @@ communicatorApp.service('statisticService', function($q,
                             e.prop('id')    + ' as id,' +
                             e.prop('date')  + ' as date,' +
                             receiverRelationshipField + ',' +
-                            c.prop('title') + ' as cardTitle,' +
+                            'c1.title as cardTitle,' +
+                            'c2.title as cardExtraTitle,' +
                             s.prop('name')  + ' as scoreName,' +
                             sp.prop('name') + ' as stepName,' +
                             ebl.prop('levelId') + ' as level' +  
@@ -109,7 +112,8 @@ communicatorApp.service('statisticService', function($q,
                        ' JOIN ' + r.tableName   + ' ON ' + r.prop('id') +           ' = ' + this.prop('receiverId') +
                        ' LEFT JOIN ' + rl.tableName + ' ON ' + r.prop('relationshipId') + ' = ' + rl.prop('id') +
                        ' JOIN ' + ebc.tableName + ' ON ' + ebc.prop('exchangeId') + ' = ' + this.prop('id') +
-                       ' JOIN ' + c.tableName   + ' ON ' + c.prop('id') +           ' = ' + ebc.prop('cardId') +
+                       ' LEFT JOIN ' + c.tableName + ' c1 ON c1.id  = ' + ebc.prop('cardId') +
+                       ' LEFT JOIN ' + c.tableName + ' c2 ON c2.id  = ' + ebc.prop('cardExtraId') +
                        ' JOIN ' + sbe.tableName + ' ON ' + sbe.prop('exchangeId') + ' = ' + this.prop('id') +
                        ' JOIN ' + s.tableName   + ' ON ' + s.prop('id') +           ' = ' + sbe.prop('scoreId') +
                        ' JOIN ' + sp.tableName  + ' ON ' + sp.prop('id') +          ' = ' + sbe.prop('stepId') +
@@ -119,7 +123,6 @@ communicatorApp.service('statisticService', function($q,
                 args: [subLevel]
             };
         });
-
 
     return {
         exchangeCountByReceiver: function(myLevel) {

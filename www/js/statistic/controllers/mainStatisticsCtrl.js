@@ -72,7 +72,9 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
                     $scope.exchanges3A = result;
                 }
                 else{
-                    $scope.hasExchanges = false;
+                    if(!$scope.hasExchanges){
+                     $scope.hasExchanges = false;
+                    }
                 }
             $scope.loaded = true;
            
@@ -83,10 +85,10 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
                     $scope.exchanges3B = result;
                 }
                 else{
-                    $scope.hasExchanges = false;
+                    if(!$scope.hasExchanges){
+                     $scope.hasExchanges = false;
+                    }
                 }
-           
-           
         });
         $scope.loaded = true;
        }

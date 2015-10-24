@@ -37,12 +37,12 @@
 
       <div class="row" ng-if="select.levelStarted">
             <div class="col col-50">
-		      <div class='item item-image' ui-sref="content.levelSingleCard({ id: {{select.imgIdA}} })">
+		      <div class='item item-image' ui-sref="content.levelSingleCard({ id: {{select.imgIdA}}, idN: {{select.imgIdB}} })">
 		        <img ng-src='{{select.imgSrcA}}'>
 		      </div>
             </div>
             <div class="col col-50">
-		      <div class='item item-image' ui-sref="content.levelSingleCard({ id: {{select.imgIdB}} })">
+		      <div class='item item-image' ui-sref="content.levelSingleCard({ id: {{select.imgIdB}}, idN: {{select.imgIdA}} })">
 		        <img ng-src='{{select.imgSrcB}}'>
 		      </div>
             </div>

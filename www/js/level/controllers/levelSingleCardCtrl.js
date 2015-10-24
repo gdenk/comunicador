@@ -8,8 +8,19 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
         img: ''
     };
 
+    $scope.card2 = {
+        id: $stateParams.idN,
+        title: '',
+        img: ''
+    };
+
+
     cardDbService.find($stateParams.id).then(function(results) {
         $scope.card = results[0];
+    });
+
+    cardDbService.find($stateParams.idN).then(function(results) {
+        $scope.card2 = results[0];
     });
 
     if(levelNumber == 3 && $stateParams.levelInfo){
@@ -114,6 +125,7 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
                         if (index === 1){
                             registryService.pickedLevelNumber = 32;
                         }
+                        registryService.notPickedCardId = $scope.card2.id;
                     }
                     $state.go('app.patternLock');
                     
