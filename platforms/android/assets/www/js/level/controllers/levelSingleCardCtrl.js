@@ -32,6 +32,11 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
         }
     }
 
+    if(levelNumber == 4){
+        $location.path("app/dragAndDrop/" + levelNumber + "/" + $stateParams.id);
+        return;
+    }
+
     var actionSheetUp = false;
 
     $scope.menuButtonPressed = function() {
@@ -69,8 +74,20 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
              break;
              case 3:
                  $scope.buttons= [
-                     {text: 'Puntuar: Preferencia'},
-                     {text: 'Puntuar: Preferencia y Distancias'}
+                     {text: 'Puntuar: Nivel IIIA'},
+                     {text: 'Puntuar: Nivel IIIB'}
+                 ];
+             break;
+             case 31:
+                 $scope.buttons= [
+                     {text: 'Puntuar: Nivel IIIA'},
+                     {text: 'Puntuar: Nivel IIIB'}
+                 ];
+             break;
+             case 32:
+                 $scope.buttons= [
+                     {text: 'Puntuar: Nivel IIIA'},
+                     {text: 'Puntuar: Nivel IIIB'}
                  ];
              break;
         }

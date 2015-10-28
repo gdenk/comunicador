@@ -11,8 +11,8 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 [7, "'Heladera'",  '"true"', "'img/pictogramas/Casa/Heladera.jpg'", 3],
                 [8, "'Sillon'",  '"true"', "'img/pictogramas/Casa/sillon.jpg'", 3],         
                 [9, "'Televisor'",  '"true"', "'img/pictogramas/Casa/tv.jpg'", 3],
-                [10, "'Pizarron'",  '"true"', "'img/pictogramas/Escuela/Pizarron.jpg'", 4],  
-                [11, "'Lapiz'",  '"true"', "'img/pictogramas/Escuela/lapiz.png'", 4],  
+                [10, "'Pizarrón'",  '"true"', "'img/pictogramas/Escuela/Pizarron.jpg'", 4],  
+                [11, "'Lápiz'",  '"true"', "'img/pictogramas/Escuela/lapiz.png'", 4],  
                 [12, "'Mochila'",  '"true"', "'img/pictogramas/Escuela/mochila.jpg'", 4],  
                 [13, "'Maestro'",  '"true"', "'img/pictogramas/Familia/maestro.jpg'", 5],  
                 [14, "'Mamá'",  '"true"', "'img/pictogramas/Familia/mama.png'", 5], 
@@ -66,7 +66,7 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
             	[1, "'Cómo comunicarse'", "'Al ver un objeto muy preferido la persona recogerá el celular con una imagen del objeto, alcanzará al receptor comunicativo y dejará el dispositivo con la imagen en la mano de este.'" , '"true"'],
                 [2, '"Distancia y persistencia"', "'Utilizando todavía una sola imagen a la vez, la persona aprende a generalizar esta nueva habilidad utilizándola en diferentes lugares, con diferentes personas y a lo largo de diversas distancias.'", '"true"'],
                 [3, '"Discriminar imágenes"', "'Las personas aprenden a seleccionar de entre dos imágenes para pedir sus objetos o actividades favoritas.'", '"true"'],
-                [4, '"Estructura oración"', "'Las personas aprenden a construir oraciones simples en una “tira-frase”, utilizando una imagen de “quiero” seguida de una imagen del elemento que está pidiendo en ese momento.'", '"false"'],
+                [4, '"Estructura oración"', "'Las personas aprenden a construir oraciones simples en una “tira-frase”, utilizando una imagen de “quiero” seguida de una imagen del elemento que está pidiendo en ese momento.'", '"true"'],
                 [5, '"Responder preguntas"', "'Las personas aprenden a usar el comunicador para responder a la pregunta: ¿Qué deseas?'", '"false"'],
                 [6, '"Comentar"', "''", '"false"']
             ]),
@@ -82,7 +82,10 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"distanceToTerminal"',2],
                 ['"eyeContact"',2],
                 ['"facialExpression"',2],
-                ['"oralOutput"',2]
+                ['"oralOutput"',2],
+                ['"discriminationLevel"',3],
+                ['"reactionNegative"',3],
+                ['"correspondence"',3]
             ]),
 
         new TableMigrationService('Score')
@@ -105,7 +108,15 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"sil"'],
                 ['"pnrdie"'],
                 ['"prdie"'],
-                ['"risa"']
+                ['"risa"'],
+                ['"reactionNegative"'],
+                ['"reactionPositive"'],
+                ['"favorite"'],
+                ['"distractor"'],
+                ['"+"'],
+                ['"-"'],
+                ['"1mts"'],
+                ['"+3mts"']
             ]),
 
         new TableMigrationService('Configuration')
@@ -122,4 +133,5 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"Otro"', '"false"', '"true"']
             ])
     ];
+
 });

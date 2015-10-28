@@ -1,0 +1,65 @@
+<form novalidate>
+
+  <ion-view title='NIVEL {{levelNumber}}'>
+    
+     <ion-content class='has-header' scroll="false">
+
+      <div class="row">
+          <div class="col col-50" ng-if="word.length > 0">
+            <div ng-repeat="obj in word" ng-drag-data="obj" class='item item-image' ng-drag="true" 
+                ng-drag-success="onDragWordSuccess($data,$event)">
+              <img ng-src='{{obj.src}}'>
+            </div>
+          </div>
+          <div class="col col-50" ng-if="word.length == 0"></div>
+          <div class="col col-50"></div>
+      </div>
+
+      <div class="row">
+          <div class="col col-50"></div>
+          <div class="col col-50" ng-if="image.length > 0 && !categoryEnabled">
+            <div ng-repeat="obj in image" class='item item-image' ng-drag="true" ng-drag-data="obj"
+              ng-drag-success="onDragImageSuccess($data,$event)" ui-sref="app.levelCards({ levelNumber: {{levelNumber}} })">
+                <img ng-src='{{obj.src}}'>
+            </div>
+          </div>
+          <div class="col col-50" ng-if="image.length > 0 && categoryEnabled">
+            <div ng-repeat="obj in image" class='item item-image' ng-drag="true" ng-drag-data="obj"
+              ng-drag-success="onDragImageSuccess($data,$event)" ui-sref="app.categories({ levelNumber: {{levelNumber}} })">
+                <img ng-src='{{obj.src}}'>
+            </div>
+          </div>
+          <div class="col col-50" ng-if="image.length == 0">
+          </div>
+      </div>
+
+      <div class="row" style="background-image: url(img/Velcro.jpg);height:230px; width:95%; margin: auto;border-radius: 15px;">
+          <div class="col col-50" ng-if="leftBox.length > 0">
+            <div ng-repeat="obj in leftBox" ng-drop="true" style="display: flex;
+              justify-content: center; align-items: center;" ng-drop-success="onDropWordSuccess($data,$event)">   
+               <img ng-src='{{obj.src}}' style="height:220px;width:50%">
+            </div>
+          </div>
+          <div class="col col-50" ng-if="leftBox.length == 0">
+            <div ng-drop="true" style="height:390px;display: flex;
+              justify-content: center; align-items: center;" ng-drop-success="onDropWordSuccess($data,$event)">   
+            </div>
+          </div>
+          <div class="col col-50" ng-if="rightBox.length > 0">
+            <div ng-repeat="obj in rightBox" ng-drop="true" style="display: flex;
+              justify-content: center; align-items: center;" ng-drop-success="onDropImageSuccess($data,$event)">
+               <img ng-src='{{obj.src}}' style="height:220px;width:50%">
+            </div>
+          </div>
+          <div class="col col-50" ng-if="rightBox.length == 0">
+            <div ng-drop="true" style="height:390px;display: flex;
+              justify-content: center; align-items: center;" ng-drop-success="onDropImageSuccess($data,$event)">   
+            </div>
+          </div>
+      </div>
+
+    </ion-content>
+
+  </ion-view>
+
+</form>

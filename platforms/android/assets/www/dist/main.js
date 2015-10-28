@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 'validation.rules'])
+var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 'validation.rules', 'ngDraggable'])
 
 .run(function($ionicPlatform, $rootScope) {
     $ionicPlatform.ready(function() {
@@ -168,6 +168,24 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             'menuContent': {
                 templateUrl: 'templates/level/selectImage.html',
                 controller: 'selectImageCtrl'
+            }
+        }
+    })
+    .state('app.dragAndDrop', {
+        url: '/dragAndDrop/:levelNumber',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/dragAndDrop.html',
+                controller: 'dragAndDropCtrl'
+            }
+        }
+    })
+    .state('app.dragAndDropSelect', {
+        url: '/dragAndDrop/:levelNumber/:cardId',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/dragAndDrop.html',
+                controller: 'dragAndDropCtrl'
             }
         }
     })
@@ -1230,8 +1248,8 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 [7, "'Heladera'",  '"true"', "'img/pictogramas/Casa/Heladera.jpg'", 3],
                 [8, "'Sillon'",  '"true"', "'img/pictogramas/Casa/sillon.jpg'", 3],         
                 [9, "'Televisor'",  '"true"', "'img/pictogramas/Casa/tv.jpg'", 3],
-                [10, "'Pizarron'",  '"true"', "'img/pictogramas/Escuela/Pizarron.jpg'", 4],  
-                [11, "'Lapiz'",  '"true"', "'img/pictogramas/Escuela/lapiz.png'", 4],  
+                [10, "'Pizarrón'",  '"true"', "'img/pictogramas/Escuela/Pizarron.jpg'", 4],  
+                [11, "'Lápiz'",  '"true"', "'img/pictogramas/Escuela/lapiz.png'", 4],  
                 [12, "'Mochila'",  '"true"', "'img/pictogramas/Escuela/mochila.jpg'", 4],  
                 [13, "'Maestro'",  '"true"', "'img/pictogramas/Familia/maestro.jpg'", 5],  
                 [14, "'Mamá'",  '"true"', "'img/pictogramas/Familia/mama.png'", 5], 
@@ -1285,7 +1303,7 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
             	[1, "'Cómo comunicarse'", "'Al ver un objeto muy preferido la persona recogerá el celular con una imagen del objeto, alcanzará al receptor comunicativo y dejará el dispositivo con la imagen en la mano de este.'" , '"true"'],
                 [2, '"Distancia y persistencia"', "'Utilizando todavía una sola imagen a la vez, la persona aprende a generalizar esta nueva habilidad utilizándola en diferentes lugares, con diferentes personas y a lo largo de diversas distancias.'", '"true"'],
                 [3, '"Discriminar imágenes"', "'Las personas aprenden a seleccionar de entre dos imágenes para pedir sus objetos o actividades favoritas.'", '"true"'],
-                [4, '"Estructura oración"', "'Las personas aprenden a construir oraciones simples en una “tira-frase”, utilizando una imagen de “quiero” seguida de una imagen del elemento que está pidiendo en ese momento.'", '"false"'],
+                [4, '"Estructura oración"', "'Las personas aprenden a construir oraciones simples en una “tira-frase”, utilizando una imagen de “quiero” seguida de una imagen del elemento que está pidiendo en ese momento.'", '"true"'],
                 [5, '"Responder preguntas"', "'Las personas aprenden a usar el comunicador para responder a la pregunta: ¿Qué deseas?'", '"false"'],
                 [6, '"Comentar"', "''", '"false"']
             ]),
@@ -1301,7 +1319,10 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"distanceToTerminal"',2],
                 ['"eyeContact"',2],
                 ['"facialExpression"',2],
-                ['"oralOutput"',2]
+                ['"oralOutput"',2],
+                ['"discriminationLevel"',3],
+                ['"reactionNegative"',3],
+                ['"correspondence"',3]
             ]),
 
         new TableMigrationService('Score')
@@ -1324,7 +1345,15 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"sil"'],
                 ['"pnrdie"'],
                 ['"prdie"'],
-                ['"risa"']
+                ['"risa"'],
+                ['"reactionNegative"'],
+                ['"reactionPositive"'],
+                ['"favorite"'],
+                ['"distractor"'],
+                ['"+"'],
+                ['"-"'],
+                ['"1mts"'],
+                ['"+3mts"']
             ]),
 
         new TableMigrationService('Configuration')
@@ -1341,6 +1370,7 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"Otro"', '"false"', '"true"']
             ])
     ];
+
 });
 communicatorApp.service('dbService', function($q, dbMigrationsService, dbSeedsService) {
     var dbService = {};
@@ -1585,6 +1615,50 @@ communicatorApp.service('imageUploaderService', function() {
         pictureFromDevice: cameraIsEnabled ? device.pictureFromDevice : webView.takePicture
     };
 });
+communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $ionicPopup, 
+	$ionicSideMenuDelegate, tutorialService, cardDbService, configurationDbService) {
+
+	configurationDbService.find('categoryEnabled').then(function(results){
+        $scope.categoryEnabled = results[0].value === 'true' ? true : false;
+    });
+
+
+	$ionicSideMenuDelegate.canDragContent(false);
+
+	$scope.word = [{name:'quiero',src:'img/Quiero.jpg'}];
+
+	if($stateParams.cardId){
+		cardDbService.find($stateParams.cardId).then(function(results) {
+	        $scope.image = [{name:'image', src: results[0].img}];
+	    });
+	}
+	else{
+		$scope.image = [{name:'image', src:''}];
+	}
+
+    $scope.leftBox = [];
+    $scope.rightBox = [];
+
+    $scope.levelNumber = $stateParams.levelNumber;
+
+    $scope.onDropWordSuccess=function(data,evt){
+    	if(data.name == 'quiero'){
+    		var index = $scope.word.indexOf(data);
+			$scope.word.splice(index, 1);
+    		$scope.leftBox.push(data);
+    	}
+    };
+
+    $scope.onDropImageSuccess=function(data,evt){
+		if(data.name == 'image'){
+			var index = $scope.image.indexOf(data);
+			$scope.image.splice(index, 1);
+    		$scope.rightBox.push(data);
+    	}
+    };
+	    
+	tutorialService.showIfActive();
+});
 communicatorApp.controller('levelCardsCtrl', function($scope, $stateParams, tutorialService, cardDbService, registryService) {
     registryService.pickedLevelNumber = parseInt($stateParams.levelNumber, 10);
 
@@ -1641,6 +1715,11 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
         }
     }
 
+    if(levelNumber == 4){
+        $location.path("app/dragAndDrop/" + levelNumber + "/" + $stateParams.id);
+        return;
+    }
+
     var actionSheetUp = false;
 
     $scope.menuButtonPressed = function() {
@@ -1678,8 +1757,20 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
              break;
              case 3:
                  $scope.buttons= [
-                     {text: 'Puntuar: Preferencia'},
-                     {text: 'Puntuar: Preferencia y Distancias'}
+                     {text: 'Puntuar: Nivel IIIA'},
+                     {text: 'Puntuar: Nivel IIIB'}
+                 ];
+             break;
+             case 31:
+                 $scope.buttons= [
+                     {text: 'Puntuar: Nivel IIIA'},
+                     {text: 'Puntuar: Nivel IIIB'}
+                 ];
+             break;
+             case 32:
+                 $scope.buttons= [
+                     {text: 'Puntuar: Nivel IIIA'},
+                     {text: 'Puntuar: Nivel IIIB'}
                  ];
              break;
         }
@@ -1847,12 +1938,16 @@ communicatorApp.controller('selectImageCtrl', function($scope, $stateParams, $io
     	$scope.select = JSON.parse(decodeURI($stateParams.levelInfo));
 
     	cardDbService.find($scope.select.imgIdA).then(function(results) {
-	        $scope.select.imgSrcA = results[0].img;
-	    });
+            if (Object.keys(results).length > 0) {
+	           $scope.select.imgSrcA = results[0].img;
+	        }
+        });
 
 	    cardDbService.find($scope.select.imgIdB).then(function(results) {
-	        $scope.select.imgSrcB = results[0].img;
-	    });
+            if (Object.keys(results).length > 0) {
+               $scope.select.imgSrcB = results[0].img;
+            }
+        });
     }
     else{
     	$scope.levelInfo = '\'' + encodeURI(JSON.stringify($scope.select)) + '\'';
@@ -1867,18 +1962,41 @@ communicatorApp.controller('selectImageCtrl', function($scope, $stateParams, $io
         if ($scope.select.imgIdA === 0 || $scope.select.imgIdB === 0) {
             $ionicPopup.alert({
                 title: "Advertencia",
-                template: "Debe seleccionar dos imagenes"
+                template: "Debe seleccionar dos pictogramas para continuar."
             });
         } 
         else if($scope.select.imgIdA == $scope.select.imgIdB){
-            $ionicPopup.alert({
-                title: "Advertencia",
-                template: "Debe seleccionar imagenes distintas"
-            });
+        $ionicPopup.show({
+            title: 'Ha seleccionado dos pictogramas idénticos.<br>Para continuar presione &apos;Aceptar&apos; o bien, &apos;Cancelar&apos; para continuar modificándolos',
+            scope: $scope,
+            buttons: [
+                { 
+                    text: 'Cancelar',
+                    onTap: function() {
+                        $scope.select.levelStarted = false;
+                    }
+                },
+                {
+                    text: 'Aceptar',
+                    type: 'button-positive',
+                    onTap: function() {
+                        $scope.select.levelStarted = true;
+                    }
+                }
+            ]
+        });
+         
         }
         else {
             $scope.select.levelStarted = true;
         }
+    };
+
+    $scope.ask = function() {
+        $ionicPopup.alert({
+            title: 'Ayuda',
+            template: 'Para agregar los pictogramas correspondientes a este nivel, se deben presionar los signos "+". Para comenzar con el intercambio, debe presionar a continuación, el tilde que se visualiza en la parte superior derecha de la pantalla. Por último deberá seleccionar el pictograma para registrar el intercambio y mantener presionado el mismo para realizar el registro propiamente dicho.'
+        });
     };
 
 	tutorialService.showIfActive();
@@ -2407,39 +2525,28 @@ communicatorApp.controller('basicRegistry3ACtrl', function($scope, $q, $ionicPop
 	var basicScoreValues = { true: 'reactionNegative', false: 'reactionPositive', 1: 'favorite', 
 	                         2: 'distractor'};
 
-	var date = new Date();
-    var today =  date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear().toString().substr(2,2);
-
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
-		date: today,
 		discriminationLevel: 0,
-		reactionNegative: false,
-		image: registryService.pickedCardId
+		reactionNegative: false
 	};
 
-	cardDbService.find(registryService.pickedCardId).then(function(results) {
-        $scope.card = results[0];
-    });
-
-	$scope.$on("$destroy", function() {
-       var delegate = $ionicScrollDelegate.$getByHandle('resetScroll');
-       delegate.forgetScrollPosition();
-    });
-
 	$scope.saveRegistry = function() {
-	
-		checkForDefaultScores().then(function(){
-			$scope.registry.discriminationLevel = basicScoreValues[$scope.registry.discriminationLevel];
-			$scope.registry.reactionNegative = basicScoreValues[$scope.registry.reactionNegative];
-			registryService.saveRegistry($scope.registry);
-			$scope.goBack();
-		});
+		$scope.registry.discriminationLevel = basicScoreValues[$scope.registry.discriminationLevel];
+		$scope.registry.reactionNegative = basicScoreValues[$scope.registry.reactionNegative];
+		registryService.saveRegistry($scope.registry);
+		$scope.goBack();
 	};
 
 	$scope.goBack = function() {
-		$location.path("app");
-        return;
+		// this is to force a double "back"
+	  	var backView = $scope.$viewHistory.views[$scope.$viewHistory.backView.backViewId];
+	    $scope.$viewHistory.forcedNav = {
+	        viewId:     backView.viewId,
+	        navAction: 'moveBack',
+	        navDirection: 'back'
+	    };
+	    backView.go();
 	};
 
 	var checkForDefaultScores = function() {
@@ -2453,7 +2560,7 @@ communicatorApp.controller('basicRegistry3ACtrl', function($scope, $q, $ionicPop
 					deferred.resolve();
 				} else {
 					deferred.reject();
-				}
+				} 
 			});
 		} else {
 			deferred.resolve();
@@ -2468,7 +2575,7 @@ communicatorApp.controller('basicRegistry3ACtrl', function($scope, $q, $ionicPop
 	$scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del receptor. Se registra entonces si la persona se desplaza o no hacia el receptor y la distancia a la que se encuentra el mismo.'
+            template: 'En esta sección se registra el intercambio en función del nivel de discriminación y de la reacción de la persona.'
         });
     };
 
@@ -2481,22 +2588,13 @@ communicatorApp.controller('basicRegistry3BCtrl', function($scope, $q, $ionicPop
 
 	var distances = { 1: '10cm', 2: '15cm', 3: '30cm', 4: '60cm', 5: '1mts', 6: '3mts', 7: '+3mts'};
 
-	var date = new Date();
-    var today =  date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear().toString().substr(2,2);
-
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
-		date: today,
 		discriminationLevel: 0,
 		correspondence: false,
 		distanceToReceiver: 0,
-		distanceToTerminal: 0,
-		image: registryService.pickedCardId
+		distanceToTerminal: 0
 	};
-
-	cardDbService.find(registryService.pickedCardId).then(function(results) {
-        $scope.card = results[0];
-    });
 
 	$scope.$on("$destroy", function() {
        var delegate = $ionicScrollDelegate.$getByHandle('resetScroll');
@@ -2504,25 +2602,29 @@ communicatorApp.controller('basicRegistry3BCtrl', function($scope, $q, $ionicPop
     });
 
 	$scope.saveRegistry = function() {
-	
-		checkForDefaultScores().then(function(){
-			$scope.registry.discriminationLevel = basicScoreValues[$scope.registry.discriminationLevel];
-			$scope.registry.correspondence = basicScoreValues[$scope.registry.correspondence];
-			$scope.registry.distanceToReceiver = distances[$scope.registry.distanceToReceiver];
-			$scope.registry.distanceToTerminal = distances[$scope.registry.distanceToTerminal];
-			registryService.saveRegistry($scope.registry);
-			$scope.goBack();
-		});
+		$scope.registry.discriminationLevel = basicScoreValues[$scope.registry.discriminationLevel];
+		$scope.registry.correspondence = basicScoreValues[$scope.registry.correspondence];
+		$scope.registry.distanceToReceiver = distances[$scope.registry.distanceToReceiver];
+		$scope.registry.distanceToTerminal = distances[$scope.registry.distanceToTerminal];
+		registryService.saveRegistry($scope.registry);
+		$scope.goBack();
 	};
 
 	$scope.goBack = function() {
-		$location.path("app");
-        return;
+		// this is to force a double "back"
+	  	var backView = $scope.$viewHistory.views[$scope.$viewHistory.backView.backViewId];
+	    $scope.$viewHistory.forcedNav = {
+	        viewId:     backView.viewId,
+	        navAction: 'moveBack',
+	        navDirection: 'back'
+	    };
+	    backView.go();
 	};
 
 	var checkForDefaultScores = function() {
 		var deferred = $q.defer();
-		if ($scope.registry.discriminationLevel > 0) {
+		if ($scope.registry.discriminationLevel > 0 && $scope.registry.distanceToReceiver > 0 && 
+				$scope.registry.distanceToTerminal > 0) {
 			$ionicPopup.confirm({
 				title: "Advertencia",
 				template: "Usted va a ingresar un registro con todos los pasos correctos. ¿Está seguro que desea hacer esto?"
@@ -2546,7 +2648,7 @@ communicatorApp.controller('basicRegistry3BCtrl', function($scope, $q, $ionicPop
 	$scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del receptor. Se registra entonces si la persona se desplaza o no hacia el receptor y la distancia a la que se encuentra el mismo.'
+            template: 'En esta sección se registra el intercambio en función del nivel de discriminación, comprobación de correspondencia, distancia al instructor y al dispositivo.'
         });
     };
 
@@ -2761,6 +2863,9 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 		if (levelNumber == 21 | levelNumber == 22){
 			levelNumber = 2;
 		}
+		if (levelNumber == 31 | levelNumber == 32){
+			levelNumber = 3;
+		}
 
 		var initDate = getLevelDate(levelNumber);
 		if (initDate === null) {
@@ -2831,6 +2936,8 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
     $scope.loaded = false;
     $scope.hasExchanges = false;
     $scope.exchanges = {};
+    $scope.exchanges3A = {};
+    $scope.exchanges3B = {};
     $scope.exchangeCountByReceiver = [];
 
     levelDbService.selectAll().then(function(levels){
@@ -2855,11 +2962,27 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
 
     $scope.getLevelData = function(myLevel){
 
+        if(myLevel.levelNumber == 1){
+            statisticService.exchangeCountByReceiver(myLevel.levelNumber).then(function(result) {
+                $scope.exchangeCountByReceiver = result;
+            });
+            statisticService.exchanges(myLevel.levelNumber).then(function(result) {
+                if (Object.keys(result).length > 0) {
+                    $scope.hasExchanges = true;
+                }
+                else{
+                    $scope.hasExchanges = false;
+                }
+                $scope.exchanges = result;
+                $scope.loaded = true;
+            });
+       }
+
         if(myLevel.levelNumber == 2){
-           statisticService.exchangeCountByReceiverForLevelSubleveled().then(function(result) {
+            statisticService.exchangeCountByReceiverForLevelSubleveled(myLevel.levelNumber + '1',myLevel.levelNumber + '2').then(function(result) {
             $scope.exchangeCountByReceiver = result;
         }); 
-           statisticService.exchangesForLevelSubleveled(myLevel.levelNumber).then(function(result) {
+           statisticService.exchangesForLevelSubleveled(myLevel.levelNumber + '1',myLevel.levelNumber + '2').then(function(result) {
                if (Object.keys(result).length > 0) {
                     $scope.hasExchanges = true;
                 }
@@ -2871,21 +2994,37 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
            
         });
        }
-       else{
-        statisticService.exchangeCountByReceiver(myLevel.levelNumber).then(function(result) {
+
+       if(myLevel.levelNumber == 3){
+            statisticService.exchangeCountByReceiverForLevelSubleveled(myLevel.levelNumber + '1',myLevel.levelNumber + '2').then(function(result) {
             $scope.exchangeCountByReceiver = result;
-        });
-        statisticService.exchanges(myLevel.levelNumber).then(function(result) {
-            if (Object.keys(result).length > 0) {
-                $scope.hasExchanges = true;
-            }
-            else{
-                $scope.hasExchanges = false;
-            }
-            $scope.exchanges = result;
+        }); 
+           statisticService.exchangesForLevelSubleveled3(myLevel.levelNumber + '1').then(function(result) {
+               if (Object.keys(result).length > 0) {
+                    $scope.hasExchanges = true;
+                    $scope.exchanges3A = result;
+                }
+                else{
+                    $scope.hasExchanges = false;
+                }
             $scope.loaded = true;
+           
         });
-    }
+            statisticService.exchangesForLevelSubleveled3(myLevel.levelNumber + '2').then(function(result) {
+               if (Object.keys(result).length > 0) {
+                    $scope.hasExchanges = true;
+                    $scope.exchanges3B = result;
+                }
+                else{
+                    $scope.hasExchanges = false;
+                }
+           
+           
+        });
+        $scope.loaded = true;
+       }
+       
+
 };   
 
 $scope.score = {
@@ -2938,7 +3077,36 @@ communicatorApp.filter('level_sublevel', function() {
         if (text == '22') {
             return 'Dispositivo';
         }
+        if (text == '31') {
+            return 'IIIA';
+        }
+        if (text == '32') {
+            return 'IIIB';
+        }
     };
+});
+
+communicatorApp.filter('reaction', function() {
+    return function(text, length, end) {
+        if (text == 'reactionNegative') {
+            return 'Sí';
+        }
+        if (text == 'reactionPositive') {
+            return 'No';
+        }
+    };
+});
+
+communicatorApp.filter('discrimination', function() {
+    return function(text, length, end) {
+        if (text == 'favorite') {
+            return 'Favorito';
+        }
+        if (text == 'distractor') {
+            return 'Distractor';
+        }
+    };
+
 });
 
 communicatorApp.controller('statisticsCtrl', function($scope, statisticService) {
@@ -2997,15 +3165,15 @@ communicatorApp.service('statisticService', function($q,
         });
 
     receiverDbService
-        .define("exchangeCountByReceiverForLevelSubleveled", function() {
+        .define("exchangeCountByReceiverForLevelSubleveled", function(subLevel1,subLevel2) {
             return {
                 query: 'SELECT avatar as receiverAvatar, '+ receiverRelationshipField +', COUNT(receiverId) as count FROM ' + this.tableName +
                        ' LEFT JOIN ' + e.tableName + ' ON ' + this.prop('id') + ' = receiverId' +
                        ' LEFT JOIN ' + rl.tableName + ' ON ' + this.prop('relationshipId') + ' = ' + rl.prop('id') +
                        ' LEFT JOIN ' + ebl.tableName + ' ON ' + ebl.prop('exchangeId') + ' = ' + e.prop('id') +
-                       ' WHERE ' + ebl.prop('levelId') + ' = 21 OR ' + ebl.prop('levelId') + ' = 22 ' +
+                       ' WHERE ' + ebl.prop('levelId') + ' = ? OR ' + ebl.prop('levelId') + ' = ? ' +
                        ' GROUP BY receiverId, ' + r.prop('name'),
-                args: []
+                args: [subLevel1,subLevel2]
             };
         });
 
@@ -3036,7 +3204,7 @@ communicatorApp.service('statisticService', function($q,
         });
 
     exchangeDbService
-        .define("exchangesForLevelSubleveled", function() {
+        .define("exchangesForLevelSubleveled", function(subLevel1,subLevel2) {
             return {
                 query: 'SELECT ' +
                             e.prop('id')    + ' as id,' +
@@ -3045,7 +3213,7 @@ communicatorApp.service('statisticService', function($q,
                             c.prop('title') + ' as cardTitle,' +
                             s.prop('name')  + ' as scoreName,' +
                             sp.prop('name') + ' as stepName,' +
-                            ebl.prop('levelId') + ' as level' + 
+                            ebl.prop('levelId') + ' as level' +  
                        ' FROM ' + this.tableName +
                        ' JOIN ' + r.tableName   + ' ON ' + r.prop('id') +           ' = ' + this.prop('receiverId') +
                        ' LEFT JOIN ' + rl.tableName + ' ON ' + r.prop('relationshipId') + ' = ' + rl.prop('id') +
@@ -3055,9 +3223,35 @@ communicatorApp.service('statisticService', function($q,
                        ' JOIN ' + s.tableName   + ' ON ' + s.prop('id') +           ' = ' + sbe.prop('scoreId') +
                        ' JOIN ' + sp.tableName  + ' ON ' + sp.prop('id') +          ' = ' + sbe.prop('stepId') +
                        ' JOIN ' + ebl.tableName  + ' ON ' + ebl.prop('exchangeId') + ' = ' + e.prop('id') +
-                       ' WHERE ' + ebl.prop('levelId') + ' = 21 OR ' + ebl.prop('levelId') + ' = 22 ' +
+                       ' WHERE ' + ebl.prop('levelId') + ' = ? OR ' + ebl.prop('levelId') + ' = ? ' +
                        ' GROUP BY stepId, ' + e.prop('id') + ' , date, ' + r.prop('name') +', cardTitle, scoreName, stepName, level',
-                args: []
+                args: [subLevel1,subLevel2]
+            };
+        });
+
+    exchangeDbService
+        .define("exchangesForLevelSubleveled3", function(subLevel) {
+            return {
+                query: 'SELECT ' +
+                            e.prop('id')    + ' as id,' +
+                            e.prop('date')  + ' as date,' +
+                            receiverRelationshipField + ',' +
+                            c.prop('title') + ' as cardTitle,' +
+                            s.prop('name')  + ' as scoreName,' +
+                            sp.prop('name') + ' as stepName,' +
+                            ebl.prop('levelId') + ' as level' +  
+                       ' FROM ' + this.tableName +
+                       ' JOIN ' + r.tableName   + ' ON ' + r.prop('id') +           ' = ' + this.prop('receiverId') +
+                       ' LEFT JOIN ' + rl.tableName + ' ON ' + r.prop('relationshipId') + ' = ' + rl.prop('id') +
+                       ' JOIN ' + ebc.tableName + ' ON ' + ebc.prop('exchangeId') + ' = ' + this.prop('id') +
+                       ' JOIN ' + c.tableName   + ' ON ' + c.prop('id') +           ' = ' + ebc.prop('cardId') +
+                       ' JOIN ' + sbe.tableName + ' ON ' + sbe.prop('exchangeId') + ' = ' + this.prop('id') +
+                       ' JOIN ' + s.tableName   + ' ON ' + s.prop('id') +           ' = ' + sbe.prop('scoreId') +
+                       ' JOIN ' + sp.tableName  + ' ON ' + sp.prop('id') +          ' = ' + sbe.prop('stepId') +
+                       ' JOIN ' + ebl.tableName  + ' ON ' + ebl.prop('exchangeId') + ' = ' + e.prop('id') +
+                       ' WHERE ' + ebl.prop('levelId') + ' = ? ' +
+                       ' GROUP BY stepId, ' + e.prop('id') + ' , date, ' + r.prop('name') +', cardTitle, scoreName, stepName, level',
+                args: [subLevel]
             };
         });
 
@@ -3066,8 +3260,8 @@ communicatorApp.service('statisticService', function($q,
         exchangeCountByReceiver: function(myLevel) {
             return receiverDbService.exchangeCountByReceiver(myLevel);
         },
-        exchangeCountByReceiverForLevelSubleveled: function() {
-            return receiverDbService.exchangeCountByReceiverForLevelSubleveled();
+        exchangeCountByReceiverForLevelSubleveled: function(subLevel1,subLevel2) {
+            return receiverDbService.exchangeCountByReceiverForLevelSubleveled(subLevel1,subLevel2);
         },
         exchanges: function(myLevel) {
             var deferred = $q.defer();
@@ -3085,10 +3279,26 @@ communicatorApp.service('statisticService', function($q,
             
             return deferred.promise;
         },
-        exchangesForLevelSubleveled: function() {
+        exchangesForLevelSubleveled: function(subLevel1,subLevel2) {
             var deferred = $q.defer();
 
-            exchangeDbService.exchangesForLevelSubleveled().then(function(result) {
+            exchangeDbService.exchangesForLevelSubleveled(subLevel1,subLevel2).then(function(result) {
+                var exchanges = result.reduce(function(memo, current) {
+                    if (!memo[current.id]) {
+                        memo[current.id] = current;
+                    }
+                    memo[current.id][current.stepName] = current.scoreName;
+                    return memo;
+                }, {});
+                deferred.resolve(exchanges);
+            });
+            
+            return deferred.promise;
+        },
+        exchangesForLevelSubleveled3: function(subLevel) {
+            var deferred = $q.defer();
+
+            exchangeDbService.exchangesForLevelSubleveled3(subLevel).then(function(result) {
                 var exchanges = result.reduce(function(memo, current) {
                     if (!memo[current.id]) {
                         memo[current.id] = current;

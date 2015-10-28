@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 'validation.rules'])
+var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 'validation.rules', 'ngDraggable'])
 
 .run(function($ionicPlatform, $rootScope) {
     $ionicPlatform.ready(function() {
@@ -168,6 +168,24 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             'menuContent': {
                 templateUrl: 'templates/level/selectImage.html',
                 controller: 'selectImageCtrl'
+            }
+        }
+    })
+    .state('app.dragAndDrop', {
+        url: '/dragAndDrop/:levelNumber',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/dragAndDrop.html',
+                controller: 'dragAndDropCtrl'
+            }
+        }
+    })
+    .state('app.dragAndDropSelect', {
+        url: '/dragAndDrop/:levelNumber/:cardId',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/dragAndDrop.html',
+                controller: 'dragAndDropCtrl'
             }
         }
     })

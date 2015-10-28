@@ -43,6 +43,11 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
         }
     }
 
+    if(levelNumber == 4){
+        $location.path("app/dragAndDrop/" + levelNumber + "/" + $stateParams.id);
+        return;
+    }
+
     var actionSheetUp = false;
 
     $scope.menuButtonPressed = function() {
