@@ -116,7 +116,10 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"+"'],
                 ['"-"'],
                 ['"1mts"'],
-                ['"+3mts"']
+                ['"+3mts"'],
+                ['"na"'],
+                ['"at"'],
+                ['"ap"']
             ]),
 
         new TableMigrationService('Configuration')

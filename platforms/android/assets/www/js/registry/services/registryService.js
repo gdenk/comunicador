@@ -3,6 +3,8 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 
 	registryService.pickedCardId = 0;
 
+	registryService.notPickedCardId = 0;
+
 	registryService.pickedLevelNumber = 1;
 	
 	var steps = [];
@@ -51,10 +53,19 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 	}
 
 	function insertNewExchangeByCard (exchangeId) {
-		exchangeByCardDbService.insert({
-			exchangeId: exchangeId,
-			cardId: registryService.pickedCardId
-		});
+
+		if(registryService.pickedLevelNumber == 31 || registryService.pickedLevelNumber == 32){
+			exchangeByCardDbService.insert({
+				exchangeId: exchangeId,
+				cardId: registryService.pickedCardId,
+				cardExtraId: registryService.notPickedCardId
+			});
+		}else{
+			exchangeByCardDbService.insert({
+				exchangeId: exchangeId,
+				cardId: registryService.pickedCardId
+			});	
+		}
 	}
 
 	function insertNewExchangeByLevel (exchangeId) {

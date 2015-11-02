@@ -36,6 +36,7 @@ communicatorApp.service('dbMigrationsService', function(TableMigrationService) {
 
         new TableMigrationService('ExchangeByCard')
             .addColumn('cardId INTEGER')
+            .addColumn('cardExtraId INTEGER')
             .addColumn('exchangeId INTEGER'),
 
         new TableMigrationService('ExchangeByLevel')

@@ -61,7 +61,10 @@ communicatorApp.controller('patternLockCtrl', function($scope, $state, $ionicNav
         	 break; 
         	 case 32:
        	 		$state.go('app.basicRegistry3B');
-        	 break;  	 			 
+        	 break;
+        	 case 4:
+       	 		$state.go('app.basicRegistry4');
+        	 break;  	 		  	 			 
 		}
 	}
 

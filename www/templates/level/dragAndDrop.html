@@ -2,6 +2,10 @@
 
   <ion-view title='NIVEL {{levelNumber}}'>
     
+    <ion-nav-buttons side='right'>
+      <a ng-click='ask()' class='button button-icon icon ask-icon'></a>
+    </ion-nav-buttons>
+
      <ion-content class='has-header' scroll="false">
 
       <div class="row">
@@ -33,11 +37,11 @@
           </div>
       </div>
 
-      <div class="row" style="background-image: url(img/Velcro.jpg);height:230px; width:95%; margin: auto;border-radius: 15px;">
+      <div menu-onhold class="row" style="background-image: url(img/Velcro.jpg);height:230px; width:95%; margin: auto;border-radius: 15px;">
           <div class="col col-50" ng-if="leftBox.length > 0">
             <div ng-repeat="obj in leftBox" ng-drop="true" style="display: flex;
               justify-content: center; align-items: center;" ng-drop-success="onDropWordSuccess($data,$event)">   
-               <img ng-src='{{obj.src}}' style="height:220px;width:50%">
+               <img ng-src='{{obj.src}}' style="height:220px">
             </div>
           </div>
           <div class="col col-50" ng-if="leftBox.length == 0">
@@ -48,7 +52,7 @@
           <div class="col col-50" ng-if="rightBox.length > 0">
             <div ng-repeat="obj in rightBox" ng-drop="true" style="display: flex;
               justify-content: center; align-items: center;" ng-drop-success="onDropImageSuccess($data,$event)">
-               <img ng-src='{{obj.src}}' style="height:220px;width:50%">
+               <img ng-src='{{obj.src}}' style="height:220px">
             </div>
           </div>
           <div class="col col-50" ng-if="rightBox.length == 0">

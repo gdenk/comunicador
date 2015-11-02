@@ -132,7 +132,7 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
         parent: 'app.categories'
     })
     .state('content.levelSingleCard', {
-        url: '/levelSingleCard/:id',
+        url: '/levelSingleCard/:id/idN/:idN',
         views: {
             'content': {
                 templateUrl: 'templates/level/levelSingleCard.html',
@@ -275,6 +275,15 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             'menuContent': {
                 templateUrl: 'templates/registry/basicRegistry3B.html',
                 controller: 'basicRegistry3BCtrl'
+            }
+        }
+    })
+    .state('app.basicRegistry4', {
+        url: '/basicRegistry4',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/registry/basicRegistry4.html',
+                controller: 'basicRegistry4Ctrl'
             }
         }
     })
@@ -1207,6 +1216,7 @@ communicatorApp.service('dbMigrationsService', function(TableMigrationService) {
 
         new TableMigrationService('ExchangeByCard')
             .addColumn('cardId INTEGER')
+            .addColumn('cardExtraId INTEGER')
             .addColumn('exchangeId INTEGER'),
 
         new TableMigrationService('ExchangeByLevel')
@@ -1353,7 +1363,10 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"+"'],
                 ['"-"'],
                 ['"1mts"'],
-                ['"+3mts"']
+                ['"+3mts"'],
+                ['"na"'],
+                ['"at"'],
+                ['"ap"']
             ]),
 
         new TableMigrationService('Configuration')
@@ -1615,13 +1628,15 @@ communicatorApp.service('imageUploaderService', function() {
         pictureFromDevice: cameraIsEnabled ? device.pictureFromDevice : webView.takePicture
     };
 });
-communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $ionicPopup, 
-	$ionicSideMenuDelegate, tutorialService, cardDbService, configurationDbService) {
+communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $ionicPopup, $ionicActionSheet,
+	$ionicSideMenuDelegate, $ionicNavBarDelegate, $state, tutorialService, cardDbService, 
+    configurationDbService, registryService) {
 
 	configurationDbService.find('categoryEnabled').then(function(results){
         $scope.categoryEnabled = results[0].value === 'true' ? true : false;
     });
 
+    var actionSheetUp = true;
 
 	$ionicSideMenuDelegate.canDragContent(false);
 
@@ -1647,6 +1662,10 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
 			$scope.word.splice(index, 1);
     		$scope.leftBox.push(data);
     	}
+
+        if($scope.leftBox.length == 1 && $scope.rightBox.length == 1){
+            actionSheetUp = false;
+        }
     };
 
     $scope.onDropImageSuccess=function(data,evt){
@@ -1655,8 +1674,49 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
 			$scope.image.splice(index, 1);
     		$scope.rightBox.push(data);
     	}
+
+        if($scope.leftBox.length == 1 && $scope.rightBox.length == 1){
+            actionSheetUp = false;
+        }
     };
-	    
+
+    $scope.menuButtonPressed = function() {
+        if (!actionSheetUp) {
+            showActionSheet();
+        }
+    };
+
+    var showActionSheet = function() {
+
+		$scope.buttons= [
+		     {text: 'Puntuar'}
+		];
+           
+        $ionicActionSheet.show({
+            buttons: $scope.buttons,
+            cancelText: 'Cancelar',
+            cancel: function() {
+                actionSheetUp = false;
+                $ionicNavBarDelegate.back();
+            },
+            buttonClicked: function(index) {
+                registryService.pickedLevelNumber = 4;
+                $state.go('app.patternLock');    
+                return true;
+            }
+        });
+        actionSheetUp = true;
+    };
+
+    $scope.$on('menuButtonPressed', $scope.menuButtonPressed);
+
+    $scope.ask = function() {
+        $ionicPopup.alert({
+            title: 'Ayuda',
+            template: 'Para agregar el pictograma correspondiente a este nivel, se debe presionar el signo "+". Arrastre ambos pictogramas hacia la tira de intercambio que se encuentra en la parte inferior de la pantalla. Finalmente, para registrar el intercambio mantener presionada la tira.'
+        });
+    };
+
 	tutorialService.showIfActive();
 });
 communicatorApp.controller('levelCardsCtrl', function($scope, $stateParams, tutorialService, cardDbService, registryService) {
@@ -1691,8 +1751,19 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
         img: ''
     };
 
+    $scope.card2 = {
+        id: $stateParams.idN,
+        title: '',
+        img: ''
+    };
+
+
     cardDbService.find($stateParams.id).then(function(results) {
         $scope.card = results[0];
+    });
+
+    cardDbService.find($stateParams.idN).then(function(results) {
+        $scope.card2 = results[0];
     });
 
     if(levelNumber == 3 && $stateParams.levelInfo){
@@ -1802,6 +1873,7 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
                         if (index === 1){
                             registryService.pickedLevelNumber = 32;
                         }
+                        registryService.notPickedCardId = $scope.card2.id;
                     }
                     $state.go('app.patternLock');
                     
@@ -1879,7 +1951,10 @@ communicatorApp.controller('patternLockCtrl', function($scope, $state, $ionicNav
         	 break; 
         	 case 32:
        	 		$state.go('app.basicRegistry3B');
-        	 break;  	 			 
+        	 break;
+        	 case 4:
+       	 		$state.go('app.basicRegistry4');
+        	 break;  	 		  	 			 
 		}
 	}
 
@@ -2655,6 +2730,47 @@ communicatorApp.controller('basicRegistry3BCtrl', function($scope, $q, $ionicPop
 	tutorialService.showIfActive();
 
 });
+communicatorApp.controller('basicRegistry4Ctrl', function($scope, $q, $ionicPopup, $location, 
+	currentReceiverService, registryService, cardDbService) {
+
+	var basicScoreValues = { 1: 'na', 2: 'at', 3: 'ap', 4: '+'};
+
+	$scope.registry = {
+		receiver: currentReceiverService.receiver,
+		setImage: '',
+		setWant: '',
+		exchangeStrip: '',
+		markPictures: '',
+		checkingCorrespondence: ''
+	};
+
+	$scope.saveRegistry = function() {
+		$scope.registry.setImage = basicScoreValues[$scope.setImage];
+		$scope.registry.setWant = basicScoreValues[$scope.setWant];
+		$scope.registry.exchangeStrip = basicScoreValues[$scope.exchangeStrip];
+		$scope.registry.markPictures = basicScoreValues[$scope.markPictures];
+		$scope.registry.checkingCorrespondence = basicScoreValues[$scope.checkingCorrespondence];
+		registryService.saveRegistry($scope.registry);
+		$scope.goBack();
+	};
+
+
+	$scope.goBack = function() {
+		// this is to force a double "back"
+	  	var backView = $scope.$viewHistory.views[$scope.$viewHistory.backView.backViewId];
+	    $scope.$viewHistory.forcedNav = {
+	        viewId:     backView.viewId,
+	        navAction: 'moveBack',
+	        navDirection: 'back'
+	    };
+	    backView.go();
+	};
+
+	$scope.toggleInfo = function(step) {
+		$scope.showInfo[step] = !$scope.showInfo[step];
+	};
+
+});
 communicatorApp.controller('basicRegistryCtrl', function($scope, $q, $ionicPopup, tutorialService, currentReceiverService, registryService) {
 
 	var basicScoreValues = { true: 'withoutHelp', false: 'withHelp' };
@@ -2797,6 +2913,8 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 
 	registryService.pickedCardId = 0;
 
+	registryService.notPickedCardId = 0;
+
 	registryService.pickedLevelNumber = 1;
 	
 	var steps = [];
@@ -2845,10 +2963,19 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 	}
 
 	function insertNewExchangeByCard (exchangeId) {
-		exchangeByCardDbService.insert({
-			exchangeId: exchangeId,
-			cardId: registryService.pickedCardId
-		});
+
+		if(registryService.pickedLevelNumber == 31 || registryService.pickedLevelNumber == 32){
+			exchangeByCardDbService.insert({
+				exchangeId: exchangeId,
+				cardId: registryService.pickedCardId,
+				cardExtraId: registryService.notPickedCardId
+			});
+		}else{
+			exchangeByCardDbService.insert({
+				exchangeId: exchangeId,
+				cardId: registryService.pickedCardId
+			});	
+		}
 	}
 
 	function insertNewExchangeByLevel (exchangeId) {
@@ -3005,7 +3132,9 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
                     $scope.exchanges3A = result;
                 }
                 else{
-                    $scope.hasExchanges = false;
+                    if(!$scope.hasExchanges){
+                     $scope.hasExchanges = false;
+                    }
                 }
             $scope.loaded = true;
            
@@ -3016,10 +3145,10 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
                     $scope.exchanges3B = result;
                 }
                 else{
-                    $scope.hasExchanges = false;
+                    if(!$scope.hasExchanges){
+                     $scope.hasExchanges = false;
+                    }
                 }
-           
-           
         });
         $scope.loaded = true;
        }
@@ -3145,6 +3274,8 @@ communicatorApp.service('statisticService', function($q,
     var ebc = exchangeByCardDbService;
     var ebl = exchangeByLevelDbService;
     var c   = cardDbService;
+    var c1   = cardDbService;
+    var c2   = cardDbService;
     var sbe = scoreByExchangeDbService;
     var s   = scoreDbService;
     var sp  = stepDbService;
@@ -3236,7 +3367,8 @@ communicatorApp.service('statisticService', function($q,
                             e.prop('id')    + ' as id,' +
                             e.prop('date')  + ' as date,' +
                             receiverRelationshipField + ',' +
-                            c.prop('title') + ' as cardTitle,' +
+                            'c1.title as cardTitle,' +
+                            'c2.title as cardExtraTitle,' +
                             s.prop('name')  + ' as scoreName,' +
                             sp.prop('name') + ' as stepName,' +
                             ebl.prop('levelId') + ' as level' +  
@@ -3244,7 +3376,8 @@ communicatorApp.service('statisticService', function($q,
                        ' JOIN ' + r.tableName   + ' ON ' + r.prop('id') +           ' = ' + this.prop('receiverId') +
                        ' LEFT JOIN ' + rl.tableName + ' ON ' + r.prop('relationshipId') + ' = ' + rl.prop('id') +
                        ' JOIN ' + ebc.tableName + ' ON ' + ebc.prop('exchangeId') + ' = ' + this.prop('id') +
-                       ' JOIN ' + c.tableName   + ' ON ' + c.prop('id') +           ' = ' + ebc.prop('cardId') +
+                       ' LEFT JOIN ' + c.tableName + ' c1 ON c1.id  = ' + ebc.prop('cardId') +
+                       ' LEFT JOIN ' + c.tableName + ' c2 ON c2.id  = ' + ebc.prop('cardExtraId') +
                        ' JOIN ' + sbe.tableName + ' ON ' + sbe.prop('exchangeId') + ' = ' + this.prop('id') +
                        ' JOIN ' + s.tableName   + ' ON ' + s.prop('id') +           ' = ' + sbe.prop('scoreId') +
                        ' JOIN ' + sp.tableName  + ' ON ' + sp.prop('id') +          ' = ' + sbe.prop('stepId') +
@@ -3254,7 +3387,6 @@ communicatorApp.service('statisticService', function($q,
                 args: [subLevel]
             };
         });
-
 
     return {
         exchangeCountByReceiver: function(myLevel) {

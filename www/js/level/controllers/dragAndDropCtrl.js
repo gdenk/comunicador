@@ -1,10 +1,12 @@
-communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $ionicPopup, 
-	$ionicSideMenuDelegate, tutorialService, cardDbService, configurationDbService) {
+communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $ionicPopup, $ionicActionSheet,
+	$ionicSideMenuDelegate, $ionicNavBarDelegate, $state, tutorialService, cardDbService, 
+    configurationDbService, registryService) {
 
 	configurationDbService.find('categoryEnabled').then(function(results){
         $scope.categoryEnabled = results[0].value === 'true' ? true : false;
     });
 
+    var actionSheetUp = true;
 
 	$ionicSideMenuDelegate.canDragContent(false);
 
@@ -30,6 +32,10 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
 			$scope.word.splice(index, 1);
     		$scope.leftBox.push(data);
     	}
+
+        if($scope.leftBox.length == 1 && $scope.rightBox.length == 1){
+            actionSheetUp = false;
+        }
     };
 
     $scope.onDropImageSuccess=function(data,evt){
@@ -38,7 +44,48 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
 			$scope.image.splice(index, 1);
     		$scope.rightBox.push(data);
     	}
+
+        if($scope.leftBox.length == 1 && $scope.rightBox.length == 1){
+            actionSheetUp = false;
+        }
     };
-	    
+
+    $scope.menuButtonPressed = function() {
+        if (!actionSheetUp) {
+            showActionSheet();
+        }
+    };
+
+    var showActionSheet = function() {
+
+		$scope.buttons= [
+		     {text: 'Puntuar'}
+		];
+           
+        $ionicActionSheet.show({
+            buttons: $scope.buttons,
+            cancelText: 'Cancelar',
+            cancel: function() {
+                actionSheetUp = false;
+                $ionicNavBarDelegate.back();
+            },
+            buttonClicked: function(index) {
+                registryService.pickedLevelNumber = 4;
+                $state.go('app.patternLock');    
+                return true;
+            }
+        });
+        actionSheetUp = true;
+    };
+
+    $scope.$on('menuButtonPressed', $scope.menuButtonPressed);
+
+    $scope.ask = function() {
+        $ionicPopup.alert({
+            title: 'Ayuda',
+            template: 'Para agregar el pictograma correspondiente a este nivel, se debe presionar el signo "+". Arrastre ambos pictogramas hacia la tira de intercambio que se encuentra en la parte inferior de la pantalla. Finalmente, para registrar el intercambio mantener presionada la tira.'
+        });
+    };
+
 	tutorialService.showIfActive();
 });

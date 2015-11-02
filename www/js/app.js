@@ -278,6 +278,15 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
             }
         }
     })
+    .state('app.basicRegistry4', {
+        url: '/basicRegistry4',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/registry/basicRegistry4.html',
+                controller: 'basicRegistry4Ctrl'
+            }
+        }
+    })
     .state('app.cards', {
         url: '/cards',
         views: {

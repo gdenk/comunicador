@@ -1,0 +1,55 @@
+<ion-view title='NIVEL 4'>
+  <ion-content class='has-header' delegate-handle="resetScroll">
+    <div class="list list-inset registry">
+      <label class="item item-input">
+        <div class="input-label">
+          COLOCA IMAGEN EN LA TIRA:
+        </div>
+        <ion-radio name="setImage" ng-model="registry.setImage" ng-value="'1'">NA</ion-radio>
+        <ion-radio name="setImage" ng-model="registry.setImage" ng-value="'2'">AT</ion-radio>
+        <ion-radio name="setImage" ng-model="registry.setImage" ng-value="'3'">AP</ion-radio>
+        <ion-radio name="setImage" ng-model="registry.setImage" ng-value="'4'">+</ion-radio>
+      </label>
+      <label class="item item-input">
+        <div class="input-label">
+          COLOCA "QUIERO" EN LA TIRA:
+        </div>
+        <ion-radio name="setWant" ng-model="registry.setWant" ng-value="'1'">NA</ion-radio>
+        <ion-radio name="setWant" ng-model="registry.setWant" ng-value="'2'">AT</ion-radio>
+        <ion-radio name="setWant" ng-model="registry.setWant" ng-value="'3'">AP</ion-radio>
+        <ion-radio name="setWant" ng-model="registry.setWant" ng-value="'4'">+</ion-radio>
+      </label>
+      <label class="item item-input">
+        <div class="input-label">
+          INTERCAMBIA LA TIRA:
+        </div>
+        <ion-radio name="exchangeStrip" ng-model="registry.exchangeStrip" ng-value="'1'">NA</ion-radio>
+        <ion-radio name="exchangeStrip" ng-model="registry.exchangeStrip" ng-value="'2'">AT</ion-radio>
+        <ion-radio name="exchangeStrip" ng-model="registry.exchangeStrip" ng-value="'3'">AP</ion-radio>
+        <ion-radio name="exchangeStrip" ng-model="registry.exchangeStrip" ng-value="'4'">+</ion-radio>
+      </label>
+      <label class="item item-input">
+        <div class="input-label">
+          SEÑALA LAS IMÁGENES:
+        </div>
+        <ion-radio name="markPictures" ng-model="registry.markPictures" ng-value="'1'">NA</ion-radio>
+        <ion-radio name="markPictures" ng-model="registry.markPictures" ng-value="'2'">AT</ion-radio>
+        <ion-radio name="markPictures" ng-model="registry.markPictures" ng-value="'3'">AP</ion-radio>
+        <ion-radio name="markPictures" ng-model="registry.markPictures" ng-value="'4'">+</ion-radio>
+      </label>
+      <label class="item item-input">
+        <div class="input-label">
+          COMPROBACIÓN DE CORRESPONDENCIA:
+        </div>
+        <ion-radio name="checkingCorrespondence" ng-model="registry.checkingCorrespondence" ng-value="'1'">NA</ion-radio>
+        <ion-radio name="checkingCorrespondence" ng-model="registry.checkingCorrespondence" ng-value="'2'">AT</ion-radio>
+        <ion-radio name="checkingCorrespondence" ng-model="registry.checkingCorrespondence" ng-value="'3'">AP</ion-radio>
+        <ion-radio name="checkingCorrespondence" ng-model="registry.checkingCorrespondence" ng-value="'4'">+</ion-radio>
+      </label>
+
+      <div class='form-buttons'>
+        <a id='accept' class='button padding-right button-positive button-block' ng-click='saveRegistry();'>Aceptar</a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
