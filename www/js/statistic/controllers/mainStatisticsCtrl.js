@@ -92,6 +92,22 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
         });
         $scope.loaded = true;
        }
+
+       if(myLevel.levelNumber == 4){
+            statisticService.exchangeCountByReceiver(myLevel.levelNumber).then(function(result) {
+                $scope.exchangeCountByReceiver = result;
+            });
+            statisticService.exchanges(myLevel.levelNumber).then(function(result) {
+                if (Object.keys(result).length > 0) {
+                    $scope.hasExchanges = true;
+                }
+                else{
+                    $scope.hasExchanges = false;
+                }
+                $scope.exchanges = result;
+                $scope.loaded = true;
+            });
+       }
        
 
 };   

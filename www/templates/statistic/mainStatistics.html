@@ -182,19 +182,19 @@
     <div class="row table table-title"><div class="col">HISTORIAL DE INTERCAMBIOS</div></div>
     <div class="row table table-header">
       <div class="col col-20">FECHA</div>
-      <div class="col col-10">COLOCA PICTOGRAMA EN TIRA</div>
-      <div class="col col-20">COLOCA QUIERO EN TIRA</div>
-      <div class="col col-20">INTERCAMBIA LA TIRA</div>
-      <div class="col col-20">SEÑALA LAS IMAGENES</div>
+      <div class="col col-10">PICTOGRAMA EN TIRA</div>
+      <div class="col col-20">QUIERO EN TIRA</div>
+      <div class="col col-20">INTERCAMBIA TIRA</div>
+      <div class="col col-20">SEÑALA IMAGENES</div>
       <div class="col col-10">CORRESPONDENCIA</div>
     </div>
-    <div class="row table" ng-repeat="(id, exchange) in exchanges3A | objectToArray | orderBy:'date':true">
+    <div class="row table" ng-repeat="(id, exchange) in exchanges | objectToArray | orderBy:'date':true">
       <div class="col col-20">{{ exchange.date | date:'dd/MM/yy HH:mm' }}</div>
-      <div class="col col-10 col-tick">AYUDA PARCIAL</div>
-      <div class="col col-20 col-tick">AYUDA TOTAL</div> 
-      <div class="col col-20 col-tick">SIN AYUDA</div>
-      <div class="col col-20 col-tick">AYUDA PARCIAL</div>
-      <div class="col col-10 col-tick">AYUDA TOTAL</div>
+      <div class="col col-10">{{ exchange.setImage }}</div>
+      <div class="col col-20">{{ exchange.setWant }}</div> 
+      <div class="col col-20">{{ exchange.exchangeStrip }}</div>
+      <div class="col col-20">{{ exchange.markPictures }}</div>
+      <div class="col col-10">{{ exchange.checkingCorrespondence }}</div>
     </div>
   </div>
 </div>
