@@ -85,7 +85,12 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"oralOutput"',2],
                 ['"discriminationLevel"',3],
                 ['"reactionNegative"',3],
-                ['"correspondence"',3]
+                ['"correspondence"',3],
+                ['"setImage"',4],
+                ['"setWant"',4],
+                ['"exchangeStrip"',4],
+                ['"markPictures"',4],
+                ['"checkingCorrespondence"',4]
             ]),
 
         new TableMigrationService('Score')
@@ -117,9 +122,9 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"-"'],
                 ['"1mts"'],
                 ['"+3mts"'],
-                ['"na"'],
-                ['"at"'],
-                ['"ap"']
+                ['"NA"'],
+                ['"AT"'],
+                ['"AP"']
             ]),
 
         new TableMigrationService('Configuration')
