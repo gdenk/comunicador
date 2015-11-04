@@ -13,11 +13,11 @@ communicatorApp.controller('basicRegistry4Ctrl', function($scope, $q, $ionicPopu
 	};
 
 	$scope.saveRegistry = function() {
-		$scope.registry.setImage = basicScoreValues[$scope.setImage];
-		$scope.registry.setWant = basicScoreValues[$scope.setWant];
-		$scope.registry.exchangeStrip = basicScoreValues[$scope.exchangeStrip];
-		$scope.registry.markPictures = basicScoreValues[$scope.markPictures];
-		$scope.registry.checkingCorrespondence = basicScoreValues[$scope.checkingCorrespondence];
+		$scope.registry.setImage = basicScoreValues[$scope.registry.setImage];
+		$scope.registry.setWant = basicScoreValues[$scope.registry.setWant];
+		$scope.registry.exchangeStrip = basicScoreValues[$scope.registry.exchangeStrip];
+		$scope.registry.markPictures = basicScoreValues[$scope.registry.markPictures];
+		$scope.registry.checkingCorrespondence = basicScoreValues[$scope.registry.checkingCorrespondence];
 		registryService.saveRegistry($scope.registry);
 		$scope.goBack();
 	};
