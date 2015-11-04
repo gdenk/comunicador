@@ -15,6 +15,7 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
 	if($stateParams.cardId){
 		cardDbService.find($stateParams.cardId).then(function(results) {
 	        $scope.image = [{name:'image', src: results[0].img}];
+            registryService.pickedCardId = $stateParams.cardId;
 	    });
 	}
 	else{
