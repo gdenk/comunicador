@@ -5,23 +5,22 @@ communicatorApp.controller('basicRegistry4Ctrl', function($scope, $q, $ionicPopu
 
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
-		setImage: '',
-		setWant: '',
-		exchangeStrip: '',
-		markPictures: '',
-		checkingCorrespondence: ''
+		setImage: 1,
+		setWant: 1,
+		exchangeStrip: 1,
+		markPictures: 1,
+		checkingCorrespondence: 1
 	};
 
 	$scope.saveRegistry = function() {
-		$scope.registry.setImage = basicScoreValues[$scope.registry.setImage];
-		$scope.registry.setWant = basicScoreValues[$scope.registry.setWant];
-		$scope.registry.exchangeStrip = basicScoreValues[$scope.registry.exchangeStrip];
-		$scope.registry.markPictures = basicScoreValues[$scope.registry.markPictures];
-		$scope.registry.checkingCorrespondence = basicScoreValues[$scope.registry.checkingCorrespondence];
-		registryService.saveRegistry($scope.registry);
-		$scope.goBack();
+			$scope.registry.setImage = basicScoreValues[$scope.registry.setImage];
+			$scope.registry.setWant = basicScoreValues[$scope.registry.setWant];
+			$scope.registry.exchangeStrip = basicScoreValues[$scope.registry.exchangeStrip];
+			$scope.registry.markPictures = basicScoreValues[$scope.registry.markPictures];
+			$scope.registry.checkingCorrespondence = basicScoreValues[$scope.registry.checkingCorrespondence];
+			registryService.saveRegistry($scope.registry);
+			$scope.goBack();
 	};
-
 
 	$scope.goBack = function() {
 		// this is to force a double "back"
