@@ -115,7 +115,7 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
             buttonClicked: function(index) {
                 if (index === 0 || index ===1) {
                     registryService.pickedCardId = $scope.card.id;
-                    if (registryService.pickedLevelNumber == 2){
+                    if (registryService.pickedLevelNumber == 2 || registryService.pickedLevelNumber == 21 || registryService.pickedLevelNumber == 22){
                         if (index === 0){
                             registryService.pickedLevelNumber = 21;
                         }
@@ -123,7 +123,7 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
                             registryService.pickedLevelNumber = 22;
                         }
                     }
-                    if (registryService.pickedLevelNumber == 3){
+                    if (registryService.pickedLevelNumber == 3 || registryService.pickedLevelNumber == 31 || registryService.pickedLevelNumber == 32){
                         if (index === 0){
                             registryService.pickedLevelNumber = 31;
                         }
