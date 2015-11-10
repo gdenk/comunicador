@@ -10,6 +10,12 @@ communicatorApp.controller('basicRegistry3ACtrl', function($scope, $q, $ionicPop
 	};
 
 	$scope.saveRegistry = function() {
+
+		if ($scope.registry.receiver.internal) {
+			$scope.goBack();
+			return;
+		}
+
 		$scope.registry.discriminationLevel = basicScoreValues[$scope.registry.discriminationLevel];
 		$scope.registry.reactionNegative = basicScoreValues[$scope.registry.reactionNegative];
 		registryService.saveRegistry($scope.registry);

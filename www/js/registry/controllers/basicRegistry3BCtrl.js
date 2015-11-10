@@ -18,6 +18,11 @@ communicatorApp.controller('basicRegistry3BCtrl', function($scope, $q, $ionicPop
     });
 
 	$scope.saveRegistry = function() {
+		if ($scope.registry.receiver.internal) {
+			$scope.goBack();
+			return;
+		}
+
 		$scope.registry.discriminationLevel = basicScoreValues[$scope.registry.discriminationLevel];
 		$scope.registry.correspondence = basicScoreValues[$scope.registry.correspondence];
 		$scope.registry.distanceToReceiver = distances[$scope.registry.distanceToReceiver];
