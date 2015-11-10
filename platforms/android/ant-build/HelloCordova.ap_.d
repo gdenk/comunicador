@@ -77,6 +77,7 @@
 /home/user/workspace/comunicador/platforms/android/assets/www/templates/registry/basicRegistry3A.html \
 /home/user/workspace/comunicador/platforms/android/assets/www/templates/registry/basicRegistry2Terminal.html \
 /home/user/workspace/comunicador/platforms/android/assets/www/templates/registry/basicRegistry2Receiver.html \
+/home/user/workspace/comunicador/platforms/android/assets/www/templates/registry/basicRegistry4.html \
 /home/user/workspace/comunicador/platforms/android/assets/www/templates/registry/advancedRegistry2Terminal.html \
 /home/user/workspace/comunicador/platforms/android/assets/www/templates/receiver/receiverPatternEdit.html \
 /home/user/workspace/comunicador/platforms/android/assets/www/templates/receiver/receivers.html \
@@ -145,6 +146,7 @@
 /home/user/workspace/comunicador/platforms/android/assets/www/js/registry/controllers/basicRegistry3BCtrl.js \
 /home/user/workspace/comunicador/platforms/android/assets/www/js/registry/controllers/advancedRegistry2TerminalCtrl.js \
 /home/user/workspace/comunicador/platforms/android/assets/www/js/registry/controllers/basicRegistry2ReceiverCtrl.js \
+/home/user/workspace/comunicador/platforms/android/assets/www/js/registry/controllers/basicRegistry4Ctrl.js \
 /home/user/workspace/comunicador/platforms/android/assets/www/js/registry/controllers/advancedRegistryCtrl.js \
 /home/user/workspace/comunicador/platforms/android/assets/www/js/registry/controllers/basicRegistry2TerminalCtrl.js \
 /home/user/workspace/comunicador/platforms/android/assets/www/js/receiver/services \

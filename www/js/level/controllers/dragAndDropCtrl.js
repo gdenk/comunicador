@@ -40,7 +40,7 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
     };
 
     $scope.onDropImageSuccess=function(data,evt){
-		if(data.name == 'image'){
+		if(data.name == 'image' && data.src !== ''){
 			var index = $scope.image.indexOf(data);
 			$scope.image.splice(index, 1);
     		$scope.rightBox.push(data);

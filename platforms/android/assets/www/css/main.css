@@ -756,6 +756,14 @@ label.item.item-radio.ng-pristine.ng-valid {
   margin-left: -4px;
 }
 
+/*.exchange-history .tick-icon.at {
+  background-image: url("../img/tick-disabled-icon.png");
+}
+
+.exchange-history .tick-icon.ap {
+  width: 12.5px;
+}/*
+
 /*  ==========================================================================
   Validations
   ========================================================================== */

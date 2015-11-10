@@ -1332,7 +1332,12 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"oralOutput"',2],
                 ['"discriminationLevel"',3],
                 ['"reactionNegative"',3],
-                ['"correspondence"',3]
+                ['"correspondence"',3],
+                ['"setImage"',4],
+                ['"setWant"',4],
+                ['"exchangeStrip"',4],
+                ['"markPictures"',4],
+                ['"checkingCorrespondence"',4]
             ]),
 
         new TableMigrationService('Score')
@@ -1364,9 +1369,9 @@ communicatorApp.service('dbSeedsService', function(TableMigrationService, uuidSe
                 ['"-"'],
                 ['"1mts"'],
                 ['"+3mts"'],
-                ['"na"'],
-                ['"at"'],
-                ['"ap"']
+                ['"NA"'],
+                ['"AT"'],
+                ['"AP"']
             ]),
 
         new TableMigrationService('Configuration')
@@ -1645,6 +1650,7 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
 	if($stateParams.cardId){
 		cardDbService.find($stateParams.cardId).then(function(results) {
 	        $scope.image = [{name:'image', src: results[0].img}];
+            registryService.pickedCardId = $stateParams.cardId;
 	    });
 	}
 	else{
@@ -1669,7 +1675,7 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
     };
 
     $scope.onDropImageSuccess=function(data,evt){
-		if(data.name == 'image'){
+		if(data.name == 'image' && data.src !== ''){
 			var index = $scope.image.indexOf(data);
 			$scope.image.splice(index, 1);
     		$scope.rightBox.push(data);
@@ -2733,7 +2739,7 @@ communicatorApp.controller('basicRegistry3BCtrl', function($scope, $q, $ionicPop
 communicatorApp.controller('basicRegistry4Ctrl', function($scope, $q, $ionicPopup, $location, 
 	currentReceiverService, registryService, cardDbService) {
 
-	var basicScoreValues = { 1: 'na', 2: 'at', 3: 'ap', 4: '+'};
+	var basicScoreValues = { 1: 'NA', 2: 'AT', 3: 'AP', 4: '+'};
 
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
@@ -2745,11 +2751,11 @@ communicatorApp.controller('basicRegistry4Ctrl', function($scope, $q, $ionicPopu
 	};
 
 	$scope.saveRegistry = function() {
-		$scope.registry.setImage = basicScoreValues[$scope.setImage];
-		$scope.registry.setWant = basicScoreValues[$scope.setWant];
-		$scope.registry.exchangeStrip = basicScoreValues[$scope.exchangeStrip];
-		$scope.registry.markPictures = basicScoreValues[$scope.markPictures];
-		$scope.registry.checkingCorrespondence = basicScoreValues[$scope.checkingCorrespondence];
+		$scope.registry.setImage = basicScoreValues[$scope.registry.setImage];
+		$scope.registry.setWant = basicScoreValues[$scope.registry.setWant];
+		$scope.registry.exchangeStrip = basicScoreValues[$scope.registry.exchangeStrip];
+		$scope.registry.markPictures = basicScoreValues[$scope.registry.markPictures];
+		$scope.registry.checkingCorrespondence = basicScoreValues[$scope.registry.checkingCorrespondence];
 		registryService.saveRegistry($scope.registry);
 		$scope.goBack();
 	};
@@ -3151,6 +3157,22 @@ communicatorApp.controller('mainStatisticsCtrl', function($scope, statisticServi
                 }
         });
         $scope.loaded = true;
+       }
+
+       if(myLevel.levelNumber == 4){
+            statisticService.exchangeCountByReceiver(myLevel.levelNumber).then(function(result) {
+                $scope.exchangeCountByReceiver = result;
+            });
+            statisticService.exchanges(myLevel.levelNumber).then(function(result) {
+                if (Object.keys(result).length > 0) {
+                    $scope.hasExchanges = true;
+                }
+                else{
+                    $scope.hasExchanges = false;
+                }
+                $scope.exchanges = result;
+                $scope.loaded = true;
+            });
        }
        
 
