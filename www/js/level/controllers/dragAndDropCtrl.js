@@ -1,4 +1,4 @@
-communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $ionicPopup, $ionicActionSheet,
+communicatorApp.controller('dragAndDropCtrl', function($scope, $timeout, $stateParams, $ionicPopup, $ionicActionSheet,
 	$ionicSideMenuDelegate, $ionicNavBarDelegate, $state, tutorialService, cardDbService, 
     configurationDbService, registryService) {
 
@@ -27,11 +27,22 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
 
     $scope.levelNumber = $stateParams.levelNumber;
 
+    $scope.intervalFunction = function(){
+        $timeout(function() {
+        $scope.leftBox = [];
+        $scope.word = [{name:'quiero',src:'img/Quiero.jpg'}];
+        $scope.intervalFunction();
+        }, 30000);
+      };
+
     $scope.onDropWordSuccess=function(data,evt){
     	if(data.name == 'quiero'){
     		var index = $scope.word.indexOf(data);
 			$scope.word.splice(index, 1);
     		$scope.leftBox.push(data);
+
+            //executes interval function for WANT card
+            $scope.intervalFunction();
     	}
 
         if($scope.leftBox.length == 1 && $scope.rightBox.length == 1){
