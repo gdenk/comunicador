@@ -91,11 +91,11 @@
         <i class="tick-icon {{exchange.reachReceiver}}"></i>
         <i class="tick-icon second-halve" ng-show="exchange.reachReceiver === 'withPartialHelp'"></i>
       </div>
-      <div class="col col-10 col-tick">{{exchange.distanceToReceiver}}</div>
+      <div class="col col-10 col-tick">{{exchange.distanceToReceiver || exchange.distanceToTerminal}}</div>
       <div class="col col-10 col-tick">{{exchange.eyeContact | yes_no_spanish}}</div>
       <div class="col col-10 col-tick">{{exchange.facialExpression | yes_no_spanish}}</div>
       <div class="col col-10 col-tick">{{exchange.oralOutput | oral_output}}</div>
-      <div class="col col-10 col-tick">{{ exchange.level | level_sublevel }}</div>
+      <div class="col col-10 col-tick">{{exchange.level | level_sublevel }}</div>
     </div>
   </div>
 </div>

@@ -124,7 +124,10 @@ communicatorApp.filter('yes_no_spanish', function() {
         if (text == 'withoutHelp') {
             return 'Si';
         }
-        return 'No';
+        if (text !== undefined) {
+            return 'No';
+        }
+        return 'NA';
     };
 });
 
@@ -151,6 +154,7 @@ communicatorApp.filter('oral_output', function() {
         if (text == 'prdie') {
             return 'Palabra RI';
         }
+        return 'NA';
     };
 });
 
@@ -191,5 +195,4 @@ communicatorApp.filter('discrimination', function() {
             return 'Distractor';
         }
     };
-
 });

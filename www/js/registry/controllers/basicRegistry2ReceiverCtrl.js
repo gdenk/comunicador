@@ -10,7 +10,7 @@ communicatorApp.controller('basicRegistry2ReceiverCtrl', function($scope, $q, $i
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
 		reachReceiver: true,
-		distanceToReceiver: 0
+		distanceToReceiver: 1
 	};
 
 	$scope.showInfo = {
@@ -23,12 +23,11 @@ communicatorApp.controller('basicRegistry2ReceiverCtrl', function($scope, $q, $i
 			$scope.goBack();
 			return;
 		}
-		checkForDefaultScores().then(function(){
+
 			$scope.registry.reachReceiver = basicScoreValues[$scope.registry.reachReceiver];
 			$scope.registry.distanceToReceiver = basicScoreValues[$scope.registry.distanceToReceiver];
 			registryService.saveRegistry($scope.registry);
 			$scope.goBack();
-		});
 	};
 
 	$scope.goBack = function() {
@@ -40,25 +39,6 @@ communicatorApp.controller('basicRegistry2ReceiverCtrl', function($scope, $q, $i
 	        navDirection: 'back'
 	    };
 	    backView.go();
-	};
-
-	var checkForDefaultScores = function() {
-		var deferred = $q.defer();
-		if ($scope.registry.reachReceiver && ($scope.registry.distanceToReceiver > 0)) {
-			$ionicPopup.confirm({
-				title: "Advertencia",
-				template: "Usted va a ingresar un registro con todos los pasos correctos. ¿Está seguro que desea hacer esto?"
-			}).then(function(response){
-				if (response) {
-					deferred.resolve();
-				} else {
-					deferred.reject();
-				}
-			});
-		} else {
-			deferred.resolve();
-		}
-		return deferred.promise;
 	};
 
 	$scope.toggleInfo = function(step) {

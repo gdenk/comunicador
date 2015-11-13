@@ -6,10 +6,10 @@ communicatorApp.controller('basicRegistry3BCtrl', function($scope, $q, $ionicPop
 
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
-		discriminationLevel: 0,
+		discriminationLevel: 1,
 		correspondence: false,
-		distanceToReceiver: 0,
-		distanceToTerminal: 0
+		distanceToReceiver: 1,
+		distanceToTerminal: 1
 	};
 
 	$scope.$on("$destroy", function() {
@@ -18,6 +18,7 @@ communicatorApp.controller('basicRegistry3BCtrl', function($scope, $q, $ionicPop
     });
 
 	$scope.saveRegistry = function() {
+		
 		if ($scope.registry.receiver.internal) {
 			$scope.goBack();
 			return;

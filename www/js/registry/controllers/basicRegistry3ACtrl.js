@@ -5,7 +5,7 @@ communicatorApp.controller('basicRegistry3ACtrl', function($scope, $q, $ionicPop
 
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
-		discriminationLevel: 0,
+		discriminationLevel: 1,
 		reactionNegative: false
 	};
 

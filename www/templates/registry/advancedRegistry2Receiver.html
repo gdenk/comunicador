@@ -1,3 +1,4 @@
+<form name="registryForm" novalidate>
 <ion-view title='NIVEL 2'>
   <ion-nav-buttons side='right'>
     <a ng-click='ask()' class='button button-icon icon ask-icon'></a>
@@ -24,12 +25,9 @@
         <div class="input-label">
           DISTANCIA AL RECEPTOR:
         </div>
-        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'1'">15 cm</ion-radio>
-        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'2'">30 cm</ion-radio>
-        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'3'">60 cm</ion-radio>
-        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'4'">1 mt</ion-radio>
-        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'5'">3 mts</ion-radio>
-        <ion-radio name="distanceToReceiver" ng-model="registry.distanceToReceiver" ng-value="'6'">Fuera del campo visual</ion-radio>
+      <ion-radio name="registry.distanceToReceiver" ng-repeat="item in distancesList" ng-value="item.value" 
+             ng-model="registry.distanceToReceiver"> {{ item.text }}
+      </ion-radio>
       </label>
       <label class="item item-input item-toggle">
         <div class="input-label">
@@ -66,8 +64,9 @@
         <ion-radio name="oralOutput" ng-model="registry.oralOutput" ng-value="'12'">Palabra representativa de la imagen entregada</ion-radio>
       </label>
         <div class='form-buttons'>
-        <a id='accept' class='button padding-right button-positive button-block' ng-click='saveRegistry();'>Aceptar</a>
+        <a id='accept' validation-submit="registryForm" class='button padding-right button-positive button-block' ng-click='saveRegistry();'>Aceptar</a>
       </div>
     </div>
   </ion-content>
 </ion-view>
+</form>
