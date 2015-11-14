@@ -95,7 +95,7 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $timeout, $stateP
     $scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'Para agregar el pictograma correspondiente a este nivel, se debe presionar el signo "+". Arrastre ambos pictogramas hacia la tira de intercambio que se encuentra en la parte inferior de la pantalla. Finalmente, para registrar el intercambio mantener presionada la tira.'
+            template: 'Presione el signo "+" para seleccionar un pictograma y de este modo comenzar la interacción en este nivel. Luego de ello, debe arrastrar ambos pictogramas hacia la tira de intercambio que se encuentra en la parte inferior de la pantalla. Finalmente, para registrar el intercambio mantener presionada la tira.'
         });
     };
 

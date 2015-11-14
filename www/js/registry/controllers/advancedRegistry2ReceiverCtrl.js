@@ -25,7 +25,6 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $io
         { text: "Fuera del campo visual", value: "6" }
     ];
 
-
 	$scope.changeScore = function(step, score) {
 		$scope.registry[step] = score;
 	};
@@ -49,7 +48,6 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $io
 
 	};
 
-
 	$scope.goBack = function() {
 		// this is to force a double "back"
 	  	var backView = $scope.$viewHistory.views[$scope.$viewHistory.backView.backViewId];
@@ -64,7 +62,7 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $io
 	$scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del receptor. Se registra entonces si la persona se desplaza o no hacia el receptor y la distancia a la que se encuentra el mismo.'
+            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del receptor. Se registra entonces si la persona se desplaza o no hacia el receptor y la distancia a la que se encuentra el mismo. Recuerde completar todos los campos para registrar el intercambio.'
         });
     };
 
