@@ -10,10 +10,10 @@ communicatorApp.controller('advancedRegistry2TerminalCtrl', function($scope, $q,
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
 		reachTerminal: '',
-		distanceToTerminal: 0,
+		distanceToTerminal: 1,
 		eyeContact: false,
 		facialExpression: false,
-		oralOutput: 0
+		oralOutput: 9
 	};
 
 	$scope.changeScore = function(step, score) {
@@ -25,18 +25,19 @@ communicatorApp.controller('advancedRegistry2TerminalCtrl', function($scope, $q,
 	};
 
 	$scope.saveRegistry = function() {
+		
 		if ($scope.registry.receiver.internal) {
 			$scope.goBack();
 			return;
 		}
-		checkForDefaultScores().then(function(){
-			$scope.registry.distanceToTerminal = advancedRegistryScores[$scope.registry.distanceToTerminal];
-			$scope.registry.eyeContact = advancedRegistryScores[$scope.registry.eyeContact];
-			$scope.registry.facialExpression = advancedRegistryScores[$scope.registry.facialExpression];
-			$scope.registry.oralOutput = advancedRegistryScores[$scope.registry.oralOutput];
-			registryService.saveRegistry($scope.registry);
-			$scope.goBack();
-		});
+
+		$scope.registry.distanceToTerminal = advancedRegistryScores[$scope.registry.distanceToTerminal];
+		$scope.registry.eyeContact = advancedRegistryScores[$scope.registry.eyeContact];
+		$scope.registry.facialExpression = advancedRegistryScores[$scope.registry.facialExpression];
+		$scope.registry.oralOutput = advancedRegistryScores[$scope.registry.oralOutput];
+		registryService.saveRegistry($scope.registry);
+		$scope.goBack();
+
 	};
 
 	$scope.goBack = function() {
@@ -48,25 +49,6 @@ communicatorApp.controller('advancedRegistry2TerminalCtrl', function($scope, $q,
 	        navDirection: 'back'
 	    };
 	    backView.go();
-	};
-
-	var checkForDefaultScores = function() {
-		var deferred = $q.defer();
-		if ($scope.registry.reachTerminal && $scope.registry.eyeContact && $scope.registry.facialExpression && ($scope.registry.distanceToTerminal > 0) && ($scope.registry.oralOutput > 0)) {
-			$ionicPopup.confirm({
-				title: "Advertencia",
-				template: "Usted va a ingresar un registro con todos los pasos correctos. ¿Está seguro que desea hacer esto?"
-			}).then(function(response){
-				if (response) {
-					deferred.resolve();
-				} else {
-					deferred.reject();
-				}
-			});
-		} else {
-			deferred.resolve();
-		}
-		return deferred.promise;
 	};
 
 	$scope.ask = function() {

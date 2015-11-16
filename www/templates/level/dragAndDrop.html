@@ -22,13 +22,13 @@
           <div class="col col-50"></div>
           <div class="col col-50" ng-if="image.length > 0 && !categoryEnabled">
             <div ng-repeat="obj in image" class='item item-image' ng-drag="true" ng-drag-data="obj"
-               ui-sref="app.levelCards({ levelNumber: {{levelNumber}} })">
+               ng-click="selectCard()">
                 <img ng-src='{{obj.src}}'>
             </div>
           </div>
           <div class="col col-50" ng-if="image.length > 0 && categoryEnabled">
             <div ng-repeat="obj in image" class='item item-image' ng-drag="true" ng-drag-data="obj"
-               ui-sref="app.categories({ levelNumber: {{levelNumber}} })">
+               ng-click="selectCardByCategory()"">
                 <img ng-src='{{obj.src}}'>
             </div>
           </div>

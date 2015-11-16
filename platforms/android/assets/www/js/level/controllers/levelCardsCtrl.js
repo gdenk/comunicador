@@ -18,5 +18,7 @@ communicatorApp.controller('levelCardsCtrl', function($scope, $stateParams, tuto
 	$scope.levelInfo = '\'' + $stateParams.levelInfo + '\'';
 	$scope.select = '\'' + $stateParams.select + '\'';
 
+	$scope.wantCardWasMoved = $stateParams.wantCardWasMoved;
+
     tutorialService.showIfActive();
 });

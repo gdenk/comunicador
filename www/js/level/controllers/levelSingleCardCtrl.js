@@ -44,7 +44,7 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
     }
 
     if(levelNumber == 4){
-        $location.path("app/dragAndDrop/" + levelNumber + "/" + $stateParams.id);
+        $location.path("app/dragAndDrop/" + levelNumber + "/" + $stateParams.id + "/" + $stateParams.wantCardWasMoved);
         return;
     }
 

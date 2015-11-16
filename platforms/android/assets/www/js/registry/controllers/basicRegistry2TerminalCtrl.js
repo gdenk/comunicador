@@ -10,7 +10,7 @@ communicatorApp.controller('basicRegistry2TerminalCtrl', function($scope, $q, $i
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
 		reachTerminal: true,
-		distanceToTerminal: 0
+		distanceToTerminal: 1
 	};
 
 	$scope.showInfo = {
@@ -23,12 +23,10 @@ communicatorApp.controller('basicRegistry2TerminalCtrl', function($scope, $q, $i
 			$scope.goBack();
 			return;
 		}
-
-		$scope.registry.reachTerminal = basicScoreValues[$scope.registry.reachTerminal];
-		$scope.registry.distanceToTerminal = basicScoreValues[$scope.registry.distanceToTerminal];
-		registryService.saveRegistry($scope.registry);
-		$scope.goBack();
-
+			$scope.registry.reachTerminal = basicScoreValues[$scope.registry.reachTerminal];
+			$scope.registry.distanceToTerminal = basicScoreValues[$scope.registry.distanceToTerminal];
+			registryService.saveRegistry($scope.registry);
+			$scope.goBack();
 	};
 
 	$scope.goBack = function() {

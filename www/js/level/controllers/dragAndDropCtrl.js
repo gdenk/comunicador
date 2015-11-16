@@ -1,6 +1,6 @@
 communicatorApp.controller('dragAndDropCtrl', function($scope, $timeout, $stateParams, $ionicPopup, $ionicActionSheet,
 	$ionicSideMenuDelegate, $ionicNavBarDelegate, $state, tutorialService, cardDbService, 
-    configurationDbService, registryService) {
+    configurationDbService, registryService, $location) {
 
 	configurationDbService.find('categoryEnabled').then(function(results){
         $scope.categoryEnabled = results[0].value === 'true' ? true : false;
@@ -24,6 +24,13 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $timeout, $stateP
 
     $scope.leftBox = [];
     $scope.rightBox = [];
+    $scope.wantCardWasMoved = 0;
+
+    if($stateParams.wantCardWasMoved == 1){
+        $scope.word.splice(0, 1);
+        $scope.leftBox.push({name:'quiero',src:'img/Quiero.jpg'});
+        $scope.wantCardWasMoved = 1;
+    }
 
     $scope.levelNumber = $stateParams.levelNumber;
 
@@ -33,6 +40,7 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $timeout, $stateP
         $scope.word = [{name:'quiero',src:'img/Quiero.jpg'}];
         $scope.intervalFunction();
         }, 30000);
+        $scope.wantCardWasMoved = 0;
       };
 
     $scope.onDropWordSuccess=function(data,evt){
@@ -40,7 +48,7 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $timeout, $stateP
     		var index = $scope.word.indexOf(data);
 			$scope.word.splice(index, 1);
     		$scope.leftBox.push(data);
-
+            $scope.wantCardWasMoved = 1;
             //executes interval function for WANT card
             $scope.intervalFunction();
     	}
@@ -62,6 +70,14 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $timeout, $stateP
         }
     };
 
+    $scope.selectCard=function(){
+        $location.path("app/levelCards/" + $scope.levelNumber + "/" + $scope.leftBox.length); 
+    };
+
+    $scope.selectCardByCategory=function(){
+        $location.path("app/categories/level/" + $scope.levelNumber + "/" + $scope.leftBox.length); 
+    };
+
     $scope.menuButtonPressed = function() {
         if (!actionSheetUp) {
             showActionSheet();
@@ -79,7 +95,7 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $timeout, $stateP
             cancelText: 'Cancelar',
             cancel: function() {
                 actionSheetUp = false;
-                $ionicNavBarDelegate.back();
+                
             },
             buttonClicked: function(index) {
                 registryService.pickedLevelNumber = 4;

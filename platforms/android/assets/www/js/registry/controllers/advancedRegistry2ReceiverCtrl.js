@@ -10,12 +10,20 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $io
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
 		reachReceiver: '',
-		distanceToReceiver: 0,
+		distanceToReceiver: 1,
 		eyeContact: false,
 		facialExpression: false,
-		oralOutput: 0
+		oralOutput: 7
 	};
 
+	$scope.distancesList = [
+        { text: "15cm", value: "1" },
+        { text: "30cm", value: "2" },
+        { text: "60cm", value: "3" },
+        { text: "1mt", value: "4" },
+        { text: "3mts", value: "5" },
+        { text: "Fuera del campo visual", value: "6" }
+    ];
 
 	$scope.changeScore = function(step, score) {
 		$scope.registry[step] = score;
@@ -30,33 +38,14 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $io
 			$scope.goBack();
 			return;
 		}
-		checkForDefaultScores().then(function(){
+
 			$scope.registry.distanceToReceiver = advancedRegistryScores[$scope.registry.distanceToReceiver];
 			$scope.registry.eyeContact = advancedRegistryScores[$scope.registry.eyeContact];
 			$scope.registry.facialExpression = advancedRegistryScores[$scope.registry.facialExpression];
 			$scope.registry.oralOutput = advancedRegistryScores[$scope.registry.oralOutput];
 			registryService.saveRegistry($scope.registry);
 			$scope.goBack();
-		});
-	};
 
-	var checkForDefaultScores = function() {
-		var deferred = $q.defer();
-		if ($scope.registry.reachReceiver && $scope.registry.eyeContact && $scope.registry.facialExpression && ($scope.registry.distanceToReceiver > 0) && ($scope.registry.oralOutput > 0)) {
-			$ionicPopup.confirm({
-				title: "Advertencia",
-				template: "Usted va a ingresar un registro con todos los pasos correctos. ¿Está seguro que desea hacer esto?"
-			}).then(function(response){
-				if (response) {
-					deferred.resolve();
-				} else {
-					deferred.reject();
-				}
-			});
-		} else {
-			deferred.resolve();
-		}
-		return deferred.promise;
 	};
 
 	$scope.goBack = function() {
@@ -73,7 +62,7 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $io
 	$scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del receptor. Se registra entonces si la persona se desplaza o no hacia el receptor y la distancia a la que se encuentra el mismo.'
+            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del receptor. Se registra entonces si la persona se desplaza o no hacia el receptor y la distancia a la que se encuentra el mismo. Recuerde completar todos los campos para registrar el intercambio.'
         });
     };
 

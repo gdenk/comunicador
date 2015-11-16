@@ -30,7 +30,7 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 			insertNewExchangeByCard(exchangeId);
 			insertNewExchangeByLevel(exchangeId);
 			setLevelInitDate(registryService.pickedLevelNumber);
-			registryServerService.sendExchangeToServer(registryInfo, registryService.pickedLevelNumber, registryService.pickedCardId);
+			//registryServerService.sendExchangeToServer(registryInfo, registryService.pickedLevelNumber, registryService.pickedCardId);
 		});
 	};
 

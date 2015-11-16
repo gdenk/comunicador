@@ -1,3 +1,4 @@
+<form name="registryForm" novalidate>
 <ion-view title='NIVEL 2 - DISTANCIA AL DISPOSITIVO'>
   <ion-nav-buttons side='right'>
     <a ng-click='ask()' class='button button-icon icon ask-icon'></a>
@@ -34,8 +35,9 @@
         <ion-radio name="distanceToTerminal" ng-model="registry.distanceToTerminal" ng-value="'8'">Más de 3 mts</ion-radio>
       </label>
         <div class='form-buttons'>
-        <a id='accept' class='button padding-right button-positive button-block' ng-click='saveRegistry();'>Aceptar</a>
+        <a id='accept' validation-submit="registryForm" class='button padding-right button-positive button-block' ng-click='saveRegistry();'>Aceptar</a>
       </div>
     </div>
   </ion-content>
 </ion-view>
+</form>

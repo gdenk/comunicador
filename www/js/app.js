@@ -181,11 +181,47 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
         }
     })
     .state('app.dragAndDropSelect', {
-        url: '/dragAndDrop/:levelNumber/:cardId',
+        url: '/dragAndDrop/:levelNumber/:cardId/:wantCardWasMoved',
         views: {
             'menuContent': {
                 templateUrl: 'templates/level/dragAndDrop.html',
                 controller: 'dragAndDropCtrl'
+            }
+        }
+    })
+    .state('app.levelCategoryCards4', {
+        url: '/levelCards/:levelNumber/category/:category/:wantCardWasMoved',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/levelCards.html',
+                controller: 'levelCardsCtrl'
+            }
+        }
+    })
+    .state('app.levelCards4', {
+        url: '/levelCards/:levelNumber/:wantCardWasMoved',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/levelCards.html',
+                controller: 'levelCardsCtrl'
+            }
+        }
+    })
+    .state('app.categories4', {
+        url: '/categories/level/:levelNumber/:wantCardWasMoved',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/category/categories.html',
+                controller: 'categoriesCtrl'
+            }
+        }
+    })
+    .state('content.levelSingleCardLevel4', {
+        url: '/levelSingleCard/:id/:wantCardWasMoved',
+        views: {
+            'content': {
+                templateUrl: 'templates/level/levelSingleCard.html',
+                controller: 'levelSingleCardCtrl'
             }
         }
     })

@@ -18,6 +18,11 @@ communicatorApp.controller('advancedRegistryCtrl', function($scope, currentRecei
 	};
 
 	$scope.saveRegistry = function() {
+		if ($scope.registry.receiver.internal) {
+			$scope.goBack();
+			return;
+		}
+
 		registryService.saveRegistry($scope.registry);
 		$scope.goBack();
 	};

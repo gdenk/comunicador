@@ -181,11 +181,47 @@ var communicatorApp = angular.module('communicatorApp', ['ionic', 'validation', 
         }
     })
     .state('app.dragAndDropSelect', {
-        url: '/dragAndDrop/:levelNumber/:cardId',
+        url: '/dragAndDrop/:levelNumber/:cardId/:wantCardWasMoved',
         views: {
             'menuContent': {
                 templateUrl: 'templates/level/dragAndDrop.html',
                 controller: 'dragAndDropCtrl'
+            }
+        }
+    })
+    .state('app.levelCategoryCards4', {
+        url: '/levelCards/:levelNumber/category/:category/:wantCardWasMoved',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/levelCards.html',
+                controller: 'levelCardsCtrl'
+            }
+        }
+    })
+    .state('app.levelCards4', {
+        url: '/levelCards/:levelNumber/:wantCardWasMoved',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/level/levelCards.html',
+                controller: 'levelCardsCtrl'
+            }
+        }
+    })
+    .state('app.categories4', {
+        url: '/categories/level/:levelNumber/:wantCardWasMoved',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/category/categories.html',
+                controller: 'categoriesCtrl'
+            }
+        }
+    })
+    .state('content.levelSingleCardLevel4', {
+        url: '/levelSingleCard/:id/:wantCardWasMoved',
+        views: {
+            'content': {
+                templateUrl: 'templates/level/levelSingleCard.html',
+                controller: 'levelSingleCardCtrl'
             }
         }
     })
@@ -480,17 +516,14 @@ communicatorApp.controller('singleCardCtrl', function($scope, $stateParams, $ion
 communicatorApp.controller('categoriesCtrl', function($scope, $stateParams, categoryDbService, tutorialService) {
     
     categoryDbService.selectEnabled().then(function(results) {
+
         $scope.categories = results;
         $scope.levelNumber = $stateParams.levelNumber;
         $scope.levelInfo = '\'' + $stateParams.levelInfo + '\'';
 	    $scope.select = '\'' + $stateParams.select + '\''; 
 
-	    if($scope.select){
-	    	 $scope.level3 = true;
-	    }
-	    else{
-	    	$scope.level3 = false;
-	    }
+	    $scope.wantCardWasMoved = $stateParams.wantCardWasMoved;
+
     });
 
 	tutorialService.showIfActive();
@@ -1633,9 +1666,9 @@ communicatorApp.service('imageUploaderService', function() {
         pictureFromDevice: cameraIsEnabled ? device.pictureFromDevice : webView.takePicture
     };
 });
-communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $ionicPopup, $ionicActionSheet,
+communicatorApp.controller('dragAndDropCtrl', function($scope, $timeout, $stateParams, $ionicPopup, $ionicActionSheet,
 	$ionicSideMenuDelegate, $ionicNavBarDelegate, $state, tutorialService, cardDbService, 
-    configurationDbService, registryService) {
+    configurationDbService, registryService, $location) {
 
 	configurationDbService.find('categoryEnabled').then(function(results){
         $scope.categoryEnabled = results[0].value === 'true' ? true : false;
@@ -1659,14 +1692,33 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
 
     $scope.leftBox = [];
     $scope.rightBox = [];
+    $scope.wantCardWasMoved = 0;
+
+    if($stateParams.wantCardWasMoved == 1){
+        $scope.word.splice(0, 1);
+        $scope.leftBox.push({name:'quiero',src:'img/Quiero.jpg'});
+        $scope.wantCardWasMoved = 1;
+    }
 
     $scope.levelNumber = $stateParams.levelNumber;
+
+    $scope.intervalFunction = function(){
+        $timeout(function() {
+        $scope.leftBox = [];
+        $scope.word = [{name:'quiero',src:'img/Quiero.jpg'}];
+        $scope.intervalFunction();
+        }, 30000);
+        $scope.wantCardWasMoved = 0;
+      };
 
     $scope.onDropWordSuccess=function(data,evt){
     	if(data.name == 'quiero'){
     		var index = $scope.word.indexOf(data);
 			$scope.word.splice(index, 1);
     		$scope.leftBox.push(data);
+            $scope.wantCardWasMoved = 1;
+            //executes interval function for WANT card
+            $scope.intervalFunction();
     	}
 
         if($scope.leftBox.length == 1 && $scope.rightBox.length == 1){
@@ -1686,6 +1738,14 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
         }
     };
 
+    $scope.selectCard=function(){
+        $location.path("app/levelCards/" + $scope.levelNumber + "/" + $scope.leftBox.length); 
+    };
+
+    $scope.selectCardByCategory=function(){
+        $location.path("app/categories/level/" + $scope.levelNumber + "/" + $scope.leftBox.length); 
+    };
+
     $scope.menuButtonPressed = function() {
         if (!actionSheetUp) {
             showActionSheet();
@@ -1703,7 +1763,7 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
             cancelText: 'Cancelar',
             cancel: function() {
                 actionSheetUp = false;
-                $ionicNavBarDelegate.back();
+                
             },
             buttonClicked: function(index) {
                 registryService.pickedLevelNumber = 4;
@@ -1719,7 +1779,7 @@ communicatorApp.controller('dragAndDropCtrl', function($scope, $stateParams, $io
     $scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'Para agregar el pictograma correspondiente a este nivel, se debe presionar el signo "+". Arrastre ambos pictogramas hacia la tira de intercambio que se encuentra en la parte inferior de la pantalla. Finalmente, para registrar el intercambio mantener presionada la tira.'
+            template: 'Presione el signo "+" para seleccionar un pictograma y de este modo comenzar la interacción en este nivel. Luego de ello, debe arrastrar ambos pictogramas hacia la tira de intercambio que se encuentra en la parte inferior de la pantalla. Finalmente, para registrar el intercambio mantener presionada la tira.'
         });
     };
 
@@ -1744,6 +1804,8 @@ communicatorApp.controller('levelCardsCtrl', function($scope, $stateParams, tuto
 	$scope.card = $stateParams.card;
 	$scope.levelInfo = '\'' + $stateParams.levelInfo + '\'';
 	$scope.select = '\'' + $stateParams.select + '\'';
+
+	$scope.wantCardWasMoved = $stateParams.wantCardWasMoved;
 
     tutorialService.showIfActive();
 });
@@ -1793,7 +1855,7 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
     }
 
     if(levelNumber == 4){
-        $location.path("app/dragAndDrop/" + levelNumber + "/" + $stateParams.id);
+        $location.path("app/dragAndDrop/" + levelNumber + "/" + $stateParams.id + "/" + $stateParams.wantCardWasMoved);
         return;
     }
 
@@ -1864,7 +1926,7 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
             buttonClicked: function(index) {
                 if (index === 0 || index ===1) {
                     registryService.pickedCardId = $scope.card.id;
-                    if (registryService.pickedLevelNumber == 2){
+                    if (registryService.pickedLevelNumber == 2 || registryService.pickedLevelNumber == 21 || registryService.pickedLevelNumber == 22){
                         if (index === 0){
                             registryService.pickedLevelNumber = 21;
                         }
@@ -1872,7 +1934,7 @@ communicatorApp.controller('levelSingleCardCtrl', function($scope, $stateParams,
                             registryService.pickedLevelNumber = 22;
                         }
                     }
-                    if (registryService.pickedLevelNumber == 3){
+                    if (registryService.pickedLevelNumber == 3 || registryService.pickedLevelNumber == 31 || registryService.pickedLevelNumber == 32){
                         if (index === 0){
                             registryService.pickedLevelNumber = 31;
                         }
@@ -2264,12 +2326,20 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $io
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
 		reachReceiver: '',
-		distanceToReceiver: 0,
+		distanceToReceiver: 1,
 		eyeContact: false,
 		facialExpression: false,
-		oralOutput: 0
+		oralOutput: 7
 	};
 
+	$scope.distancesList = [
+        { text: "15cm", value: "1" },
+        { text: "30cm", value: "2" },
+        { text: "60cm", value: "3" },
+        { text: "1mt", value: "4" },
+        { text: "3mts", value: "5" },
+        { text: "Fuera del campo visual", value: "6" }
+    ];
 
 	$scope.changeScore = function(step, score) {
 		$scope.registry[step] = score;
@@ -2284,33 +2354,14 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $io
 			$scope.goBack();
 			return;
 		}
-		checkForDefaultScores().then(function(){
+
 			$scope.registry.distanceToReceiver = advancedRegistryScores[$scope.registry.distanceToReceiver];
 			$scope.registry.eyeContact = advancedRegistryScores[$scope.registry.eyeContact];
 			$scope.registry.facialExpression = advancedRegistryScores[$scope.registry.facialExpression];
 			$scope.registry.oralOutput = advancedRegistryScores[$scope.registry.oralOutput];
 			registryService.saveRegistry($scope.registry);
 			$scope.goBack();
-		});
-	};
 
-	var checkForDefaultScores = function() {
-		var deferred = $q.defer();
-		if ($scope.registry.reachReceiver && $scope.registry.eyeContact && $scope.registry.facialExpression && ($scope.registry.distanceToReceiver > 0) && ($scope.registry.oralOutput > 0)) {
-			$ionicPopup.confirm({
-				title: "Advertencia",
-				template: "Usted va a ingresar un registro con todos los pasos correctos. ¿Está seguro que desea hacer esto?"
-			}).then(function(response){
-				if (response) {
-					deferred.resolve();
-				} else {
-					deferred.reject();
-				}
-			});
-		} else {
-			deferred.resolve();
-		}
-		return deferred.promise;
 	};
 
 	$scope.goBack = function() {
@@ -2327,7 +2378,7 @@ communicatorApp.controller('advancedRegistry2ReceiverCtrl', function($scope, $io
 	$scope.ask = function() {
         $ionicPopup.alert({
             title: 'Ayuda',
-            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del receptor. Se registra entonces si la persona se desplaza o no hacia el receptor y la distancia a la que se encuentra el mismo.'
+            template: 'En esta sección se registra la intercambio en función del desplazamiento de la persona respecto del receptor. Se registra entonces si la persona se desplaza o no hacia el receptor y la distancia a la que se encuentra el mismo. Recuerde completar todos los campos para registrar el intercambio.'
         });
     };
 
@@ -2344,10 +2395,10 @@ communicatorApp.controller('advancedRegistry2TerminalCtrl', function($scope, $q,
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
 		reachTerminal: '',
-		distanceToTerminal: 0,
+		distanceToTerminal: 1,
 		eyeContact: false,
 		facialExpression: false,
-		oralOutput: 0
+		oralOutput: 9
 	};
 
 	$scope.changeScore = function(step, score) {
@@ -2359,18 +2410,19 @@ communicatorApp.controller('advancedRegistry2TerminalCtrl', function($scope, $q,
 	};
 
 	$scope.saveRegistry = function() {
+		
 		if ($scope.registry.receiver.internal) {
 			$scope.goBack();
 			return;
 		}
-		checkForDefaultScores().then(function(){
-			$scope.registry.distanceToTerminal = advancedRegistryScores[$scope.registry.distanceToTerminal];
-			$scope.registry.eyeContact = advancedRegistryScores[$scope.registry.eyeContact];
-			$scope.registry.facialExpression = advancedRegistryScores[$scope.registry.facialExpression];
-			$scope.registry.oralOutput = advancedRegistryScores[$scope.registry.oralOutput];
-			registryService.saveRegistry($scope.registry);
-			$scope.goBack();
-		});
+
+		$scope.registry.distanceToTerminal = advancedRegistryScores[$scope.registry.distanceToTerminal];
+		$scope.registry.eyeContact = advancedRegistryScores[$scope.registry.eyeContact];
+		$scope.registry.facialExpression = advancedRegistryScores[$scope.registry.facialExpression];
+		$scope.registry.oralOutput = advancedRegistryScores[$scope.registry.oralOutput];
+		registryService.saveRegistry($scope.registry);
+		$scope.goBack();
+
 	};
 
 	$scope.goBack = function() {
@@ -2382,25 +2434,6 @@ communicatorApp.controller('advancedRegistry2TerminalCtrl', function($scope, $q,
 	        navDirection: 'back'
 	    };
 	    backView.go();
-	};
-
-	var checkForDefaultScores = function() {
-		var deferred = $q.defer();
-		if ($scope.registry.reachTerminal && $scope.registry.eyeContact && $scope.registry.facialExpression && ($scope.registry.distanceToTerminal > 0) && ($scope.registry.oralOutput > 0)) {
-			$ionicPopup.confirm({
-				title: "Advertencia",
-				template: "Usted va a ingresar un registro con todos los pasos correctos. ¿Está seguro que desea hacer esto?"
-			}).then(function(response){
-				if (response) {
-					deferred.resolve();
-				} else {
-					deferred.reject();
-				}
-			});
-		} else {
-			deferred.resolve();
-		}
-		return deferred.promise;
 	};
 
 	$scope.ask = function() {
@@ -2432,6 +2465,11 @@ communicatorApp.controller('advancedRegistryCtrl', function($scope, currentRecei
 	};
 
 	$scope.saveRegistry = function() {
+		if ($scope.registry.receiver.internal) {
+			$scope.goBack();
+			return;
+		}
+
 		registryService.saveRegistry($scope.registry);
 		$scope.goBack();
 	};
@@ -2459,7 +2497,7 @@ communicatorApp.controller('basicRegistry2ReceiverCtrl', function($scope, $q, $i
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
 		reachReceiver: true,
-		distanceToReceiver: 0
+		distanceToReceiver: 1
 	};
 
 	$scope.showInfo = {
@@ -2472,12 +2510,11 @@ communicatorApp.controller('basicRegistry2ReceiverCtrl', function($scope, $q, $i
 			$scope.goBack();
 			return;
 		}
-		checkForDefaultScores().then(function(){
+
 			$scope.registry.reachReceiver = basicScoreValues[$scope.registry.reachReceiver];
 			$scope.registry.distanceToReceiver = basicScoreValues[$scope.registry.distanceToReceiver];
 			registryService.saveRegistry($scope.registry);
 			$scope.goBack();
-		});
 	};
 
 	$scope.goBack = function() {
@@ -2489,25 +2526,6 @@ communicatorApp.controller('basicRegistry2ReceiverCtrl', function($scope, $q, $i
 	        navDirection: 'back'
 	    };
 	    backView.go();
-	};
-
-	var checkForDefaultScores = function() {
-		var deferred = $q.defer();
-		if ($scope.registry.reachReceiver && ($scope.registry.distanceToReceiver > 0)) {
-			$ionicPopup.confirm({
-				title: "Advertencia",
-				template: "Usted va a ingresar un registro con todos los pasos correctos. ¿Está seguro que desea hacer esto?"
-			}).then(function(response){
-				if (response) {
-					deferred.resolve();
-				} else {
-					deferred.reject();
-				}
-			});
-		} else {
-			deferred.resolve();
-		}
-		return deferred.promise;
 	};
 
 	$scope.toggleInfo = function(step) {
@@ -2537,7 +2555,7 @@ communicatorApp.controller('basicRegistry2TerminalCtrl', function($scope, $q, $i
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
 		reachTerminal: true,
-		distanceToTerminal: 0
+		distanceToTerminal: 1
 	};
 
 	$scope.showInfo = {
@@ -2550,12 +2568,10 @@ communicatorApp.controller('basicRegistry2TerminalCtrl', function($scope, $q, $i
 			$scope.goBack();
 			return;
 		}
-		checkForDefaultScores().then(function(){
 			$scope.registry.reachTerminal = basicScoreValues[$scope.registry.reachTerminal];
 			$scope.registry.distanceToTerminal = basicScoreValues[$scope.registry.distanceToTerminal];
 			registryService.saveRegistry($scope.registry);
 			$scope.goBack();
-		});
 	};
 
 	$scope.goBack = function() {
@@ -2567,25 +2583,6 @@ communicatorApp.controller('basicRegistry2TerminalCtrl', function($scope, $q, $i
 	        navDirection: 'back'
 	    };
 	    backView.go();
-	};
-
-	var checkForDefaultScores = function() {
-		var deferred = $q.defer();
-		if ($scope.registry.reachTerminal && ($scope.registry.distanceToTerminal > 0)) {
-			$ionicPopup.confirm({
-				title: "Advertencia",
-				template: "Usted va a ingresar un registro con todos los pasos correctos. ¿Está seguro que desea hacer esto?"
-			}).then(function(response){
-				if (response) {
-					deferred.resolve();
-				} else {
-					deferred.reject();
-				}
-			});
-		} else {
-			deferred.resolve();
-		}
-		return deferred.promise;
 	};
 
 	$scope.toggleInfo = function(step) {
@@ -2608,11 +2605,17 @@ communicatorApp.controller('basicRegistry3ACtrl', function($scope, $q, $ionicPop
 
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
-		discriminationLevel: 0,
+		discriminationLevel: 1,
 		reactionNegative: false
 	};
 
 	$scope.saveRegistry = function() {
+
+		if ($scope.registry.receiver.internal) {
+			$scope.goBack();
+			return;
+		}
+
 		$scope.registry.discriminationLevel = basicScoreValues[$scope.registry.discriminationLevel];
 		$scope.registry.reactionNegative = basicScoreValues[$scope.registry.reactionNegative];
 		registryService.saveRegistry($scope.registry);
@@ -2671,10 +2674,10 @@ communicatorApp.controller('basicRegistry3BCtrl', function($scope, $q, $ionicPop
 
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
-		discriminationLevel: 0,
+		discriminationLevel: 1,
 		correspondence: false,
-		distanceToReceiver: 0,
-		distanceToTerminal: 0
+		distanceToReceiver: 1,
+		distanceToTerminal: 1
 	};
 
 	$scope.$on("$destroy", function() {
@@ -2683,6 +2686,12 @@ communicatorApp.controller('basicRegistry3BCtrl', function($scope, $q, $ionicPop
     });
 
 	$scope.saveRegistry = function() {
+		
+		if ($scope.registry.receiver.internal) {
+			$scope.goBack();
+			return;
+		}
+
 		$scope.registry.discriminationLevel = basicScoreValues[$scope.registry.discriminationLevel];
 		$scope.registry.correspondence = basicScoreValues[$scope.registry.correspondence];
 		$scope.registry.distanceToReceiver = distances[$scope.registry.distanceToReceiver];
@@ -2743,14 +2752,19 @@ communicatorApp.controller('basicRegistry4Ctrl', function($scope, $q, $ionicPopu
 
 	$scope.registry = {
 		receiver: currentReceiverService.receiver,
-		setImage: '',
-		setWant: '',
-		exchangeStrip: '',
-		markPictures: '',
-		checkingCorrespondence: ''
+		setImage: 1,
+		setWant: 1,
+		exchangeStrip: 1,
+		markPictures: 1,
+		checkingCorrespondence: 1
 	};
 
 	$scope.saveRegistry = function() {
+		if ($scope.registry.receiver.internal) {
+			$scope.goBack();
+			return;
+		}
+
 		$scope.registry.setImage = basicScoreValues[$scope.registry.setImage];
 		$scope.registry.setWant = basicScoreValues[$scope.registry.setWant];
 		$scope.registry.exchangeStrip = basicScoreValues[$scope.registry.exchangeStrip];
@@ -2759,7 +2773,6 @@ communicatorApp.controller('basicRegistry4Ctrl', function($scope, $q, $ionicPopu
 		registryService.saveRegistry($scope.registry);
 		$scope.goBack();
 	};
-
 
 	$scope.goBack = function() {
 		// this is to force a double "back"
@@ -2946,7 +2959,7 @@ communicatorApp.service('registryService', function($q, exchangeDbService, stepD
 			insertNewExchangeByCard(exchangeId);
 			insertNewExchangeByLevel(exchangeId);
 			setLevelInitDate(registryService.pickedLevelNumber);
-			registryServerService.sendExchangeToServer(registryInfo, registryService.pickedLevelNumber, registryService.pickedCardId);
+			//registryServerService.sendExchangeToServer(registryInfo, registryService.pickedLevelNumber, registryService.pickedCardId);
 		});
 	};
 
@@ -3190,7 +3203,10 @@ communicatorApp.filter('yes_no_spanish', function() {
         if (text == 'withoutHelp') {
             return 'Si';
         }
-        return 'No';
+        if (text !== undefined) {
+            return 'No';
+        }
+        return 'NA';
     };
 });
 
@@ -3217,6 +3233,7 @@ communicatorApp.filter('oral_output', function() {
         if (text == 'prdie') {
             return 'Palabra RI';
         }
+        return 'NA';
     };
 });
 
@@ -3257,7 +3274,6 @@ communicatorApp.filter('discrimination', function() {
             return 'Distractor';
         }
     };
-
 });
 
 communicatorApp.controller('statisticsCtrl', function($scope, statisticService) {

@@ -2,13 +2,19 @@
   <ion-content class='has-header card-list'>
     <ion-list class='list-inset'>
 
-      <ion-item class='item-image' ng-repeat='card in cards' ui-sref='content.levelSingleCard({ id: {{card.id}} })' onclick="window.plugins.insomnia.keepAwake()" ng-if="levelNumber != 3">
+      <ion-item class='item-image' ng-repeat='card in cards' ui-sref='content.levelSingleCard({ id: {{card.id}} })' onclick="window.plugins.insomnia.keepAwake()" ng-if="levelNumber < 3">
 
         <img ng-src='{{card.img}}' alt='{{card.title}}'>
         <div class='card-title'>{{card.title}}</div>
       </ion-item>
 
       <ion-item class='item-image' ng-repeat='card in cards' ui-sref="content.levelSingleCardLevelInfo({ id: {{card.id}}, select: {{select}}, levelInfo: {{levelInfo}} })" onclick="window.plugins.insomnia.keepAwake()" ng-if="levelNumber == 3">
+
+        <img ng-src='{{card.img}}' alt='{{card.title}}'>
+        <div class='card-title'>{{card.title}}</div>
+      </ion-item>
+
+      <ion-item class='item-image' ng-repeat='card in cards' ui-sref="content.levelSingleCardLevel4({ id: {{card.id}}, wantCardWasMoved: {{wantCardWasMoved}} })" onclick="window.plugins.insomnia.keepAwake()" ng-if="levelNumber == 4">
 
         <img ng-src='{{card.img}}' alt='{{card.title}}'>
         <div class='card-title'>{{card.title}}</div>
