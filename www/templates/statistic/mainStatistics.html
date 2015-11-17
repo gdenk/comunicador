@@ -182,6 +182,7 @@
     <div class="row table table-title"><div class="col">HISTORIAL DE INTERCAMBIOS</div></div>
     <div class="row table table-header">
       <div class="col col-20">FECHA</div>
+      <div class="col col-10">RECEPTOR</div>
       <div class="col col-20">PICTOGRAMA EN TIRA</div>
       <div class="col col-20">QUIERO EN TIRA</div>
       <div class="col col-10">INTERCAMBIA TIRA</div>
@@ -190,6 +191,7 @@
     </div>
     <div class="row table" ng-repeat="(id, exchange) in exchanges | objectToArray | orderBy:'date':true">
       <div class="col col-20">{{ exchange.date | date:'dd/MM/yy HH:mm' }}</div>
+      <div class="col col-10">{{ exchange.receiverRelationship || 'Otro' }}</div>
       <div class="col col-20">{{ exchange.setImage }}</div>
       <div class="col col-20">{{ exchange.setWant }}</div> 
       <div class="col col-10">{{ exchange.exchangeStrip }}</div>
