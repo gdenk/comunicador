@@ -42,4 +42,11 @@ communicatorApp.controller('basicRegistry4Ctrl', function($scope, $q, $ionicPopu
 		$scope.showInfo[step] = !$scope.showInfo[step];
 	};
 
+	$scope.ask = function() {
+        $ionicPopup.alert({
+            title: 'Ayuda',
+            template: 'Los valores para la puntuación en este nivel son: NA (no aplica), AT (ayuda total), AP (ayuda parcial) y "+" (chequeo de correspondencia).'
+        });
+    };
+
 });
